@@ -3,6 +3,7 @@ package net.neganote.gtutilities.common.item;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
@@ -10,7 +11,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PrecisionBreakBehavior implements IInteractionItem {
+
     public int tier;
+
     public PrecisionBreakBehavior(int tier) {
         this.tier = tier;
     }

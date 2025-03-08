@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +22,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class OmniToolItem extends ComponentItem {
+
     protected int tier;
+
     protected OmniToolItem(Properties properties, int tier) {
         super(properties);
         this.tier = tier;
@@ -44,7 +48,8 @@ public class OmniToolItem extends ComponentItem {
     }
 
     @Override
-    public boolean mineBlock(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull BlockState pState, @NotNull BlockPos pPos, @NotNull LivingEntity pMiningEntity) {
+    public boolean mineBlock(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull BlockState pState,
+                             @NotNull BlockPos pPos, @NotNull LivingEntity pMiningEntity) {
         super.mineBlock(pStack, pLevel, pState, pPos, pMiningEntity);
 
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(pStack));
@@ -59,7 +64,8 @@ public class OmniToolItem extends ComponentItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level,
+                                @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(stack));
         long charge = electricItem.getCharge();
         long maxCharge = electricItem.getMaxCharge();

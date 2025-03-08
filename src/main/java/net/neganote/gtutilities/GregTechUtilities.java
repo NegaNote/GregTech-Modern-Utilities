@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
-import com.tterrag.registrate.util.entry.RegistryEntry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -21,21 +21,27 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.machine.UtilMachines;
+
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(GregTechUtilities.MOD_ID)
 public class GregTechUtilities {
+
     public static final String MOD_ID = "gtutils";
     public static final Logger LOGGER = LogManager.getLogger();
     public static GTRegistrate REGISTRATE = GTRegistrate.create(GregTechUtilities.MOD_ID);
 
-    public static RegistryEntry<CreativeModeTab> UTIL_CREATIVE_TAB = REGISTRATE.defaultCreativeTab(GregTechUtilities.MOD_ID,
-            builder -> builder
-                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(GregTechUtilities.MOD_ID, REGISTRATE))
-                    .title(REGISTRATE.addLang("itemGroup", GregTechUtilities.id("creative_tab"), "GregTech Utilities"))
-                    .icon(UtilItems.OMNITOOL::asStack)
-                    .build())
+    public static RegistryEntry<CreativeModeTab> UTIL_CREATIVE_TAB = REGISTRATE
+            .defaultCreativeTab(GregTechUtilities.MOD_ID,
+                    builder -> builder
+                            .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(
+                                    GregTechUtilities.MOD_ID, REGISTRATE))
+                            .title(REGISTRATE.addLang("itemGroup", GregTechUtilities.id("creative_tab"),
+                                    "GregTech Utilities"))
+                            .icon(UtilItems.OMNITOOL::asStack)
+                            .build())
             .register();
 
     public GregTechUtilities() {
@@ -50,14 +56,10 @@ public class GregTechUtilities {
         modEventBus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         modEventBus.addGenericListener(MachineDefinition.class, this::registerMachines);
 
-
-
         // Most other events are fired on Forge's bus.
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
-
-
     }
 
     public static void init() {
@@ -87,16 +89,16 @@ public class GregTechUtilities {
 
     // As well as this.
     private void addMaterials(MaterialEvent event) {
-        //CustomMaterials.init();
+        // CustomMaterials.init();
     }
 
     // This is optional, though.
     private void modifyMaterials(PostMaterialEvent event) {
-        //CustomMaterials.modify();
+        // CustomMaterials.modify();
     }
 
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
-        //CustomRecipeTypes.init();
+        // CustomRecipeTypes.init();
     }
 
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {

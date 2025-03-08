@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechUtilities;
@@ -31,9 +32,12 @@ public class UtilMachines {
                     Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.1"))
             .tooltipBuilder((stack, tooltips) -> {
                 tooltips.add(Component.literal("  ").append(Component
-                        .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey()).withStyle(ChatFormatting.GREEN)));
+                        .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
+                        .withStyle(ChatFormatting.GREEN)));
             })
-            .renderer(() -> new MaintenanceHatchPartRenderer(GTValues.UHV, GregTechUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always be changed later
+            .renderer(() -> new MaintenanceHatchPartRenderer(GTValues.UHV,
+                    GregTechUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always be
+                                                                                              // changed later
             .register();
 
     public static void init() {}
