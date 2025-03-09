@@ -1,4 +1,4 @@
-# GregTech Utilities
+# GregTech Modern Utilities
 A GregTech Modern addon, adding some nice quality-of-life features.
 
 ## License

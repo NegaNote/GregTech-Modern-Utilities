@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 @GTAddon
-public class GregTechUtilitiesGTAddon implements IGTAddon {
+public class GTMUtilitiesGTAddon implements IGTAddon {
 
     @Override
     public GTRegistrate getRegistrate() {
-        return GregTechUtilities.REGISTRATE;
+        return GregTechModernUtilities.REGISTRATE;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class GregTechUtilitiesGTAddon implements IGTAddon {
 
     @Override
     public String addonModId() {
-        return GregTechUtilities.MOD_ID;
+        return GregTechModernUtilities.MOD_ID;
     }
 
     @Override

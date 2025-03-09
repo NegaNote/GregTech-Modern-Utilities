@@ -26,26 +26,26 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(GregTechUtilities.MOD_ID)
-public class GregTechUtilities {
+@Mod(GregTechModernUtilities.MOD_ID)
+public class GregTechModernUtilities {
 
-    public static final String MOD_ID = "gtutils";
+    public static final String MOD_ID = "gtmutils";
     public static final Logger LOGGER = LogManager.getLogger();
-    public static GTRegistrate REGISTRATE = GTRegistrate.create(GregTechUtilities.MOD_ID);
+    public static GTRegistrate REGISTRATE = GTRegistrate.create(GregTechModernUtilities.MOD_ID);
 
     public static RegistryEntry<CreativeModeTab> UTIL_CREATIVE_TAB = REGISTRATE
-            .defaultCreativeTab(GregTechUtilities.MOD_ID,
+            .defaultCreativeTab(GregTechModernUtilities.MOD_ID,
                     builder -> builder
                             .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(
-                                    GregTechUtilities.MOD_ID, REGISTRATE))
-                            .title(REGISTRATE.addLang("itemGroup", GregTechUtilities.id("creative_tab"),
-                                    "GregTech Utilities"))
+                                    GregTechModernUtilities.MOD_ID, REGISTRATE))
+                            .title(REGISTRATE.addLang("itemGroup", GregTechModernUtilities.id("creative_tab"),
+                                    "GregTech Modern Utilities"))
                             .icon(UtilItems.OMNITOOL::asStack)
                             .build())
             .register();
 
-    public GregTechUtilities() {
-        GregTechUtilities.init();
+    public GregTechModernUtilities() {
+        GregTechModernUtilities.init();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
@@ -84,7 +84,7 @@ public class GregTechUtilities {
     // You MUST have this for custom materials.
     // Remember to register them not to GT's namespace, but your own.
     private void addMaterialRegistries(MaterialRegistryEvent event) {
-        GTCEuAPI.materialManager.createRegistry(GregTechUtilities.MOD_ID);
+        GTCEuAPI.materialManager.createRegistry(GregTechModernUtilities.MOD_ID);
     }
 
     // As well as this.

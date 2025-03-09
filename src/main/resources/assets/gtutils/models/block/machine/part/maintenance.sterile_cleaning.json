@@ -1,8 +1,0 @@
-{
-  "parent": "gtceu:block/overlay/front_emissive",
-  "textures": {
-    "particle": "gtutils:block/overlay/machine/overlay_maintenance_sterile_cleaning",
-    "overlay": "gtutils:block/overlay/machine/overlay_maintenance_sterile_cleaning",
-    "overlay_emissive": "gtutils:block/overlay/machine/overlay_maintenance_sterile_cleaning_emissive"
-  }
-}

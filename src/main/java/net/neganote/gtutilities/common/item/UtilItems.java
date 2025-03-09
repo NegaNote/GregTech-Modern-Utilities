@@ -5,17 +5,17 @@ import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 
-import net.neganote.gtutilities.GregTechUtilities;
+import net.neganote.gtutilities.GregTechModernUtilities;
 
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
-import static net.neganote.gtutilities.GregTechUtilities.REGISTRATE;
+import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 public class UtilItems {
 
     static {
-        REGISTRATE.creativeModeTab(() -> GregTechUtilities.UTIL_CREATIVE_TAB);
+        REGISTRATE.creativeModeTab(() -> GregTechModernUtilities.UTIL_CREATIVE_TAB);
     }
 
     @SuppressWarnings("unused")

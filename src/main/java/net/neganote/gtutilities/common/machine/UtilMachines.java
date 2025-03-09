@@ -10,15 +10,15 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceH
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.neganote.gtutilities.GregTechUtilities;
+import net.neganote.gtutilities.GregTechModernUtilities;
 
-import static net.neganote.gtutilities.GregTechUtilities.REGISTRATE;
+import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 @SuppressWarnings("unused")
 public class UtilMachines {
 
     static {
-        REGISTRATE.creativeModeTab(() -> GregTechUtilities.UTIL_CREATIVE_TAB);
+        REGISTRATE.creativeModeTab(() -> GregTechModernUtilities.UTIL_CREATIVE_TAB);
     }
 
     // Edited slightly from GTMachines
@@ -36,7 +36,7 @@ public class UtilMachines {
                         .withStyle(ChatFormatting.GREEN)));
             })
             .renderer(() -> new MaintenanceHatchPartRenderer(GTValues.UHV,
-                    GregTechUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always be
+                    GregTechModernUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always be
                                                                                               // changed later
             .register();
 
