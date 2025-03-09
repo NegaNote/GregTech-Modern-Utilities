@@ -36,8 +36,9 @@ public class UtilMachines {
                         .withStyle(ChatFormatting.GREEN)));
             })
             .renderer(() -> new MaintenanceHatchPartRenderer(GTValues.UHV,
-                    GregTechModernUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always be
-                                                                                              // changed later
+                    GregTechModernUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always
+                                                                                                    // be
+            // changed later
             .register();
 
     public static void init() {}
