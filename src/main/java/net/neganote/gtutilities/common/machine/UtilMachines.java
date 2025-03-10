@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.client.renderer.machine.ConverterRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
@@ -17,6 +16,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceH
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
+import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
 
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -42,15 +42,12 @@ public class UtilMachines {
             .tooltips(Component.translatable("gtceu.universal.disabled"),
                     Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.0"),
                     Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.1"))
-            .tooltipBuilder((stack, tooltips) -> {
-                tooltips.add(Component.literal("  ").append(Component
-                        .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
-                        .withStyle(ChatFormatting.GREEN)));
-            })
+            .tooltipBuilder((stack, tooltips) -> tooltips.add(Component.literal("  ").append(Component
+                    .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
+                    .withStyle(ChatFormatting.GREEN))))
             .renderer(() -> new MaintenanceHatchPartRenderer(GTValues.UHV,
-                    GregTechModernUtilities.id("block/machine/part/maintenance.sterile_cleaning"))) // Tier can always
-                                                                                                    // be
-            // changed later
+                    GregTechModernUtilities.id("block/machine/part/maintenance.sterile_cleaning")))
+            // Tier can always be changed later
             .register();
 
     // Copied from GTMachineUtils
@@ -61,7 +58,7 @@ public class UtilMachines {
                         .rotationState(RotationState.ALL)
                         .langValue("%s %s§eA§r Energy Converter".formatted(VCF[tier] + VN[tier] + ChatFormatting.RESET,
                                 amperage))
-                        .renderer(() -> new ConverterRenderer(tier, amperage))
+                        .renderer(() -> new UtilConverterRenderer(tier, amperage))
                         .tooltips(Component.translatable("gtceu.machine.energy_converter.description"),
                                 Component.translatable("gtceu.machine.energy_converter.tooltip_tool_usage"),
                                 Component.translatable("gtceu.machine.energy_converter.tooltip_conversion_native",
