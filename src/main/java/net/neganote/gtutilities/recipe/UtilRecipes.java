@@ -27,6 +27,7 @@ public class UtilRecipes {
                     .inputItems(CABLE_HEX.getIngredient(0), 4)
                     .inputItems(CABLE_HEX.getIngredient(tier), 16)
                     .outputItems(ENERGY_CONVERTER_64A[tier])
+                    .EUt(GTValues.VEX[tier]).duration(40)
                     .save(provider);
         }
     }
