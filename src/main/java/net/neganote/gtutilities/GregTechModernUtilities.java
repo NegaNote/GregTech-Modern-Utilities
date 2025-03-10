@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
+import com.gregtechceu.gtceu.common.data.GTItems;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.machine.UtilMachines;
+import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.data.UtilDatagen;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -34,16 +36,7 @@ public class GregTechModernUtilities {
     public static final Logger LOGGER = LogManager.getLogger();
     public static GTRegistrate REGISTRATE = GTRegistrate.create(GregTechModernUtilities.MOD_ID);
 
-    public static RegistryEntry<CreativeModeTab> UTIL_CREATIVE_TAB = REGISTRATE
-            .defaultCreativeTab(GregTechModernUtilities.MOD_ID,
-                    builder -> builder
-                            .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(
-                                    GregTechModernUtilities.MOD_ID, REGISTRATE))
-                            .title(REGISTRATE.addLang("itemGroup", GregTechModernUtilities.id("creative_tab"),
-                                    "GregTech Modern Utilities"))
-                            .icon(UtilItems.OMNITOOL::asStack)
-                            .build())
-            .register();
+    public static RegistryEntry<CreativeModeTab> UTIL_CREATIVE_TAB = null;
 
     public GregTechModernUtilities() {
         GregTechModernUtilities.init();
@@ -64,6 +57,31 @@ public class GregTechModernUtilities {
     }
 
     public static void init() {
+        UtilConfig.init();
+        if (UtilConfig.INSTANCE.features.omnitoolEnabled) {
+            UTIL_CREATIVE_TAB = REGISTRATE
+                    .defaultCreativeTab(GregTechModernUtilities.MOD_ID,
+                            builder -> builder
+                                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(
+                                            GregTechModernUtilities.MOD_ID, REGISTRATE))
+                                    .title(REGISTRATE.addLang("itemGroup", GregTechModernUtilities.id("creative_tab"),
+                                            "GregTech Modern Utilities"))
+                                    .icon(UtilItems.OMNITOOL::asStack)
+                                    .build())
+                    .register();
+        } else {
+            UTIL_CREATIVE_TAB = REGISTRATE
+                    .defaultCreativeTab(GregTechModernUtilities.MOD_ID,
+                            builder -> builder
+                                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(
+                                            GregTechModernUtilities.MOD_ID, REGISTRATE))
+                                    .title(REGISTRATE.addLang("itemGroup", GregTechModernUtilities.id("creative_tab"),
+                                            "GregTech Modern Utilities"))
+                                    .icon(GTItems.INTEGRATED_CIRCUIT_HV::asStack)
+                                    // same as above, but using a GTm item for the icon instead
+                                    .build())
+                    .register();
+        }
         UtilItems.init();
         REGISTRATE.registerRegistrate();
         UtilDatagen.init();
