@@ -1,17 +1,28 @@
 package net.neganote.gtutilities.common.machine;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.client.renderer.machine.ConverterRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
+import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 
+import java.util.Locale;
+import java.util.function.BiFunction;
+
+import static com.gregtechceu.gtceu.api.GTValues.*;
+import static com.gregtechceu.gtceu.api.GTValues.V;
 import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 @SuppressWarnings("unused")
@@ -25,6 +36,7 @@ public class UtilMachines {
     public static final MachineDefinition STERILE_CLEANING_MAINTENANCE_HATCH = REGISTRATE
             .machine("sterile_cleaning_maintenance_hatch",
                     holder -> new CleaningMaintenanceHatchPartMachine(holder, CleanroomType.STERILE_CLEANROOM))
+            .langValue("Sterile Cleaning Maintenance Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.MAINTENANCE)
             .tooltips(Component.translatable("gtceu.universal.disabled"),
@@ -40,6 +52,47 @@ public class UtilMachines {
                                                                                                     // be
             // changed later
             .register();
+
+    // Copied from GTMachineUtils
+    public static MachineDefinition[] registerConverter(int amperage) {
+        return registerTieredMachines(amperage + "a_energy_converter",
+                (holder, tier) -> new ConverterMachine(holder, tier, amperage),
+                (tier, builder) -> builder
+                        .rotationState(RotationState.ALL)
+                        .langValue("%s %s§eA§r Energy Converter".formatted(VCF[tier] + VN[tier] + ChatFormatting.RESET,
+                                amperage))
+                        .renderer(() -> new ConverterRenderer(tier, amperage))
+                        .tooltips(Component.translatable("gtceu.machine.energy_converter.description"),
+                                Component.translatable("gtceu.machine.energy_converter.tooltip_tool_usage"),
+                                Component.translatable("gtceu.machine.energy_converter.tooltip_conversion_native",
+                                        FeCompat.toFeLong(V[tier] * amperage,
+                                                FeCompat.ratio(true)),
+                                        amperage, V[tier], GTValues.VNF[tier]),
+                                Component.translatable("gtceu.machine.energy_converter.tooltip_conversion_eu", amperage,
+                                        V[tier], GTValues.VNF[tier],
+                                        FeCompat.toFeLong(V[tier] * amperage,
+                                                FeCompat.ratio(false))))
+                        .register(),
+                ALL_TIERS);
+    }
+
+    // Copied from GTMachineUtils
+    public static MachineDefinition[] registerTieredMachines(String name,
+                                                             BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
+                                                             BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+                                                             int... tiers) {
+        MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
+        for (int tier : tiers) {
+            var register = REGISTRATE
+                    .machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
+                            holder -> factory.apply(holder, tier))
+                    .tier(tier);
+            definitions[tier] = builder.apply(tier, register);
+        }
+        return definitions;
+    }
+
+    public static final MachineDefinition[] ENERGY_CONVERTER_64A = registerConverter(64);
 
     public static void init() {}
 }

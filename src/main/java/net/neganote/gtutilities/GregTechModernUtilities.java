@@ -21,6 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.machine.UtilMachines;
+import net.neganote.gtutilities.data.UtilDatagen;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import org.apache.logging.log4j.LogManager;
@@ -64,6 +65,8 @@ public class GregTechModernUtilities {
 
     public static void init() {
         UtilItems.init();
+        REGISTRATE.registerRegistrate();
+        UtilDatagen.init();
     }
 
     public static ResourceLocation id(String path) {
