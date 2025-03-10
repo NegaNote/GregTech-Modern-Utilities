@@ -1,5 +1,7 @@
 package net.neganote.gtutilities.config;
 
+import com.gregtechceu.gtceu.api.GTValues;
+
 import net.neganote.gtutilities.GregTechModernUtilities;
 
 import dev.toma.configuration.Configuration;
@@ -30,5 +32,8 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Whether the Omnitool is enabled." })
         public boolean omnitoolEnabled = true;
+        @Configurable
+        @Configurable.Comment({ "What tier the Omnitool is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)" })
+        public int omnitoolTier = GTValues.IV;
     }
 }

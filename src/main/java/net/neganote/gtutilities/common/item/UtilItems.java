@@ -1,6 +1,5 @@
 package net.neganote.gtutilities.common.item;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -21,16 +20,19 @@ public class UtilItems {
 
     @SuppressWarnings("unused")
     public static ItemEntry<OmniToolItem> OMNITOOL = null;
+    public static int OMNITOOL_TIER = UtilConfig.INSTANCE.features.omnitoolTier;
 
     static {
         if (UtilConfig.INSTANCE.features.omnitoolEnabled) {
             OMNITOOL = REGISTRATE
-                    .item("omnitool", (p) -> OmniToolItem.create(p, GTValues.IV))
+                    .item("omnitool", (p) -> OmniToolItem.create(p, OMNITOOL_TIER))
                     .lang("Omnitool")
                     .defaultModel()
                     .properties(p -> p.stacksTo(1).durability(0))
-                    .onRegister(attach(ElectricStats.createElectricItem(25_600_000L, GTValues.IV),
-                            new PrecisionBreakBehavior(GTValues.IV)))
+                    .onRegister(attach(
+                            ElectricStats.createElectricItem(
+                                    (long) Math.pow(4.0, (double) OMNITOOL_TIER - 1) * 100_000L, OMNITOOL_TIER),
+                            new PrecisionBreakBehavior(OMNITOOL_TIER)))
                     .register();
         }
     }
