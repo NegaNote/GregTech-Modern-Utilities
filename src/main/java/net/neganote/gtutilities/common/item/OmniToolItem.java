@@ -18,9 +18,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class OmniToolItem extends ComponentItem {
 
     protected int tier;
@@ -37,14 +39,24 @@ public class OmniToolItem extends ComponentItem {
     // Should make it so it can harvest anything
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return true;
+        var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(stack));
+
+        // Only work if it has enough charge
+        return electricItem.getCharge() >= GTValues.VEX[tier];
     }
 
-    // Effectively instamines
+    // Effectively insta-mines
     @Override
-    @SuppressWarnings("All") // Otherwise it complains about annotated parameters, which I'm ignoring
+
     public float getDestroySpeed(ItemStack pStack, BlockState pState) {
-        return 10_000.0F;
+        var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(pStack));
+
+        // Only work if it has enough charge
+        if (electricItem.getCharge() >= GTValues.VEX[tier]) {
+            return 100_000.0F;
+        } else {
+            return 0.0F;
+        }
     }
 
     @Override
