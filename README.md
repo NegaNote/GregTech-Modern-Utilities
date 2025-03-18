@@ -6,12 +6,7 @@ Current features:
 * A Sterile Cleaning Maintenance Hatch
 * An omnitool, that can break anything instantly
 * 64A Energy Converters
-
-All features can be enabled or disabled in the config.
-
-TODO:
-- Punch card (single use programmed circuit)
-- Ice mold (freezes water and single use molds)
+* Punched Cards as single-use programmed circuits
 
 ## License
 
