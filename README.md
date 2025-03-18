@@ -9,6 +9,10 @@ Current features:
 
 All features can be enabled or disabled in the config.
 
+TODO:
+- Punch card (single use programmed circuit)
+- Ice mold (freezes water and single use molds)
+
 ## License
 
 All code is under LGPL3. Some parts were directly lifted from GregTech Modern.

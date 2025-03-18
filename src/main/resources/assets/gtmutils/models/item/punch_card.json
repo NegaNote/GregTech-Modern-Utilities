@@ -1,0 +1,206 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "gtmutils:item/punch_card/0",
+      "predicate": {
+        "gtmutils:punch_card": 0.0
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/1",
+      "predicate": {
+        "gtmutils:punch_card": 0.01
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/2",
+      "predicate": {
+        "gtmutils:punch_card": 0.02
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/3",
+      "predicate": {
+        "gtmutils:punch_card": 0.03
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/4",
+      "predicate": {
+        "gtmutils:punch_card": 0.04
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/5",
+      "predicate": {
+        "gtmutils:punch_card": 0.05
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/6",
+      "predicate": {
+        "gtmutils:punch_card": 0.06
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/7",
+      "predicate": {
+        "gtmutils:punch_card": 0.07
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/8",
+      "predicate": {
+        "gtmutils:punch_card": 0.08
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/9",
+      "predicate": {
+        "gtmutils:punch_card": 0.09
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/10",
+      "predicate": {
+        "gtmutils:punch_card": 0.1
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/11",
+      "predicate": {
+        "gtmutils:punch_card": 0.11
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/12",
+      "predicate": {
+        "gtmutils:punch_card": 0.12
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/13",
+      "predicate": {
+        "gtmutils:punch_card": 0.13
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/14",
+      "predicate": {
+        "gtmutils:punch_card": 0.14
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/15",
+      "predicate": {
+        "gtmutils:punch_card": 0.15
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/16",
+      "predicate": {
+        "gtmutils:punch_card": 0.16
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/17",
+      "predicate": {
+        "gtmutils:punch_card": 0.17
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/18",
+      "predicate": {
+        "gtmutils:punch_card": 0.18
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/19",
+      "predicate": {
+        "gtmutils:punch_card": 0.19
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/20",
+      "predicate": {
+        "gtmutils:punch_card": 0.2
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/21",
+      "predicate": {
+        "gtmutils:punch_card": 0.21
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/22",
+      "predicate": {
+        "gtmutils:punch_card": 0.22
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/23",
+      "predicate": {
+        "gtmutils:punch_card": 0.23
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/24",
+      "predicate": {
+        "gtmutils:punch_card": 0.24
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/25",
+      "predicate": {
+        "gtmutils:punch_card": 0.25
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/26",
+      "predicate": {
+        "gtmutils:punch_card": 0.26
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/27",
+      "predicate": {
+        "gtmutils:punch_card": 0.27
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/28",
+      "predicate": {
+        "gtmutils:punch_card": 0.28
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/29",
+      "predicate": {
+        "gtmutils:punch_card": 0.29
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/30",
+      "predicate": {
+        "gtmutils:punch_card": 0.3
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/31",
+      "predicate": {
+        "gtmutils:punch_card": 0.31
+      }
+    },
+    {
+      "model": "gtmutils:item/punch_card/32",
+      "predicate": {
+        "gtmutils:punch_card": 0.32
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "gtmutils:item/punch_card/1"
+  }
+}

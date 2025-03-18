@@ -4,6 +4,13 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'com.diffplug.spotless' version '7.0.2'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+mixin {
+    add sourceSets.main, "modid.refmap.json"
+
+    config "gtmutils.mixins.json"
 }
 
 def generatedResources = file("src/generated")
@@ -127,6 +134,8 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // implementation fg.deobf("curse.maven:configuration-444699:5840405")
 }

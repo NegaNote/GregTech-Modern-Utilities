@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gtmutils:item/punch_card/base",
+    "layer1": "gtmutils:item/punch_card/27"
+  }
+}

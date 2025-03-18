@@ -16,6 +16,7 @@
   "block.gtmutils.uxv_64a_energy_converter": "§eUXV§r 64§eA§r Energy Converter",
   "block.gtmutils.zpm_64a_energy_converter": "§cZPM§r 64§eA§r Energy Converter",
   "item.gtmutils.omnitool": "Omnitool",
+  "item.gtmutils.punch_card": "Punched Card",
   "itemGroup.gtmutils.creative_tab": "GregTech Modern Utilities",
   "tooltip.omnitool.can_break_anything": "The omnitool can break ANYTHING INSTANTLY!",
   "tooltip.omnitool.charge_status": "Energy: %s EU / %s EU",
