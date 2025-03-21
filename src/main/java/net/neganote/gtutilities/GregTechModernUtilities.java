@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,6 +26,7 @@ import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.data.UtilDatagen;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
+import net.neganote.gtutilities.recipe.IntPunchCardIngredient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

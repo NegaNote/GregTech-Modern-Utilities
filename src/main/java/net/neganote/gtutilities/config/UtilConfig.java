@@ -22,6 +22,9 @@ public class UtilConfig {
     public FeatureConfigs features = new FeatureConfigs();
 
     public static class FeatureConfigs {
+        @Configurable
+        @Configurable.Comment({ "Whether the Punched Cards are enabled." })
+        public boolean punchedCardsEnabled = true;
 
         @Configurable
         @Configurable.Comment({ "Whether the Sterile Cleaning Maintenance Hatch is enabled." })

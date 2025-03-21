@@ -27,10 +27,12 @@ public class UtilRecipes {
             registerOmnitoolRecipe(provider);
         }
 
-        registerPunchCardRecipes(provider);
+        if (UtilConfig.INSTANCE.features.punchedCardsEnabled) {
+            registerPunchCardRecipes(provider);
+        }
     }
 
-    private static ItemStack GetPowerUnit(int tier) {
+    private static ItemStack getPowerUnit(int tier) {
         return switch (tier) {
             case GTValues.LV -> GTItems.POWER_UNIT_LV.asStack();
             case GTValues.MV -> GTItems.POWER_UNIT_MV.asStack();
@@ -43,7 +45,7 @@ public class UtilRecipes {
 
     public static void registerOmnitoolRecipe(Consumer<FinishedRecipe> provider) {
         ASSEMBLER_RECIPES.recipeBuilder("omnitool")
-                .inputItems(GetPowerUnit(UtilConfig.INSTANCE.features.omnitoolTier))
+                .inputItems(getPowerUnit(UtilConfig.INSTANCE.features.omnitoolTier))
                 .inputItems(CIRCUIT.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 2)
                 .inputItems(EMITTER.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 1)
                 .inputItems(CABLE_QUAD.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 3)

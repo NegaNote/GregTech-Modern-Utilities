@@ -1,9 +1,7 @@
-package net.neganote.gtutilities;
+package net.neganote.gtutilities.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.core.mixins.StrictNBTIngredientAccessor;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.StrictNBTIngredient;
+import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.item.UtilItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

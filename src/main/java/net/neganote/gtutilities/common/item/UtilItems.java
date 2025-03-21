@@ -5,7 +5,6 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
@@ -15,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.model.generators.ModelFile;
-import net.neganote.gtutilities.ComponentGroup;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.config.UtilConfig;
 
@@ -59,16 +57,16 @@ public class UtilItems {
                     .register();
         }
 
-        PUNCH_CARD = REGISTRATE
-                .item("punch_card", ComponentGroup::create)
-                .lang("Punch Card")
-                .model(overrideModel(GregTechModernUtilities.id("punch_card"), 33))
-//                .properties(p -> p.stacksTo(8))
-                .onRegister(modelPredicate(GregTechModernUtilities.id("punch_card"),
-                        (itemStack) -> IntCircuitBehaviour.getCircuitConfiguration(itemStack) / 100f))
-                .onRegister(attach(new IntCircuitBehaviour()))
-                .register();
-
+        if (UtilConfig.INSTANCE.features.omnitoolEnabled) {
+            PUNCH_CARD = REGISTRATE
+                    .item("punch_card", ComponentItem::create)
+                    .lang("Punch Card")
+                    .model(overrideModel(GregTechModernUtilities.id("punch_card"), 33))
+                    .onRegister(modelPredicate(GregTechModernUtilities.id("punch_card"),
+                            (itemStack) -> IntCircuitBehaviour.getCircuitConfiguration(itemStack) / 100f))
+                    .onRegister(attach(new IntCircuitBehaviour()))
+                    .register();
+        }
     }
 
     public static <
@@ -98,7 +96,8 @@ public class UtilItems {
         };
     }
 
-    public static void init() {}
+    public static void init() {
+    }
 
     // Copied from GTItems
     public static <T extends IComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
