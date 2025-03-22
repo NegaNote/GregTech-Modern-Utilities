@@ -33,7 +33,8 @@ public class UtilConfig {
         @Configurable.Comment({ "Whether the Omnitool is enabled." })
         public boolean omnitoolEnabled = true;
         @Configurable
-        @Configurable.Comment({ "What tier the Omnitool is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)" })
+        @Configurable.Comment({ "What tier the Omnitool is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)",
+                "(Unless the default recipe is overridden, can only support up to IV!)" })
         public int omnitoolTier = GTValues.IV;
     }
 }
