@@ -48,7 +48,6 @@ public class OmniToolItem extends ComponentItem {
 
     // Effectively insta-mines
     @Override
-
     public float getDestroySpeed(ItemStack pStack, BlockState pState) {
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(pStack));
 
@@ -67,7 +66,7 @@ public class OmniToolItem extends ComponentItem {
 
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(pStack));
 
-        if (electricItem.discharge(GTValues.VEX[tier], tier, true, false, true) == GTValues.VEX[tier]) {
+        if (electricItem.getCharge() >= GTValues.VEX[tier]) {
             // Only discharge if possible to discharge the full amount
             electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
             return true;
