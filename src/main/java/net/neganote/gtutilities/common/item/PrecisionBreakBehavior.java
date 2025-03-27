@@ -24,15 +24,15 @@ public class PrecisionBreakBehavior implements IInteractionItem {
         if (!level.isClientSide()) {
             BlockPos pos = context.getClickedPos();
             BlockState blockState = level.getBlockState(pos);
-            if (!blockState.canHarvestBlock(level, pos, context.getPlayer())) {
+            float hardness = blockState.getBlock().defaultDestroyTime();
+            if (!blockState.canHarvestBlock(level, pos, context.getPlayer()) || hardness < 0.0f) {
                 return InteractionResult.PASS;
             }
 
             var electricItem = GTCapabilityHelper.getElectricItem(context.getItemInHand());
 
             if (electricItem != null) {
-                if (electricItem.discharge(GTValues.VEX[tier], tier, true, false, true) == GTValues.VEX[tier]) {
-                    // Only discharge if possible to discharge the full amount
+                if (electricItem.getCharge() >= GTValues.VEX[tier]) {
                     electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
                 } else {
                     return InteractionResult.PASS;
