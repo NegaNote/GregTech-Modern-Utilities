@@ -3,6 +3,7 @@ package net.neganote.gtutilities.recipe;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.common.data.GTItems;
 
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.neganote.gtutilities.config.UtilConfig;
@@ -17,7 +18,7 @@ import static net.neganote.gtutilities.common.machine.UtilMachines.ENERGY_CONVER
 public class UtilRecipes {
 
     public static void init(Consumer<FinishedRecipe> provider) {
-        if (UtilConfig.INSTANCE.features.converters64aEnabled) {
+        if (UtilConfig.INSTANCE.features.converters64aEnabled && ConfigHolder.INSTANCE.compat.energy.enableFEConverters) {
             register64AConverterRecipes(provider);
         }
 

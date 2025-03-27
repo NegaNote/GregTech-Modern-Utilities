@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRendere
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
@@ -99,7 +100,7 @@ public class UtilMachines {
     public static MachineDefinition[] ENERGY_CONVERTER_64A = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.converters64aEnabled) {
+        if (UtilConfig.INSTANCE.features.converters64aEnabled && ConfigHolder.INSTANCE.compat.energy.enableFEConverters) {
             ENERGY_CONVERTER_64A = registerConverter(64);
         }
     }
