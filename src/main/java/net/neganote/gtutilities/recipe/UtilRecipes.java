@@ -11,7 +11,7 @@ import net.neganote.gtutilities.config.UtilConfig;
 import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
-import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
+import static com.gregtechceu.gtceu.data.recipe.CraftingComponent.*;
 import static net.neganote.gtutilities.common.item.UtilItems.OMNITOOL;
 import static net.neganote.gtutilities.common.machine.UtilMachines.ENERGY_CONVERTER_64A;
 
@@ -31,10 +31,10 @@ public class UtilRecipes {
     public static void register64AConverterRecipes(Consumer<FinishedRecipe> provider) {
         for (int tier : GTValues.tiersBetween(GTValues.ULV, GTValues.UXV)) {
             ASSEMBLER_RECIPES.recipeBuilder("converter_64a_" + GTValues.VN[tier])
-                    .inputItems(HULL.get(tier))
-                    .inputItems(CIRCUIT.get(tier + 2))
-                    .inputItems(CABLE_HEX.get(0), 4)
-                    .inputItems(CABLE_HEX.get(tier), 16)
+                    .inputItems(HULL.getIngredient(tier))
+                    .inputItems(CIRCUIT.getIngredient(tier + 2))
+                    .inputItems(CABLE_HEX.getIngredient(0), 4)
+                    .inputItems(CABLE_HEX.getIngredient(tier), 16)
                     .outputItems(ENERGY_CONVERTER_64A[tier])
                     .EUt(GTValues.VEX[tier]).duration(40)
                     .save(provider);
@@ -55,10 +55,10 @@ public class UtilRecipes {
     public static void registerOmnitoolRecipe(Consumer<FinishedRecipe> provider) {
         ASSEMBLER_RECIPES.recipeBuilder("omnitool")
                 .inputItems(getPowerUnit(UtilConfig.INSTANCE.features.omnitoolTier))
-                .inputItems(CIRCUIT.get(UtilConfig.INSTANCE.features.omnitoolTier), 2)
-                .inputItems(EMITTER.get(UtilConfig.INSTANCE.features.omnitoolTier), 1)
-                .inputItems(CABLE_QUAD.get(UtilConfig.INSTANCE.features.omnitoolTier), 3)
-                .inputItems(MOTOR.get(UtilConfig.INSTANCE.features.omnitoolTier), 2)
+                .inputItems(CIRCUIT.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 2)
+                .inputItems(EMITTER.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 1)
+                .inputItems(CABLE_QUAD.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 3)
+                .inputItems(MOTOR.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 2)
                 .outputItems(OMNITOOL)
                 .EUt(GTValues.VEX[UtilConfig.INSTANCE.features.omnitoolTier]).duration(20 * 60)
                 .save(provider);
