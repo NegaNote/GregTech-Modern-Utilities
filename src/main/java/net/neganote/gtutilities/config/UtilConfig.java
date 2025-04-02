@@ -36,5 +36,9 @@ public class UtilConfig {
         @Configurable.Comment({ "What tier the Omnitool is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)",
                 "(Unless the default recipe is overridden, can only support up to IV!)" })
         public int omnitoolTier = GTValues.IV;
+
+        @Configurable
+        @Configurable.Comment("Whether the Quantum Power Substation is enabled.")
+        public boolean qpssEnabled = true;
     }
 }
