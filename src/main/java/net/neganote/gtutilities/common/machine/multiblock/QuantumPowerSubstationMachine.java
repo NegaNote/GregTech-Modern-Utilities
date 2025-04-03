@@ -69,7 +69,7 @@ public class QuantumPowerSubstationMachine extends WorkableMultiblockMachine
 
     private IMaintenanceMachine maintenance;
 
-    private PowerStationEnergyBank energyBank;
+    private QuantumPowerStationEnergyBank energyBank;
     private EnergyContainerList inputHatches;
     private EnergyContainerList outputHatches;
     private long passiveDrain;
@@ -85,7 +85,7 @@ public class QuantumPowerSubstationMachine extends WorkableMultiblockMachine
     public QuantumPowerSubstationMachine(IMachineBlockEntity holder) {
         super(holder);
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isFormed);
-        this.energyBank = new PowerStationEnergyBank(this, List.of());
+        this.energyBank = new QuantumPowerStationEnergyBank(this, List.of());
     }
 
     @Override
@@ -137,7 +137,7 @@ public class QuantumPowerSubstationMachine extends WorkableMultiblockMachine
             return;
         }
         if (this.energyBank == null) {
-            this.energyBank = new PowerStationEnergyBank(this, batteries);
+            this.energyBank = new QuantumPowerStationEnergyBank(this, batteries);
         } else {
             this.energyBank = energyBank.rebuild(batteries);
         }
@@ -385,10 +385,10 @@ public class QuantumPowerSubstationMachine extends WorkableMultiblockMachine
         energyBank.readFromNBT(tag.getCompound("energyBank"));
     }
 
-    public static class PowerStationEnergyBank extends MachineTrait {
+    public static class QuantumPowerStationEnergyBank extends MachineTrait {
 
         protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-                QuantumPowerSubstationMachine.PowerStationEnergyBank.class);
+                QuantumPowerStationEnergyBank.class);
         private static final String NBT_SIZE = "Size";
         private static final String NBT_STORED = "Stored";
         private static final String NBT_MAX = "Max";
@@ -401,7 +401,7 @@ public class QuantumPowerSubstationMachine extends WorkableMultiblockMachine
         private BigInteger capacity;
         private int index;
 
-        public PowerStationEnergyBank(MetaMachine machine, List<IBatteryData> batteries) {
+        public QuantumPowerStationEnergyBank(MetaMachine machine, List<IBatteryData> batteries) {
             super(machine);
             storage = new long[batteries.size()];
             maximums = new long[batteries.size()];
@@ -443,11 +443,11 @@ public class QuantumPowerSubstationMachine extends WorkableMultiblockMachine
          * Will use existing stored power and try to map it onto new batteries.
          * If there was more power before the rebuild operation, it will be lost.
          */
-        public PowerStationEnergyBank rebuild(@NotNull List<IBatteryData> batteries) {
+        public QuantumPowerStationEnergyBank rebuild(@NotNull List<IBatteryData> batteries) {
             if (batteries.isEmpty()) {
                 throw new IllegalArgumentException("Cannot rebuild Power Substation power bank with no batteries!");
             }
-            PowerStationEnergyBank newStorage = new PowerStationEnergyBank(this.machine, batteries);
+            QuantumPowerStationEnergyBank newStorage = new QuantumPowerStationEnergyBank(this.machine, batteries);
             for (long stored : storage) {
                 newStorage.fill(stored);
             }
