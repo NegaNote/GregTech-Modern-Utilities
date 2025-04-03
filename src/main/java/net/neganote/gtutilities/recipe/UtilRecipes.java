@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
 import static com.gregtechceu.gtceu.data.recipe.CraftingComponent.*;
-import static net.neganote.gtutilities.common.item.UtilItems.OMNITOOL;
+import static net.neganote.gtutilities.common.item.UtilItems.OMNIBREAKER;
 import static net.neganote.gtutilities.common.machine.UtilMachines.ENERGY_CONVERTER_64A;
 
 public class UtilRecipes {
@@ -23,7 +23,7 @@ public class UtilRecipes {
             register64AConverterRecipes(provider);
         }
 
-        if (UtilConfig.INSTANCE.features.omnitoolEnabled) {
+        if (UtilConfig.INSTANCE.features.omnibreakerEnabled) {
             registerOmnitoolRecipe(provider);
         }
     }
@@ -48,19 +48,20 @@ public class UtilRecipes {
             case GTValues.HV -> GTItems.POWER_UNIT_HV.asStack();
             case GTValues.EV -> GTItems.POWER_UNIT_EV.asStack();
             case GTValues.IV -> GTItems.POWER_UNIT_IV.asStack();
-            default -> throw new IllegalArgumentException("Invalid tier of power unit: " + tier);
+            default -> GTItems.POWER_UNIT_LV.asStack(); // just so there isn't an error if a tier is used that's not
+            // LV through IV
         };
     }
 
     public static void registerOmnitoolRecipe(Consumer<FinishedRecipe> provider) {
-        ASSEMBLER_RECIPES.recipeBuilder("omnitool")
-                .inputItems(getPowerUnit(UtilConfig.INSTANCE.features.omnitoolTier))
-                .inputItems(CIRCUIT.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 2)
-                .inputItems(EMITTER.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 1)
-                .inputItems(CABLE_QUAD.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 3)
-                .inputItems(MOTOR.getIngredient(UtilConfig.INSTANCE.features.omnitoolTier), 2)
-                .outputItems(OMNITOOL)
-                .EUt(GTValues.VEX[UtilConfig.INSTANCE.features.omnitoolTier]).duration(20 * 60)
+        ASSEMBLER_RECIPES.recipeBuilder("omnibreaker")
+                .inputItems(getPowerUnit(UtilConfig.INSTANCE.features.omnibreakerTier))
+                .inputItems(CIRCUIT.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
+                .inputItems(EMITTER.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 1)
+                .inputItems(CABLE_QUAD.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 3)
+                .inputItems(MOTOR.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
+                .outputItems(OMNIBREAKER)
+                .EUt(GTValues.VEX[UtilConfig.INSTANCE.features.omnibreakerTier]).duration(20 * 60)
                 .save(provider);
     }
 }

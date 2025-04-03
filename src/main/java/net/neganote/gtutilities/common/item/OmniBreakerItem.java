@@ -24,17 +24,17 @@ import java.util.Objects;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class OmniToolItem extends ComponentItem {
+public class OmniBreakerItem extends ComponentItem {
 
     protected int tier;
 
-    protected OmniToolItem(Properties properties, int tier) {
+    protected OmniBreakerItem(Properties properties, int tier) {
         super(properties);
         this.tier = tier;
     }
 
-    public static OmniToolItem create(Item.Properties properties, int tier) {
-        return new OmniToolItem(properties, tier);
+    public static OmniBreakerItem create(Item.Properties properties, int tier) {
+        return new OmniBreakerItem(properties, tier);
     }
 
     // Should make it so it can harvest anything
@@ -81,11 +81,11 @@ public class OmniToolItem extends ComponentItem {
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(stack));
         long charge = electricItem.getCharge();
         long maxCharge = electricItem.getMaxCharge();
-        tooltipComponents.add(Component.translatable("tooltip.omnitool.charge_status",
+        tooltipComponents.add(Component.translatable("tooltip.omnibreaker.charge_status",
                 Component.translatable(FormattingUtil.formatNumbers(charge)).withStyle(ChatFormatting.GREEN),
                 Component.translatable(FormattingUtil.formatNumbers(maxCharge)).withStyle(ChatFormatting.YELLOW)));
-        tooltipComponents.add(Component.translatable("tooltip.omnitool.can_break_anything"));
-        tooltipComponents.add(Component.translatable("tooltip.omnitool.right_click_function"));
+        tooltipComponents.add(Component.translatable("tooltip.omnibreaker.can_break_anything"));
+        tooltipComponents.add(Component.translatable("tooltip.omnibreaker.right_click_function"));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

@@ -19,20 +19,20 @@ public class UtilItems {
     }
 
     @SuppressWarnings("unused")
-    public static ItemEntry<OmniToolItem> OMNITOOL = null;
-    public static int OMNITOOL_TIER = UtilConfig.INSTANCE.features.omnitoolTier;
+    public static ItemEntry<OmniBreakerItem> OMNIBREAKER = null;
+    public static int OMNIBREAKER_TIER = UtilConfig.INSTANCE.features.omnibreakerTier;
 
     static {
-        if (UtilConfig.INSTANCE.features.omnitoolEnabled) {
-            OMNITOOL = REGISTRATE
-                    .item("omnitool", (p) -> OmniToolItem.create(p, OMNITOOL_TIER))
-                    .lang("Omnitool")
+        if (UtilConfig.INSTANCE.features.omnibreakerEnabled) {
+            OMNIBREAKER = REGISTRATE
+                    .item("omnibreaker", (p) -> OmniBreakerItem.create(p, OMNIBREAKER_TIER))
+                    .lang("Omni-breaker")
                     .defaultModel()
                     .properties(p -> p.stacksTo(1).durability(0))
                     .onRegister(attach(
-                            ElectricStats.createElectricItem(
-                                    (long) Math.pow(4.0, (double) OMNITOOL_TIER - 1) * 100_000L, OMNITOOL_TIER),
-                            new PrecisionBreakBehavior(OMNITOOL_TIER)))
+                            ElectricStats.createElectricItem(UtilConfig.INSTANCE.features.omnibreakerEnergyCapacity,
+                                    OMNIBREAKER_TIER),
+                            new PrecisionBreakBehavior(OMNIBREAKER_TIER)))
                     .register();
         }
     }

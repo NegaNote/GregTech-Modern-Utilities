@@ -30,11 +30,14 @@ public class UtilConfig {
         @Configurable.Comment({ "Whether the 64A energy converters are enabled." })
         public boolean converters64aEnabled = true;
         @Configurable
-        @Configurable.Comment({ "Whether the Omnitool is enabled." })
-        public boolean omnitoolEnabled = true;
+        @Configurable.Comment({ "Whether the Omni-breaker is enabled." })
+        public boolean omnibreakerEnabled = true;
         @Configurable
-        @Configurable.Comment({ "What tier the Omnitool is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)",
-                "(Unless the default recipe is overridden, can only support up to IV!)" })
-        public int omnitoolTier = GTValues.IV;
+        @Configurable.Comment({ "What tier the Omni-breaker is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)",
+                "(Unless the default recipe is overridden, can only support LV to IV!)" })
+        public int omnibreakerTier = GTValues.IV;
+        @Configurable
+        @Configurable.Comment("The energy capacity of the Omni-breaker.")
+        public long omnibreakerEnergyCapacity = 40_960_000L;
     }
 }

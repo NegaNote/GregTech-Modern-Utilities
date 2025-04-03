@@ -15,9 +15,9 @@
   "block.gtmutils.uv_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§Λ∩Ɛ§",
   "block.gtmutils.uxv_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§ΛX∩ǝ§",
   "block.gtmutils.zpm_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§WԀZɔ§",
-  "item.gtmutils.omnitool": "ןooʇıuɯO",
+  "item.gtmutils.omnibreaker": "ɹǝʞɐǝɹq-ıuɯO",
   "itemGroup.gtmutils.creative_tab": "sǝıʇıןıʇ∩ uɹǝpoW ɥɔǝ⟘bǝɹ⅁",
-  "tooltip.omnitool.can_break_anything": "¡ʎꞀ⟘NⱯ⟘SNI ⅁NIH⟘ʎNⱯ ʞɐǝɹq uɐɔ ןooʇıuɯo ǝɥ⟘",
-  "tooltip.omnitool.charge_status": "∩Ǝ %s / ∩Ǝ %s :ʎbɹǝuƎ",
-  "tooltip.omnitool.right_click_function": "¡ʞɔıןɔ-ʇɥbıɹ ɥʇıʍ sʞɔoןq ןɐnpıʌıpuı ʞɐǝɹᗺ"
+  "tooltip.omnibreaker.can_break_anything": "¡⅁NIH⟘ʎNⱯ ǝuıɯ-ɐʇsuı uɐɔ ɹǝʞɐǝɹq-ıuɯO ǝɥ⟘",
+  "tooltip.omnibreaker.charge_status": "∩Ǝ %s / ∩Ǝ %s :ʎbɹǝuƎ",
+  "tooltip.omnibreaker.right_click_function": "¡ʞɔıןɔ-ʇɥbıɹ ɥʇıʍ sʞɔoןq ןɐnpıʌıpuı ʞɐǝɹᗺ"
 }

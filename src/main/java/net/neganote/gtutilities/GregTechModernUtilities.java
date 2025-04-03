@@ -58,7 +58,7 @@ public class GregTechModernUtilities {
 
     public static void init() {
         UtilConfig.init();
-        if (UtilConfig.INSTANCE.features.omnitoolEnabled) {
+        if (UtilConfig.INSTANCE.features.omnibreakerEnabled) {
             UTIL_CREATIVE_TAB = REGISTRATE
                     .defaultCreativeTab(GregTechModernUtilities.MOD_ID,
                             builder -> builder
@@ -66,7 +66,7 @@ public class GregTechModernUtilities {
                                             GregTechModernUtilities.MOD_ID, REGISTRATE))
                                     .title(REGISTRATE.addLang("itemGroup", GregTechModernUtilities.id("creative_tab"),
                                             "GregTech Modern Utilities"))
-                                    .icon(UtilItems.OMNITOOL::asStack)
+                                    .icon(UtilItems.OMNIBREAKER::asStack)
                                     .build())
                     .register();
         } else {
