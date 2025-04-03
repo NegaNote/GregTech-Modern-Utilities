@@ -84,8 +84,10 @@ public class OmniBreakerItem extends ComponentItem {
         tooltipComponents.add(Component.translatable("tooltip.omnibreaker.charge_status",
                 Component.translatable(FormattingUtil.formatNumbers(charge)).withStyle(ChatFormatting.GREEN),
                 Component.translatable(FormattingUtil.formatNumbers(maxCharge)).withStyle(ChatFormatting.YELLOW)));
-        tooltipComponents.add(Component.translatable("tooltip.omnibreaker.can_break_anything"));
-        tooltipComponents.add(Component.translatable("tooltip.omnibreaker.right_click_function"));
+        tooltipComponents
+                .add(Component.translatable("tooltip.omnibreaker.can_break_anything").withStyle(ChatFormatting.GRAY));
+        tooltipComponents
+                .add(Component.translatable("tooltip.omnibreaker.right_click_function").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }
