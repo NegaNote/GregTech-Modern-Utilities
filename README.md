@@ -4,10 +4,12 @@ A GregTech Modern addon, adding some nice quality-of-life features.
 Current features:
 
 * A Sterile Cleaning Maintenance Hatch
-* An omnitool, that can break anything instantly
+* An omni-breaker, that can break anything instantly
 * 64A Energy Converters
 
 All features can be enabled or disabled in the config.
+
+While this mod was originally created for Monifactory, feel free to use it in any GregTech modpack you like!
 
 ## License
 
