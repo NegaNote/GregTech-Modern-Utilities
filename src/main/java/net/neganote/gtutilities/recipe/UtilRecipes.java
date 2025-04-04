@@ -29,10 +29,10 @@ public class UtilRecipes {
     }
 
     public static void register64AConverterRecipes(Consumer<FinishedRecipe> provider) {
-        for (int tier : GTValues.tiersBetween(GTValues.ULV, GTValues.UXV)) {
+        for (int tier : GTValues.tiersBetween(GTValues.ULV, GTValues.MAX)) {
             ASSEMBLER_RECIPES.recipeBuilder("converter_64a_" + GTValues.VN[tier])
                     .inputItems(HULL.getIngredient(tier))
-                    .inputItems(CIRCUIT.getIngredient(tier + 2))
+                    .inputItems(CIRCUIT.getIngredient(tier))
                     .inputItems(CABLE_HEX.getIngredient(0), 4)
                     .inputItems(CABLE_HEX.getIngredient(tier), 16)
                     .outputItems(ENERGY_CONVERTER_64A[tier])
