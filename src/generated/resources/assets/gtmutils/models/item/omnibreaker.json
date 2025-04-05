@@ -1,5 +1,19 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "gtmutils:item/monibreaker",
+      "predicate": {
+        "gtmutils:omnibreaker_name": 1.0
+      }
+    },
+    {
+      "model": "gtmutils:item/meownibreaker",
+      "predicate": {
+        "gtmutils:omnibreaker_name": 2.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "gtmutils:item/omnibreaker"
   }

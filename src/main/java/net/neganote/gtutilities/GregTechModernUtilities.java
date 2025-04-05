@@ -10,12 +10,13 @@ import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
 import com.gregtechceu.gtceu.common.data.GTItems;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -98,8 +99,18 @@ public class GregTechModernUtilities {
         });
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
-        LOGGER.info("Hey, we're on Minecraft version {}!", Minecraft.getInstance().getLaunchedVersion());
+    @SubscribeEvent
+    public void clientSetup(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> ItemProperties.register(UtilItems.OMNIBREAKER.get(), id("omnibreaker_name"),
+                (itemStack, clientLevel, livingEntity, i) -> {
+                    String hoverName = itemStack.getHoverName().getString().toLowerCase();
+                    if (hoverName.equals("monibreaker")) {
+                        return 1;
+                    } else if (hoverName.equals("meownibreaker")) {
+                        return 2;
+                    }
+                    return 0;
+                }));
     }
 
     // You MUST have this for custom materials.
