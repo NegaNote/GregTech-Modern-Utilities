@@ -104,9 +104,9 @@ public class GregTechModernUtilities {
         event.enqueueWork(() -> ItemProperties.register(UtilItems.OMNIBREAKER.get(), id("omnibreaker_name"),
                 (itemStack, clientLevel, livingEntity, i) -> {
                     String hoverName = itemStack.getHoverName().getString().toLowerCase();
-                    if (hoverName.equals("monibreaker")) {
+                    if (hoverName.equals("monibreaker") || hoverName.equals("moni-breaker")) {
                         return 1;
-                    } else if (hoverName.equals("meownibreaker")) {
+                    } else if (hoverName.equals("meownibreaker") || hoverName.equals("meowni-breaker")) {
                         return 2;
                     }
                     return 0;
