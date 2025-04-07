@@ -32,17 +32,17 @@ public class UtilItems {
                         ResourceLocation generatedItem = new ResourceLocation("item/generated");
                         prov
                                 .withExistingParent(ctx.getName(), generatedItem)
-                                .texture("layer0", GregTechModernUtilities.id("item/omnibreaker"))
-                                .override()
-                                .predicate(GregTechModernUtilities.id("omnibreaker_name"), 1)
-                                .model(prov.withExistingParent("monibreaker", generatedItem)
-                                        .texture("layer0", GregTechModernUtilities.id("item/monibreaker")))
-                                .end()
-                                .override()
-                                .predicate(GregTechModernUtilities.id("omnibreaker_name"), 2)
-                                .model(prov.withExistingParent("meownibreaker", generatedItem)
-                                        .texture("layer0", GregTechModernUtilities.id("item/meownibreaker")))
-                                .end();
+                                .texture("layer0", GregTechModernUtilities.id("item/omnibreaker"));
+                        // .override()
+                        // .predicate(GregTechModernUtilities.id("omnibreaker_name"), 1)
+                        // .model(prov.withExistingParent("monibreaker", generatedItem)
+                        // .texture("layer0", GregTechModernUtilities.id("item/monibreaker")))
+                        // .end()
+                        // .override()
+                        // .predicate(GregTechModernUtilities.id("omnibreaker_name"), 2)
+                        // .model(prov.withExistingParent("meownibreaker", generatedItem)
+                        // .texture("layer0", GregTechModernUtilities.id("item/meownibreaker")))
+                        // .end();
                     })
                     .properties(p -> p.stacksTo(1).durability(0))
                     .onRegister(attach(
