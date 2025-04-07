@@ -42,13 +42,6 @@ jobs:
           path: ./gradle.properties
           properties: "mod_version"
 
-      - name: Get minecraft version
-        id: toml_properties
-        uses: SebRollen/toml-action@v1.2.0
-        with:
-          file: ./gradle/libs.versions.toml
-          field: "versions.minecraft"
-
       - name: Build Project
         run: ./gradlew build --build-cache
 
@@ -61,7 +54,7 @@ jobs:
 
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-generate-changelog: true
-          github-tag: "${{ steps.toml_properties.outputs.value }}-${{ steps.gradle_properties.outputs.mod_version }}"
+          github-tag: "1.20.1-${{ steps.gradle_properties.outputs.mod_version }}"
 
           files: ./build/libs/!(*-@(dev|sources|dev-slim)).jar
           name: "GregTech Modern Utilities ${{ steps.gradle_properties.outputs.mod_version }}"
