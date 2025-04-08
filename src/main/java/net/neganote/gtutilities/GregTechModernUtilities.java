@@ -1,5 +1,6 @@
 package net.neganote.gtutilities;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -14,6 +15,8 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,7 +47,9 @@ public class GregTechModernUtilities {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::clientSetup);
+        if (GTCEu.isClientSide()) {
+            modEventBus.addListener(this::clientSetup);
+        }
         modEventBus.addListener(this::addMaterialRegistries);
         modEventBus.addListener(this::addMaterials);
         modEventBus.addListener(this::modifyMaterials);
@@ -99,6 +104,7 @@ public class GregTechModernUtilities {
         });
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void clientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> ItemProperties.register(UtilItems.OMNIBREAKER.get(), id("omnibreaker_name"),
