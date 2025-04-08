@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.0.2
+# GregTech Modern Utilities version 1.0.3
 
-Changes omni-breaker texture (again).
+HOTFIX - prevent server from trying to load client code
