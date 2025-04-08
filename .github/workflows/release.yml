@@ -62,4 +62,4 @@ jobs:
           version-type: ${{ inputs.version_type }}
           changelog-file: changelog.md
           loaders: forge
-          game-versions: ${{ steps.toml_properties.outputs.value }}
+          game-versions: 1.20.1
