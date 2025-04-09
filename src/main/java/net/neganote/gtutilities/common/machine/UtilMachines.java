@@ -1,15 +1,21 @@
 package net.neganote.gtutilities.common.machine;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
+import com.gregtechceu.gtceu.client.util.TooltipHelper;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -18,6 +24,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
+import net.neganote.gtutilities.common.machine.multiblock.QuantumActiveTransformerMachine;
 import net.neganote.gtutilities.config.UtilConfig;
 
 import java.util.Locale;
@@ -25,6 +32,9 @@ import java.util.function.BiFunction;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.V;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.controller;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.HIGH_POWER_CASING;
 import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 @SuppressWarnings("unused")
@@ -105,6 +115,40 @@ public class UtilMachines {
             ENERGY_CONVERTER_64A = registerConverter(64);
         }
     }
+
+    public static MultiblockMachineDefinition QUANTUM_ACTIVE_TRANSFORMER = null;
+
+    static {
+        if (UtilConfig.INSTANCE.features.quantumActiveTransformerEnabled) {
+            QUANTUM_ACTIVE_TRANSFORMER = REGISTRATE
+                    .multiblock("quantum_active_transformer", QuantumActiveTransformerMachine::new)
+                    .langValue("Quantum Active Transformer")
+                    .rotationState(RotationState.ALL)
+                    .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+                    .appearanceBlock(HIGH_POWER_CASING)
+                    .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
+                            Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
+                    .tooltipBuilder(
+                            (stack,
+                             components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
+                                    .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
+                                            .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+                    .pattern((definition) -> FactoryBlockPattern.start()
+                            .aisle("XXX", "XXX", "XXX")
+                            .aisle("XXX", "XCX", "XXX")
+                            .aisle("XXX", "XSX", "XXX")
+                            .where('S', controller(blocks(definition.getBlock())))
+                            .where('X', blocks(GTBlocks.HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
+                                    .or(QuantumActiveTransformerMachine.getHatchPredicates()))
+                            .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                            .build())
+                    .workableCasingRenderer(GTCEu.id("block/casings/hpca/high_power_casing"),
+                            GTCEu.id("block/multiblock/data_bank"))
+                    .register();
+        }
+
+    }
+
 
     public static void init() {}
 }

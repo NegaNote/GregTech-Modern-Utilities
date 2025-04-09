@@ -39,5 +39,9 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment("The energy capacity of the Omni-breaker.")
         public long omnibreakerEnergyCapacity = 40_960_000L;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the Quantum Active Transformer is enabled." })
+        public boolean quantumActiveTransformerEnabled = true;
     }
 }
