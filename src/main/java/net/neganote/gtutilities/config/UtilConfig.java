@@ -52,7 +52,7 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
                 "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
-        public float qatCoolantIOMultiplier = 0.005f;
+        public float qatCoolantIOMultiplier = 0.000005f;
     }
 
     public static boolean coolantEnabled() {

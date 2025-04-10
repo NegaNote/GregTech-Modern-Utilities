@@ -5,7 +5,9 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -19,15 +21,20 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
+import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
+import com.lowdragmc.lowdraglib.gui.texture.ItemStackTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -38,16 +45,17 @@ import net.neganote.gtutilities.config.UtilConfig;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
+// A lot of this is just from the original normal active transformer
 public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockMachine
                                              implements IControllable, IExplosionMachine, IFancyUIMachine,
                                              IDisplayUIMachine {
+
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            QuantumActiveTransformerMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private IEnergyContainer powerOutput;
     private IEnergyContainer powerInput;
@@ -55,7 +63,11 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
     @Persisted
     @DescSynced
-    private FluidHatchPartMachine coolantHatch;
+    private BlockPos coolantHatchPos;
+
+    @Persisted
+    @DescSynced
+    private int frequency;
 
     @Persisted
     @DescSynced
@@ -68,6 +80,8 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
         this.converterSubscription = new ConditionalSubscriptionHandler(this, this::convertEnergyTick,
                 this::isSubscriptionActive);
+
+        this.frequency = 0;
     }
 
     public void convertEnergyTick() {
@@ -77,6 +91,10 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         }
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
                 UtilConfig.coolantEnabled() && coolantTimer == 0) {
+
+            FluidHatchPartMachine coolantHatch = Objects.requireNonNull(
+                    (FluidHatchPartMachine) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
+
             FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
             int amountToDrain = calculateCoolantDrain();
             if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= amountToDrain) {
@@ -134,7 +152,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
         for (IMultiPart part : getPrioritySortedParts()) {
             if (part instanceof FluidHatchPartMachine machine) {
-                this.coolantHatch = machine;
+                this.coolantHatchPos = machine.getPos();
             }
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
@@ -167,10 +185,12 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
-        if (UtilConfig.coolantEnabled() && coolantHatch != null) {
+        if (UtilConfig.coolantEnabled() && coolantHatchPos != null) {
             coolantTimer = 0;
             if (isWorkingAllowed) {
                 // Player is unpausing machine
+                FluidHatchPartMachine coolantHatch = Objects.requireNonNull(
+                        (FluidHatchPartMachine) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
                 FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
                 int amountToDrain = calculateCoolantDrain();
                 if (!(coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() &&
@@ -212,6 +232,11 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
     }
 
     @Override
+    public @NotNull ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
+    }
+
+    @Override
     public void onStructureInvalid() {
         coolantTimer = 0;
         if ((isWorkingEnabled() && recipeLogic.getStatus() == RecipeLogic.Status.WORKING) &&
@@ -221,7 +246,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         super.onStructureInvalid();
         this.powerOutput = new EnergyContainerList(new ArrayList<>());
         this.powerInput = new EnergyContainerList(new ArrayList<>());
-        this.coolantHatch = null;
+        this.coolantHatchPos = null;
         getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
         converterSubscription.unsubscribe();
     }
@@ -269,6 +294,39 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 textList.add(Component.translatable("gtceu.multiblock.idling"));
             }
         }
+    }
+
+    public void setFrequencyFromString(String str) {
+        this.frequency = Integer.parseInt(str);
+    }
+
+    public String getFrequencyString() {
+        return Integer.valueOf(frequency).toString();
+    }
+
+    @Override
+    public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
+        super.attachConfigurators(configuratorPanel);
+        configuratorPanel.attachConfigurators(new IFancyConfigurator() {
+
+            @Override
+            public Component getTitle() {
+                return Component.translatable("gtmutils.gui.qat_wireless_configurator.title");
+            }
+
+            @Override
+            public IGuiTexture getIcon() {
+                return new ItemStackTexture(GTItems.SENSOR_UV.asItem());
+            }
+
+            @Override
+            public Widget createConfigurator() {
+                return new WidgetGroup(0, 0, 130, 25)
+                        .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
+                                .setTextResponder(QuantumActiveTransformerMachine.this::setFrequencyFromString)
+                                .setTextSupplier(QuantumActiveTransformerMachine.this::getFrequencyString));
+            }
+        });
     }
 
     @Override
