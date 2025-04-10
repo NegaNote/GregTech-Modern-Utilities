@@ -214,6 +214,10 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 textList.add(Component
                         .translatable("gtceu.multiblock.active_transformer.average_out",
                                 FormattingUtil.formatNumbers(Math.abs(powerOutput.getOutputPerSec() / 20))));
+                textList.add(Component
+                        .translatable("gtmutils.multiblock.quantum_active_transformer.coolant_usage",
+                                FormattingUtil.formatNumbers(calculateCoolantDrain()),
+                                UtilMaterials.QuantumCoolant.getLocalizedName()));
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     textList.add(Component
                             .translatable("gtceu.multiblock.active_transformer.danger_enabled"));

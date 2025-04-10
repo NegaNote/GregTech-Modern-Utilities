@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
 import net.neganote.gtutilities.common.machine.multiblock.QuantumActiveTransformerMachine;
+import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 
 import java.util.Locale;
@@ -133,6 +134,13 @@ public class UtilMachines {
                                      .translatable("gtceu.machine.active_transformer.tooltip.2")
                                      .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
                                              .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+                    .conditionalTooltip(
+                            Component
+                                    .translatable("tooltip.quantum_active_transformer.uses_coolant",
+                                            UtilMaterials.QuantumCoolant.getLocalizedName()
+                                                    .withStyle(ChatFormatting.AQUA))
+                                    .withStyle(ChatFormatting.DARK_RED),
+                            UtilConfig.coolantEnabled())
                     .pattern((definition) -> FactoryBlockPattern.start()
                             .aisle("XXX", "XXX", "XXX")
                             .aisle("XXX", "XCX", "XXX")
