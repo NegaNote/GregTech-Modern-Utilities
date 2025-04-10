@@ -173,7 +173,8 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 // Player is unpausing machine
                 FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
                 int amountToDrain = calculateCoolantDrain();
-                if (!(coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= amountToDrain)) {
+                if (!(coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() &&
+                        coolant.getAmount() >= amountToDrain)) {
                     if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                         doExplosion(6.0f + getTier());
                     } else {
