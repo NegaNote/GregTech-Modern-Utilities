@@ -18,6 +18,8 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
+import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -27,6 +29,9 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.fluids.FluidStack;
+import net.neganote.gtutilities.common.materials.UtilMaterials;
+import net.neganote.gtutilities.config.UtilConfig;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import org.jetbrains.annotations.NotNull;
@@ -39,11 +44,14 @@ import java.util.Map;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockMachine
-        implements IControllable, IExplosionMachine, IFancyUIMachine, IDisplayUIMachine {
+                                             implements IControllable, IExplosionMachine, IFancyUIMachine,
+                                             IDisplayUIMachine {
 
     private IEnergyContainer powerOutput;
     private IEnergyContainer powerInput;
     protected ConditionalSubscriptionHandler converterSubscription;
+
+    private FluidHatchPartMachine coolantHatch;
 
     public QuantumActiveTransformerMachine(IMachineBlockEntity holder) {
         super(holder);
@@ -59,12 +67,35 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
             getRecipeLogic()
                     .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
         }
+        if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
+                UtilConfig.coolantEnabled()) {
+            FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
+            int amountToDrain = calculateCoolantDrain();
+            if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= amountToDrain) {
+                coolantHatch.tank.handleRecipe(IO.IN, null,
+                        List.of(FluidIngredient.of(amountToDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
+                        false);
+            } else {
+                if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
+                    doExplosion(6.0f + getTier());
+                } else {
+                    getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
+                    converterSubscription.updateSubscription();
+                    return;
+                }
+            }
+        }
         if (isWorkingEnabled()) {
             long canDrain = powerInput.getEnergyStored();
             long totalDrained = powerOutput.changeEnergy(canDrain);
             powerInput.removeEnergy(totalDrained);
         }
         converterSubscription.updateSubscription();
+    }
+
+    private int calculateCoolantDrain() {
+        return UtilConfig.INSTANCE.features.qatCoolantBaseDrain +
+                (int) (powerOutput.getInputPerSec() * UtilConfig.INSTANCE.features.qatCoolantIOMultiplier);
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -87,6 +118,9 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
         for (IMultiPart part : getPrioritySortedParts()) {
+            if (part instanceof FluidHatchPartMachine machine) {
+                this.coolantHatch = machine;
+            }
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
             for (var handler : part.getRecipeHandlers()) {
@@ -145,11 +179,12 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         super.onStructureInvalid();
         this.powerOutput = new EnergyContainerList(new ArrayList<>());
         this.powerInput = new EnergyContainerList(new ArrayList<>());
+        this.coolantHatch = null;
         getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
         converterSubscription.unsubscribe();
     }
 
-    public static TraceabilityPredicate getHatchPredicates() {
+    public static TraceabilityPredicate getEnergyHatchPredicates() {
         return abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
                 .or(abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2))
                 .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))
@@ -160,9 +195,6 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
     @Override
     public void addDisplayText(@NotNull List<Component> textList) {
-        // super.addDisplayText(textList); idek what it does stop doing what you do for a minute pls
-        // Assume That the Structure is ALWAYS formed, and has at least 1 In and 1 Out, there is never a case where this
-        // does not occur.
         if (isFormed()) {
             if (!isWorkingEnabled()) {
                 textList.add(Component.translatable("gtceu.multiblock.work_paused"));
@@ -185,6 +217,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     textList.add(Component
                             .translatable("gtceu.multiblock.active_transformer.danger_enabled"));
+
                 }
             } else {
                 textList.add(Component.translatable("gtceu.multiblock.idling"));

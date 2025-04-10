@@ -32,8 +32,7 @@ import java.util.function.BiFunction;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.V;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.controller;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.HIGH_POWER_CASING;
 import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
@@ -130,16 +129,18 @@ public class UtilMachines {
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
                     .tooltipBuilder(
                             (stack,
-                             components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
-                                    .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
-                                            .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+                             components) -> components.add(Component
+                                     .translatable("gtceu.machine.active_transformer.tooltip.2")
+                                     .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
+                                             .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
                     .pattern((definition) -> FactoryBlockPattern.start()
                             .aisle("XXX", "XXX", "XXX")
                             .aisle("XXX", "XCX", "XXX")
                             .aisle("XXX", "XSX", "XXX")
                             .where('S', controller(blocks(definition.getBlock())))
                             .where('X', blocks(GTBlocks.HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
-                                    .or(QuantumActiveTransformerMachine.getHatchPredicates()))
+                                    .or(QuantumActiveTransformerMachine.getEnergyHatchPredicates())
+                                    .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(1)))
                             .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
                             .build())
                     .workableCasingRenderer(GTCEu.id("block/casings/hpca/high_power_casing"),
@@ -148,7 +149,6 @@ public class UtilMachines {
         }
 
     }
-
 
     public static void init() {}
 }

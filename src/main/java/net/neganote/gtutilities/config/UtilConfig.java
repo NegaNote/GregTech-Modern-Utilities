@@ -43,5 +43,20 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Whether the Quantum Active Transformer is enabled." })
         public boolean quantumActiveTransformerEnabled = true;
+
+        @Configurable
+        @Configurable.Comment({ "Base amount of QAT coolant to drain every tick.",
+                "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
+        public int qatCoolantBaseDrain = 4;
+
+        @Configurable
+        @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
+                "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
+        public float qatCoolantIOMultiplier = 0.005f;
+    }
+
+    public static boolean coolantEnabled() {
+        return UtilConfig.INSTANCE.features.qatCoolantBaseDrain != 0 &&
+                UtilConfig.INSTANCE.features.qatCoolantIOMultiplier != 0.0f;
     }
 }

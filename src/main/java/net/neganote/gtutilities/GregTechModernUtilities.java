@@ -26,6 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.machine.UtilMachines;
+import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.data.UtilDatagen;
 
@@ -127,7 +128,7 @@ public class GregTechModernUtilities {
 
     // As well as this.
     private void addMaterials(MaterialEvent event) {
-        // CustomMaterials.init();
+        UtilMaterials.register();
     }
 
     // This is optional, though.

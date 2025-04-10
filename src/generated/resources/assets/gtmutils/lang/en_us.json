@@ -18,6 +18,7 @@
   "block.gtmutils.zpm_64a_energy_converter": "§cZPM§r 64§eA§r Energy Converter",
   "item.gtmutils.omnibreaker": "Omni-breaker",
   "itemGroup.gtmutils.creative_tab": "GregTech Modern Utilities",
+  "material.gtmutils.quantum_coolant": "Quantum Coolant",
   "tooltip.omnibreaker.can_break_anything": "The Omni-breaker can insta-mine ANYTHING!",
   "tooltip.omnibreaker.charge_status": "Energy: %s EU / %s EU",
   "tooltip.omnibreaker.right_click_function": "Break individual blocks with right-click!"
