@@ -11,6 +11,6 @@ public class UtilLangHandler {
 
         provider.add("tooltip.quantum_active_transformer.uses_coolant", "Drains %s to function!");
 
-        provider.add("gtmutils.multiblock.quantum_active_transformer.coolant_usage", "§cDrains %sL of %s per tick");
+        provider.add("gtmutils.multiblock.quantum_active_transformer.coolant_usage", "§cDrains %sL of %s per second");
     }
 }

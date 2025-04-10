@@ -25,6 +25,8 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -51,7 +53,13 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
     private IEnergyContainer powerInput;
     protected ConditionalSubscriptionHandler converterSubscription;
 
+    @Persisted
+    @DescSynced
     private FluidHatchPartMachine coolantHatch;
+
+    @Persisted
+    @DescSynced
+    private int coolantTimer = 0;
 
     public QuantumActiveTransformerMachine(IMachineBlockEntity holder) {
         super(holder);
@@ -68,7 +76,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                     .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
         }
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
-                UtilConfig.coolantEnabled()) {
+                UtilConfig.coolantEnabled() && coolantTimer == 0) {
             FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
             int amountToDrain = calculateCoolantDrain();
             if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= amountToDrain) {
@@ -79,12 +87,14 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     doExplosion(6.0f + getTier());
                 } else {
+                    coolantTimer = 0;
                     getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
                     converterSubscription.updateSubscription();
                     return;
                 }
             }
         }
+        coolantTimer = (coolantTimer + 1) % 20;
         if (isWorkingEnabled()) {
             long canDrain = powerInput.getEnergyStored();
             long totalDrained = powerOutput.changeEnergy(canDrain);
@@ -107,6 +117,11 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         if (powerOutput.getEnergyStored() >= powerOutput.getEnergyCapacity()) return false;
 
         return true;
+    }
+
+    @Override
+    public boolean onWorking() {
+        return super.onWorking();
     }
 
     @Override
@@ -150,6 +165,31 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         converterSubscription.updateSubscription();
     }
 
+    @Override
+    public void setWorkingEnabled(boolean isWorkingAllowed) {
+        if (UtilConfig.coolantEnabled() && coolantHatch != null) {
+            coolantTimer = 0;
+            if (isWorkingAllowed) {
+                // Player is unpausing machine
+                FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
+                int amountToDrain = calculateCoolantDrain();
+                if (!(coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= amountToDrain)) {
+                    if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
+                        doExplosion(6.0f + getTier());
+                    } else {
+                        coolantTimer = 0;
+                        super.setWorkingEnabled(false);
+                        converterSubscription.updateSubscription();
+                        return;
+                    }
+                }
+            }
+            super.setWorkingEnabled(isWorkingAllowed);
+        } else {
+            super.setWorkingEnabled(isWorkingAllowed);
+        }
+    }
+
     @NotNull
     private List<IMultiPart> getPrioritySortedParts() {
         return getParts().stream().sorted(Comparator.comparing(part -> {
@@ -172,6 +212,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
     @Override
     public void onStructureInvalid() {
+        coolantTimer = 0;
         if ((isWorkingEnabled() && recipeLogic.getStatus() == RecipeLogic.Status.WORKING) &&
                 !ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
             doExplosion(6f + getTier());

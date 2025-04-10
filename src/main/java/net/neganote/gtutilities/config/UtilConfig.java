@@ -45,7 +45,7 @@ public class UtilConfig {
         public boolean quantumActiveTransformerEnabled = true;
 
         @Configurable
-        @Configurable.Comment({ "Base amount of QAT coolant to drain every tick.",
+        @Configurable.Comment({ "Base amount of QAT coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
         public int qatCoolantBaseDrain = 4;
 
