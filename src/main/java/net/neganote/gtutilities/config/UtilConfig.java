@@ -2,11 +2,11 @@ package net.neganote.gtutilities.config;
 
 import com.gregtechceu.gtceu.api.GTValues;
 
-import dev.toma.configuration.config.ConfigHolder;
 import net.neganote.gtutilities.GregTechModernUtilities;
 
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.Config;
+import dev.toma.configuration.config.ConfigHolder;
 import dev.toma.configuration.config.Configurable;
 import dev.toma.configuration.config.format.ConfigFormats;
 

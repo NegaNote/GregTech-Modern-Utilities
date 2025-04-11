@@ -1,10 +1,11 @@
 package net.neganote.gtutilities.data.lang;
 
+import net.neganote.gtutilities.GregTechModernUtilities;
+import net.neganote.gtutilities.config.UtilConfig;
+
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 import dev.toma.configuration.config.value.ConfigValue;
 import dev.toma.configuration.config.value.ObjectValue;
-import net.neganote.gtutilities.GregTechModernUtilities;
-import net.neganote.gtutilities.config.UtilConfig;
 
 import java.util.HashSet;
 import java.util.Map;
