@@ -24,7 +24,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
-import net.neganote.gtutilities.common.machine.multiblock.QuantumActiveTransformerMachine;
+import net.neganote.gtutilities.common.machine.multiblock.PowerWormholeMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 
@@ -116,13 +116,13 @@ public class UtilMachines {
         }
     }
 
-    public static MultiblockMachineDefinition QUANTUM_ACTIVE_TRANSFORMER = null;
+    public static MultiblockMachineDefinition POWER_WORMHOLE_MACHINE = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.quantumActiveTransformerEnabled) {
-            QUANTUM_ACTIVE_TRANSFORMER = REGISTRATE
-                    .multiblock("quantum_active_transformer", QuantumActiveTransformerMachine::new)
-                    .langValue("Quantum Active Transformer")
+        if (UtilConfig.INSTANCE.features.powerWormholeEnabled) {
+            POWER_WORMHOLE_MACHINE = REGISTRATE
+                    .multiblock("power_wormhole_machine", PowerWormholeMachine::new)
+                    .langValue("Power Transfer Einstein-Rosen Bridge")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(HIGH_POWER_CASING)
@@ -136,7 +136,7 @@ public class UtilMachines {
                                              .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
                     .conditionalTooltip(
                             Component
-                                    .translatable("tooltip.quantum_active_transformer.uses_coolant",
+                                    .translatable("tooltip.power_wormhole_machine.uses_coolant",
                                             UtilMaterials.QuantumCoolant.getLocalizedName()
                                                     .withStyle(ChatFormatting.AQUA))
                                     .withStyle(ChatFormatting.DARK_RED),
@@ -147,7 +147,7 @@ public class UtilMachines {
                             .aisle("XXX", "XSX", "XXX")
                             .where('S', controller(blocks(definition.getBlock())))
                             .where('X', blocks(GTBlocks.HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
-                                    .or(QuantumActiveTransformerMachine.getEnergyHatchPredicates())
+                                    .or(PowerWormholeMachine.getEnergyHatchPredicates())
                                     .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(1)))
                             .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
                             .build())

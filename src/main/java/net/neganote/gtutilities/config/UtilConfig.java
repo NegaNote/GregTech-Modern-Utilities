@@ -2,6 +2,7 @@ package net.neganote.gtutilities.config;
 
 import com.gregtechceu.gtceu.api.GTValues;
 
+import dev.toma.configuration.config.ConfigHolder;
 import net.neganote.gtutilities.GregTechModernUtilities;
 
 import dev.toma.configuration.Configuration;
@@ -14,8 +15,11 @@ public class UtilConfig {
 
     public static UtilConfig INSTANCE;
 
+    public static ConfigHolder<UtilConfig> CONFIG_HOLDER;
+
     public static void init() {
-        INSTANCE = Configuration.registerConfig(UtilConfig.class, ConfigFormats.yaml()).getConfigInstance();
+        CONFIG_HOLDER = Configuration.registerConfig(UtilConfig.class, ConfigFormats.yaml());
+        INSTANCE = CONFIG_HOLDER.getConfigInstance();
     }
 
     @Configurable
@@ -41,22 +45,22 @@ public class UtilConfig {
         public long omnibreakerEnergyCapacity = 40_960_000L;
 
         @Configurable
-        @Configurable.Comment({ "Whether the Quantum Active Transformer is enabled." })
-        public boolean quantumActiveTransformerEnabled = true;
+        @Configurable.Comment({ "Whether the Power-Transfer Einstein-Rosen Bridge is enabled." })
+        public boolean powerWormholeEnabled = true;
 
         @Configurable
-        @Configurable.Comment({ "Base amount of QAT coolant to drain every second.",
+        @Configurable.Comment({ "Base amount of PTERB coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
-        public int qatCoolantBaseDrain = 4;
+        public int pterbCoolantBaseDrain = 4;
 
         @Configurable
         @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
                 "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
-        public float qatCoolantIOMultiplier = 0.000005f;
+        public float pterbCoolantIOMultiplier = 0.000005f;
     }
 
     public static boolean coolantEnabled() {
-        return UtilConfig.INSTANCE.features.qatCoolantBaseDrain != 0 &&
-                UtilConfig.INSTANCE.features.qatCoolantIOMultiplier != 0.0f;
+        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 &&
+                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f;
     }
 }

@@ -51,12 +51,12 @@ import java.util.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is just from the original normal active transformer
-public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockMachine
-                                             implements IControllable, IExplosionMachine, IFancyUIMachine,
-                                             IDisplayUIMachine {
+public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
+                                  implements IControllable, IExplosionMachine, IFancyUIMachine,
+                                  IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            QuantumActiveTransformerMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            PowerWormholeMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private IEnergyContainer powerOutput;
     private IEnergyContainer powerInput;
@@ -78,7 +78,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
     @DescSynced
     private int coolantTimer = 0;
 
-    public QuantumActiveTransformerMachine(IMachineBlockEntity holder) {
+    public PowerWormholeMachine(IMachineBlockEntity holder) {
         super(holder);
         this.powerOutput = new EnergyContainerList(new ArrayList<>());
         this.powerInput = new EnergyContainerList(new ArrayList<>());
@@ -136,8 +136,8 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         } else {
             scalingFactor = powerOutput.getOutputAmperage() * powerOutput.getOutputVoltage();
         }
-        return UtilConfig.INSTANCE.features.qatCoolantBaseDrain +
-                (int) (scalingFactor * UtilConfig.INSTANCE.features.qatCoolantIOMultiplier);
+        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
+                (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -268,7 +268,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                         .translatable("gtceu.multiblock.active_transformer.average_out",
                                 FormattingUtil.formatNumbers(Math.abs(powerOutput.getOutputPerSec() / 20))));
                 textList.add(Component
-                        .translatable("gtmutils.multiblock.quantum_active_transformer.coolant_usage",
+                        .translatable("gtmutils.multiblock.power_wormhole_machine.coolant_usage",
                                 FormattingUtil.formatNumbers(calculateCoolantDrain()),
                                 UtilMaterials.QuantumCoolant.getLocalizedName()));
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
@@ -296,7 +296,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
             @Override
             public Component getTitle() {
-                return Component.translatable("gtmutils.gui.qat_wireless_configurator.title");
+                return Component.translatable("gtmutils.gui.pterb.wireless_configurator.title");
             }
 
             @Override
@@ -308,8 +308,8 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
             public Widget createConfigurator() {
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
-                                .setTextResponder(QuantumActiveTransformerMachine.this::setFrequencyFromString)
-                                .setTextSupplier(QuantumActiveTransformerMachine.this::getFrequencyString))
+                                .setTextResponder(PowerWormholeMachine.this::setFrequencyFromString)
+                                .setTextSupplier(PowerWormholeMachine.this::getFrequencyString))
                         .addWidget(
                                 new ToggleButtonWidget(70, 0, 15, 15, GuiTextures.BUTTON_ALLOW_IMPORT_EXPORT,
                                         () -> isInput, (newIOSetting) -> isInput = newIOSetting));
