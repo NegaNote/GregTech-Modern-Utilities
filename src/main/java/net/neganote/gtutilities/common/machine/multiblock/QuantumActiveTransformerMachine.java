@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
+import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -71,6 +72,10 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
 
     @Persisted
     @DescSynced
+    private boolean isInput;
+
+    @Persisted
+    @DescSynced
     private int coolantTimer = 0;
 
     public QuantumActiveTransformerMachine(IMachineBlockEntity holder) {
@@ -82,6 +87,7 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 this::isSubscriptionActive);
 
         this.frequency = 0;
+        this.isInput = true;
     }
 
     public void convertEnergyTick() {
@@ -112,7 +118,9 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 }
             }
         }
-        coolantTimer = (coolantTimer + 1) % 20;
+        if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING) {
+            coolantTimer = (coolantTimer + 1) % 20;
+        }
         if (isWorkingEnabled()) {
             long canDrain = powerInput.getEnergyStored();
             long totalDrained = powerOutput.changeEnergy(canDrain);
@@ -122,8 +130,14 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
     }
 
     private int calculateCoolantDrain() {
+        long scalingFactor;
+        if (isInput) {
+            scalingFactor = powerInput.getInputAmperage() * powerInput.getInputVoltage();
+        } else {
+            scalingFactor = powerOutput.getOutputAmperage() * powerOutput.getOutputVoltage();
+        }
         return UtilConfig.INSTANCE.features.qatCoolantBaseDrain +
-                (int) (powerOutput.getInputPerSec() * UtilConfig.INSTANCE.features.qatCoolantIOMultiplier);
+                (int) (scalingFactor * UtilConfig.INSTANCE.features.qatCoolantIOMultiplier);
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -181,34 +195,6 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
         this.powerInput = new EnergyContainerList(powerInput);
 
         converterSubscription.updateSubscription();
-    }
-
-    @Override
-    public void setWorkingEnabled(boolean isWorkingAllowed) {
-        if (UtilConfig.coolantEnabled() && coolantHatchPos != null) {
-            coolantTimer = 0;
-            if (isWorkingAllowed) {
-                // Player is unpausing machine
-                FluidHatchPartMachine coolantHatch = Objects.requireNonNull(
-                        (FluidHatchPartMachine) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
-                FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
-                int amountToDrain = calculateCoolantDrain();
-                if (!(coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() &&
-                        coolant.getAmount() >= amountToDrain)) {
-                    if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
-                        doExplosion(6.0f + getTier());
-                    } else {
-                        coolantTimer = 0;
-                        super.setWorkingEnabled(false);
-                        converterSubscription.updateSubscription();
-                        return;
-                    }
-                }
-            }
-            super.setWorkingEnabled(isWorkingAllowed);
-        } else {
-            super.setWorkingEnabled(isWorkingAllowed);
-        }
     }
 
     @NotNull
@@ -288,7 +274,6 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     textList.add(Component
                             .translatable("gtceu.multiblock.active_transformer.danger_enabled"));
-
                 }
             } else {
                 textList.add(Component.translatable("gtceu.multiblock.idling"));
@@ -324,7 +309,10 @@ public class QuantumActiveTransformerMachine extends WorkableElectricMultiblockM
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
                                 .setTextResponder(QuantumActiveTransformerMachine.this::setFrequencyFromString)
-                                .setTextSupplier(QuantumActiveTransformerMachine.this::getFrequencyString));
+                                .setTextSupplier(QuantumActiveTransformerMachine.this::getFrequencyString))
+                        .addWidget(
+                                new ToggleButtonWidget(70, 0, 15, 15, GuiTextures.BUTTON_ALLOW_IMPORT_EXPORT,
+                                        () -> isInput, (newIOSetting) -> isInput = newIOSetting));
             }
         });
     }
