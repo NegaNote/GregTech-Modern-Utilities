@@ -8,7 +8,6 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
-import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -50,7 +49,7 @@ import java.util.*;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
-// A lot of this is just from the original normal active transformer
+// A lot of this is copied from the Active Transformer
 public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                                   implements IControllable, IExplosionMachine, IFancyUIMachine,
                                   IDisplayUIMachine {
@@ -72,10 +71,6 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
 
     @Persisted
     @DescSynced
-    private boolean isInput;
-
-    @Persisted
-    @DescSynced
     private int coolantTimer = 0;
 
     public PowerWormholeMachine(IMachineBlockEntity holder) {
@@ -87,7 +82,6 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                 this::isSubscriptionActive);
 
         this.frequency = 0;
-        this.isInput = true;
     }
 
     public void convertEnergyTick() {
@@ -122,6 +116,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             coolantTimer = (coolantTimer + 1) % 20;
         }
         if (isWorkingEnabled()) {
+            reportAvailablePower();
+            receiveWirelessPower();
             long canDrain = powerInput.getEnergyStored();
             long totalDrained = powerOutput.changeEnergy(canDrain);
             powerInput.removeEnergy(totalDrained);
@@ -129,13 +125,15 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         converterSubscription.updateSubscription();
     }
 
+    private void reportAvailablePower() {}
+
+    private void receiveWirelessPower() {}
+
     private int calculateCoolantDrain() {
         long scalingFactor;
-        if (isInput) {
-            scalingFactor = powerInput.getInputAmperage() * powerInput.getInputVoltage();
-        } else {
-            scalingFactor = powerOutput.getOutputAmperage() * powerOutput.getOutputVoltage();
-        }
+
+        scalingFactor = Math.max(powerInput.getInputAmperage() * powerInput.getInputVoltage(),
+                powerOutput.getOutputAmperage() * powerOutput.getOutputVoltage());
         return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
                 (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
     }
@@ -309,10 +307,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
                                 .setTextResponder(PowerWormholeMachine.this::setFrequencyFromString)
-                                .setTextSupplier(PowerWormholeMachine.this::getFrequencyString))
-                        .addWidget(
-                                new ToggleButtonWidget(70, 0, 15, 15, GuiTextures.BUTTON_ALLOW_IMPORT_EXPORT,
-                                        () -> isInput, (newIOSetting) -> isInput = newIOSetting));
+                                .setTextSupplier(PowerWormholeMachine.this::getFrequencyString));
             }
         });
     }
