@@ -1,6 +1,6 @@
-package net.neganote.gtutilities.data;
+package net.neganote.gtutilities.datagen;
 
-import net.neganote.gtutilities.data.lang.UtilLangHandler;
+import net.neganote.gtutilities.datagen.lang.UtilLangHandler;
 
 import com.tterrag.registrate.providers.ProviderType;
 

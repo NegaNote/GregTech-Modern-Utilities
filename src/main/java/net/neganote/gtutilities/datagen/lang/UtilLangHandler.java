@@ -1,4 +1,4 @@
-package net.neganote.gtutilities.data.lang;
+package net.neganote.gtutilities.datagen.lang;
 
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.config.UtilConfig;
