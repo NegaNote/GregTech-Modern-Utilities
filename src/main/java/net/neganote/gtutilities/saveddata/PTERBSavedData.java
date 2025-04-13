@@ -232,7 +232,7 @@ public class PTERBSavedData extends SavedData {
             }
             return new EnergyContainerList(energyContainerList);
         }
-        return null;
+        return new EnergyContainerList(new ArrayList<>());
     }
 
     public EnergyContainerList getWirelessEnergyOutputs(int freq) {
@@ -252,6 +252,6 @@ public class PTERBSavedData extends SavedData {
             }
             return new EnergyContainerList(energyContainerList);
         }
-        return null;
+        return new EnergyContainerList(new ArrayList<>());
     }
 }

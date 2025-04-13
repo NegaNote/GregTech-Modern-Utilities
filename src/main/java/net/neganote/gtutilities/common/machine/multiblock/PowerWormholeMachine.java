@@ -36,11 +36,13 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
+import net.neganote.gtutilities.saveddata.PTERBSavedData;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import org.jetbrains.annotations.NotNull;
@@ -57,9 +59,9 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             PowerWormholeMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private IEnergyContainer localPowerOutput;
+    private List<IEnergyContainer> localPowerOutput;
 
-    private IEnergyContainer localPowerInput;
+    private List<IEnergyContainer> localPowerInput;
 
     protected ConditionalSubscriptionHandler converterSubscription;
 
@@ -73,12 +75,28 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
 
     @Persisted
     @DescSynced
+    private long inputAmperage;
+
+    @Persisted
+    @DescSynced
+    private long inputVoltage;
+
+    @Persisted
+    @DescSynced
+    private long outputAmperage;
+
+    @Persisted
+    @DescSynced
+    private long outputVoltage;
+
+    @Persisted
+    @DescSynced
     private int coolantTimer = 0;
 
     public PowerWormholeMachine(IMachineBlockEntity holder) {
         super(holder);
-        this.localPowerOutput = new EnergyContainerList(new ArrayList<>());
-        this.localPowerInput = new EnergyContainerList(new ArrayList<>());
+        this.localPowerOutput = new ArrayList<>();
+        this.localPowerInput = new ArrayList<>();
 
         this.converterSubscription = new ConditionalSubscriptionHandler(this, this::convertEnergyTick,
                 this::isSubscriptionActive);
@@ -118,9 +136,18 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             coolantTimer = (coolantTimer + 1) % 20;
         }
         if (isWorkingEnabled()) {
-            long canDrain = localPowerInput.getEnergyStored();
-            long totalDrained = localPowerOutput.changeEnergy(canDrain);
-            localPowerInput.removeEnergy(totalDrained);
+            if (getLevel() instanceof ServerLevel serverLevel) {
+                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+
+                savedData.addEnergyInputs(frequency, localPowerInput);
+                savedData.addEnergyOutputs(frequency, localPowerOutput);
+
+                EnergyContainerList powerInput = savedData.getWirelessEnergyInputs(frequency);
+                EnergyContainerList powerOutput = savedData.getWirelessEnergyOutputs(frequency);
+                long canDrain = powerInput.getEnergyStored();
+                long totalDrained = powerOutput.changeEnergy(canDrain);
+                powerInput.removeEnergy(totalDrained);
+            }
         }
         converterSubscription.updateSubscription();
     }
@@ -128,8 +155,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     private int calculateCoolantDrain() {
         long scalingFactor;
 
-        scalingFactor = Math.max(localPowerInput.getInputAmperage() * localPowerInput.getInputVoltage(),
-                localPowerOutput.getOutputAmperage() * localPowerOutput.getOutputVoltage());
+        scalingFactor = Math.max(inputAmperage * inputVoltage,
+                outputAmperage * outputVoltage);
         return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
                 (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
     }
@@ -160,6 +187,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         for (IMultiPart part : getPrioritySortedParts()) {
             if (part instanceof FluidHatchPartMachine machine) {
                 this.coolantHatchPos = machine.getPos();
+                continue;
             }
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
@@ -184,8 +212,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             this.onStructureInvalid();
         }
 
-        this.localPowerInput = new EnergyContainerList(localPowerInput);
-        this.localPowerOutput = new EnergyContainerList(localPowerOutput);
+        this.localPowerInput = localPowerInput;
+        this.localPowerOutput = localPowerOutput;
 
         converterSubscription.updateSubscription();
     }
@@ -223,8 +251,17 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             doExplosion(6f + getTier());
         }
         super.onStructureInvalid();
-        this.localPowerOutput = new EnergyContainerList(new ArrayList<>());
-        this.localPowerInput = new EnergyContainerList(new ArrayList<>());
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            savedData.removeEnergyInputs(frequency, localPowerInput);
+            savedData.removeEnergyOutputs(frequency, localPowerOutput);
+        }
+        this.localPowerOutput = new ArrayList<>();
+        this.localPowerInput = new ArrayList<>();
+        this.inputAmperage = 0;
+        this.inputVoltage = 0;
+        this.outputAmperage = 0;
+        this.outputVoltage = 0;
         this.coolantHatchPos = null;
         getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
         converterSubscription.unsubscribe();
@@ -249,19 +286,17 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                 textList.add(Component
                         .translatable("gtceu.multiblock.active_transformer.max_input",
                                 FormattingUtil.formatNumbers(
-                                        Math.abs(localPowerInput.getInputVoltage() *
-                                                localPowerInput.getInputAmperage()))));
+                                        Math.abs(inputVoltage * inputAmperage))));
                 textList.add(Component
                         .translatable("gtceu.multiblock.active_transformer.max_output",
                                 FormattingUtil.formatNumbers(
-                                        Math.abs(localPowerOutput.getOutputVoltage() *
-                                                localPowerOutput.getOutputAmperage()))));
-                textList.add(Component
-                        .translatable("gtceu.multiblock.active_transformer.average_in",
-                                FormattingUtil.formatNumbers(Math.abs(localPowerInput.getInputPerSec() / 20))));
-                textList.add(Component
-                        .translatable("gtceu.multiblock.active_transformer.average_out",
-                                FormattingUtil.formatNumbers(Math.abs(localPowerOutput.getOutputPerSec() / 20))));
+                                        Math.abs(outputVoltage * outputAmperage))));
+                // textList.add(Component
+                // .translatable("gtceu.multiblock.active_transformer.average_in",
+                // FormattingUtil.formatNumbers(Math.abs(localPowerInput.getInputPerSec() / 20))));
+                // textList.add(Component
+                // .translatable("gtceu.multiblock.active_transformer.average_out",
+                // FormattingUtil.formatNumbers(Math.abs(localPowerOutput.getOutputPerSec() / 20))));
                 textList.add(Component
                         .translatable("gtmutils.multiblock.power_wormhole_machine.coolant_usage",
                                 FormattingUtil.formatNumbers(calculateCoolantDrain()),
@@ -277,6 +312,15 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     }
 
     public void setFrequencyFromString(String str) {
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            savedData.removeEnergyInputs(frequency, localPowerInput);
+            savedData.removeEnergyOutputs(frequency, localPowerOutput);
+        }
+        this.inputAmperage = 0;
+        this.inputVoltage = 0;
+        this.outputAmperage = 0;
+        this.outputVoltage = 0;
         this.frequency = Integer.parseInt(str);
     }
 
