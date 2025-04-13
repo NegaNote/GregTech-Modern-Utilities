@@ -110,7 +110,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                     .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
         }
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
-                UtilConfig.coolantEnabled() && coolantTimer == 0) {
+                UtilConfig.coolantEnabled() && coolantTimer == 0 && frequency != 0) {
 
             FluidHatchPartMachine coolantHatch = Objects.requireNonNull(
                     (FluidHatchPartMachine) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
@@ -135,7 +135,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING) {
             coolantTimer = (coolantTimer + 1) % 20;
         }
-        if (isWorkingEnabled()) {
+        if (isWorkingEnabled() && frequency != 0) {
             if (getLevel() instanceof ServerLevel serverLevel) {
                 PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
 
@@ -212,7 +212,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         this.localPowerInput = localPowerInput;
         this.localPowerOutput = localPowerOutput;
 
-        if (getLevel() instanceof ServerLevel serverLevel) {
+        if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
             savedData.addEnergyInputs(frequency, localPowerInput);
             savedData.addEnergyOutputs(frequency, localPowerOutput);
@@ -317,8 +317,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             savedData.removeEnergyOutputs(frequency, localPowerOutput);
             savedData.saveDataToCache();
         }
-        this.frequency = Integer.parseInt(str);
-        if (getLevel() instanceof ServerLevel serverLevel) {
+        frequency = Integer.parseInt(str);
+        if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.addEnergyInputs(frequency, localPowerInput);
             savedData.addEnergyOutputs(frequency, localPowerOutput);
@@ -333,7 +333,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         super.setWorkingEnabled(isWorkingAllowed);
-        if (getLevel() instanceof ServerLevel serverLevel) {
+        if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             if (isWorkingAllowed) {
                 savedData.addEnergyInputs(frequency, localPowerInput);
