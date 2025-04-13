@@ -59,9 +59,9 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             PowerWormholeMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private List<IEnergyContainer> localPowerOutput;
+    private List<IMultiPart> localPowerOutput;
 
-    private List<IEnergyContainer> localPowerInput;
+    private List<IMultiPart> localPowerInput;
 
     protected ConditionalSubscriptionHandler converterSubscription;
 
@@ -180,8 +180,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     public void onStructureFormed() {
         super.onStructureFormed();
         // capture all energy containers
-        List<IEnergyContainer> localPowerInput = new ArrayList<>();
-        List<IEnergyContainer> localPowerOutput = new ArrayList<>();
+        List<IMultiPart> localPowerInput = new ArrayList<>();
+        List<IMultiPart> localPowerOutput = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
         for (IMultiPart part : getPrioritySortedParts()) {
@@ -196,11 +196,11 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                 // If IO not compatible
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
                 if (handler.getCapability() == EURecipeCapability.CAP &&
-                        handler instanceof IEnergyContainer container) {
+                        handler instanceof IEnergyContainer) {
                     if (handlerIO == IO.IN) {
-                        localPowerInput.add(container);
+                        localPowerInput.add(part);
                     } else if (handlerIO == IO.OUT) {
-                        localPowerOutput.add(container);
+                        localPowerOutput.add(part);
                     }
                     traitSubscriptions.add(handler.addChangedListener(converterSubscription::updateSubscription));
                 }
@@ -291,12 +291,6 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                         .translatable("gtceu.multiblock.active_transformer.max_output",
                                 FormattingUtil.formatNumbers(
                                         Math.abs(outputVoltage * outputAmperage))));
-                // textList.add(Component
-                // .translatable("gtceu.multiblock.active_transformer.average_in",
-                // FormattingUtil.formatNumbers(Math.abs(localPowerInput.getInputPerSec() / 20))));
-                // textList.add(Component
-                // .translatable("gtceu.multiblock.active_transformer.average_out",
-                // FormattingUtil.formatNumbers(Math.abs(localPowerOutput.getOutputPerSec() / 20))));
                 textList.add(Component
                         .translatable("gtmutils.multiblock.power_wormhole_machine.coolant_usage",
                                 FormattingUtil.formatNumbers(calculateCoolantDrain()),

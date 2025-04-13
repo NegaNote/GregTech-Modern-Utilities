@@ -1,9 +1,12 @@
 package net.neganote.gtutilities.saveddata;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
+import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.LaserHatchPartMachine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -135,123 +138,127 @@ public class PTERBSavedData extends SavedData {
         return tags;
     }
 
-    public void addEnergyInputs(int freq, List<IEnergyContainer> energyContainers) {
-        if (!GTCEu.isClientSide()) {
-            List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
-                    (f) -> new ArrayList<>());
-            for (IEnergyContainer container : energyContainers) {
-                if (container instanceof MetaMachine machine) {
-                    ServerLevel level = (ServerLevel) machine.getLevel();
-                    assert level != null;
-                    ResourceLocation dimension = level.dimension().location();
-                    BlockPos pos = machine.getPos();
-                    Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
-                    if (!inputPairs.contains(pair)) {
-                        inputPairs.add(pair);
-                    }
+    public void addEnergyInputs(int freq, List<IMultiPart> parts) {
+        List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
+                (f) -> new ArrayList<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                if (!inputPairs.contains(pair)) {
+                    inputPairs.add(pair);
                 }
             }
-            energyInputs.put(freq, inputPairs);
-            setDirty();
         }
+        energyInputs.put(freq, inputPairs);
+        setDirty();
     }
 
-    public void removeEnergyInputs(int freq, List<IEnergyContainer> energyContainers) {
-        if (!GTCEu.isClientSide()) {
-            List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
-                    (f) -> new ArrayList<>());
-            for (IEnergyContainer container : energyContainers) {
-                if (container instanceof MetaMachine machine) {
-                    ServerLevel level = (ServerLevel) machine.getLevel();
-                    assert level != null;
-                    ResourceLocation dimension = level.dimension().location();
-                    BlockPos pos = machine.getPos();
-                    Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
-                    inputPairs.remove(pair);
-                }
+    public void removeEnergyInputs(int freq, List<IMultiPart> parts) {
+        List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
+                (f) -> new ArrayList<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                inputPairs.remove(pair);
             }
-            energyInputs.put(freq, inputPairs);
-            setDirty();
         }
+        energyInputs.put(freq, inputPairs);
+        setDirty();
     }
 
-    public void addEnergyOutputs(int freq, List<IEnergyContainer> energyContainers) {
-        if (!GTCEu.isClientSide()) {
-            List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
-                    (f) -> new ArrayList<>());
-            for (IEnergyContainer container : energyContainers) {
-                if (container instanceof MetaMachine machine) {
-                    ServerLevel level = (ServerLevel) machine.getLevel();
-                    assert level != null;
-                    ResourceLocation dimension = level.dimension().location();
-                    BlockPos pos = machine.getPos();
-                    Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
-                    if (!outputPairs.contains(pair)) {
-                        outputPairs.add(pair);
-                    }
+    public void addEnergyOutputs(int freq, List<IMultiPart> parts) {
+        List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
+                (f) -> new ArrayList<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                if (!outputPairs.contains(pair)) {
+                    outputPairs.add(pair);
                 }
             }
-            energyOutputs.put(freq, outputPairs);
-            setDirty();
         }
+        energyOutputs.put(freq, outputPairs);
+        setDirty();
     }
 
-    public void removeEnergyOutputs(int freq, List<IEnergyContainer> energyContainers) {
-        if (!GTCEu.isClientSide()) {
-            List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
-                    (f) -> new ArrayList<>());
-            for (IEnergyContainer container : energyContainers) {
-                if (container instanceof MetaMachine machine) {
-                    ServerLevel level = (ServerLevel) machine.getLevel();
-                    assert level != null;
-                    ResourceLocation dimension = level.dimension().location();
-                    BlockPos pos = machine.getPos();
-                    Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
-                    outputPairs.remove(pair);
-                }
+    public void removeEnergyOutputs(int freq, List<IMultiPart> parts) {
+        List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
+                (f) -> new ArrayList<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                outputPairs.remove(pair);
             }
-            energyOutputs.put(freq, outputPairs);
-            setDirty();
         }
+        energyOutputs.put(freq, outputPairs);
+        setDirty();
     }
 
     public EnergyContainerList getWirelessEnergyInputs(int freq) {
-        if (!GTCEu.isClientSide()) {
-            List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
-                    (f) -> new ArrayList<>());
-            List<IEnergyContainer> energyContainerList = new ArrayList<>();
-            for (Pair<ResourceLocation, BlockPos> pair : inputPairs) {
-                ServerLevel dimension = serverLevel.getServer()
-                        .getLevel(ResourceKey.create(Registries.DIMENSION, pair.getFirst()));
-                if (dimension != null) {
-                    MetaMachine machine = MetaMachine.getMachine(dimension, pair.getSecond());
-                    if (machine instanceof IEnergyContainer energyContainer) {
-                        energyContainerList.add(energyContainer);
+        List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
+                (f) -> new ArrayList<>());
+        List<IEnergyContainer> energyContainerList = new ArrayList<>();
+        for (Pair<ResourceLocation, BlockPos> pair : inputPairs) {
+            ServerLevel dimension = serverLevel.getServer()
+                    .getLevel(ResourceKey.create(Registries.DIMENSION, pair.getFirst()));
+            if (dimension != null) {
+                MetaMachine machine = MetaMachine.getMachine(dimension, pair.getSecond());
+                if (machine instanceof EnergyHatchPartMachine hatch) {
+                    energyContainerList.add(hatch.energyContainer);
+                }
+                if (machine instanceof LaserHatchPartMachine hatch) {
+                    // unfortunately the laser hatch's buffer is private, so I have to do this instead
+                    for (var handler : hatch.getRecipeHandlers()) {
+                        if (handler.getCapability() == EURecipeCapability.CAP &&
+                                handler instanceof IEnergyContainer container) {
+                            energyContainerList.add(container);
+                        }
                     }
                 }
             }
-            return new EnergyContainerList(energyContainerList);
         }
-        return new EnergyContainerList(new ArrayList<>());
+        return new EnergyContainerList(energyContainerList);
     }
 
     public EnergyContainerList getWirelessEnergyOutputs(int freq) {
-        if (!GTCEu.isClientSide()) {
-            List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
-                    (f) -> new ArrayList<>());
-            List<IEnergyContainer> energyContainerList = new ArrayList<>();
-            for (Pair<ResourceLocation, BlockPos> pair : outputPairs) {
-                ServerLevel dimension = serverLevel.getServer()
-                        .getLevel(ResourceKey.create(Registries.DIMENSION, pair.getFirst()));
-                if (dimension != null) {
-                    MetaMachine machine = MetaMachine.getMachine(dimension, pair.getSecond());
-                    if (machine instanceof IEnergyContainer energyContainer) {
-                        energyContainerList.add(energyContainer);
+        List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
+                (f) -> new ArrayList<>());
+        List<IEnergyContainer> energyContainerList = new ArrayList<>();
+        for (Pair<ResourceLocation, BlockPos> pair : outputPairs) {
+            ServerLevel dimension = serverLevel.getServer()
+                    .getLevel(ResourceKey.create(Registries.DIMENSION, pair.getFirst()));
+            if (dimension != null) {
+                MetaMachine machine = MetaMachine.getMachine(dimension, pair.getSecond());
+                if (machine instanceof EnergyHatchPartMachine hatch) {
+                    energyContainerList.add(hatch.energyContainer);
+                }
+                if (machine instanceof LaserHatchPartMachine hatch) {
+                    // unfortunately the laser hatch's buffer is private, so I have to do this instead
+                    for (var handler : hatch.getRecipeHandlers()) {
+                        if (handler.getCapability() == EURecipeCapability.CAP &&
+                                handler instanceof IEnergyContainer container) {
+                            energyContainerList.add(container);
+                        }
                     }
                 }
             }
-            return new EnergyContainerList(energyContainerList);
         }
-        return new EnergyContainerList(new ArrayList<>());
+        return new EnergyContainerList(energyContainerList);
     }
 }
