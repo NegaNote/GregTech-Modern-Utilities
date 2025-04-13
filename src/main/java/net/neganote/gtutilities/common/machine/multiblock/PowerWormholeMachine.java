@@ -139,9 +139,6 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             if (getLevel() instanceof ServerLevel serverLevel) {
                 PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
 
-                savedData.addEnergyInputs(frequency, localPowerInput);
-                savedData.addEnergyOutputs(frequency, localPowerOutput);
-
                 EnergyContainerList powerInput = savedData.getWirelessEnergyInputs(frequency);
                 EnergyContainerList powerOutput = savedData.getWirelessEnergyOutputs(frequency);
                 long canDrain = powerInput.getEnergyStored();
@@ -207,13 +204,20 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             }
         }
 
-        // Invalidate the structure if there is not at least one output and one input
-        if (localPowerInput.isEmpty() || localPowerOutput.isEmpty()) {
+        // Invalidate the structure if there is not at least one output or one input
+        if (localPowerInput.isEmpty() && localPowerOutput.isEmpty()) {
             this.onStructureInvalid();
         }
 
         this.localPowerInput = localPowerInput;
         this.localPowerOutput = localPowerOutput;
+
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            savedData.addEnergyInputs(frequency, localPowerInput);
+            savedData.addEnergyOutputs(frequency, localPowerOutput);
+            savedData.saveDataToCache();
+        }
 
         converterSubscription.updateSubscription();
     }
@@ -255,6 +259,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.removeEnergyInputs(frequency, localPowerInput);
             savedData.removeEnergyOutputs(frequency, localPowerOutput);
+            savedData.saveDataToCache();
         }
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
@@ -310,16 +315,36 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.removeEnergyInputs(frequency, localPowerInput);
             savedData.removeEnergyOutputs(frequency, localPowerOutput);
+            savedData.saveDataToCache();
         }
-        this.inputAmperage = 0;
-        this.inputVoltage = 0;
-        this.outputAmperage = 0;
-        this.outputVoltage = 0;
         this.frequency = Integer.parseInt(str);
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
+            savedData.addEnergyInputs(frequency, localPowerInput);
+            savedData.addEnergyOutputs(frequency, localPowerOutput);
+            savedData.saveDataToCache();
+        }
     }
 
     public String getFrequencyString() {
         return Integer.valueOf(frequency).toString();
+    }
+
+    @Override
+    public void setWorkingEnabled(boolean isWorkingAllowed) {
+        super.setWorkingEnabled(isWorkingAllowed);
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
+            if (isWorkingAllowed) {
+                savedData.addEnergyInputs(frequency, localPowerInput);
+                savedData.addEnergyOutputs(frequency, localPowerOutput);
+                savedData.saveDataToCache();
+            } else {
+                savedData.removeEnergyInputs(frequency, localPowerInput);
+                savedData.removeEnergyOutputs(frequency, localPowerOutput);
+                savedData.saveDataToCache();
+            }
+        }
     }
 
     @Override

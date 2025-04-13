@@ -141,6 +141,7 @@ public class PTERBSavedData extends SavedData {
     public void addEnergyInputs(int freq, List<IMultiPart> parts) {
         List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
                 (f) -> new ArrayList<>());
+        boolean changed = false;
         for (IMultiPart part : parts) {
             if (part instanceof MetaMachine machine) {
                 ServerLevel level = (ServerLevel) machine.getLevel();
@@ -150,16 +151,20 @@ public class PTERBSavedData extends SavedData {
                 Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
                 if (!inputPairs.contains(pair)) {
                     inputPairs.add(pair);
+                    changed = true;
                 }
             }
         }
+        if (changed) {
+            setDirty();
+        }
         energyInputs.put(freq, inputPairs);
-        setDirty();
     }
 
     public void removeEnergyInputs(int freq, List<IMultiPart> parts) {
         List<Pair<ResourceLocation, BlockPos>> inputPairs = energyInputs.computeIfAbsent(freq,
                 (f) -> new ArrayList<>());
+        boolean changed = false;
         for (IMultiPart part : parts) {
             if (part instanceof MetaMachine machine) {
                 ServerLevel level = (ServerLevel) machine.getLevel();
@@ -167,16 +172,21 @@ public class PTERBSavedData extends SavedData {
                 ResourceLocation dimension = level.dimension().location();
                 BlockPos pos = machine.getPos();
                 Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
-                inputPairs.remove(pair);
+                if (inputPairs.remove(pair)) {
+                    changed = true;
+                }
             }
         }
+        if (changed) {
+            setDirty();
+        }
         energyInputs.put(freq, inputPairs);
-        setDirty();
     }
 
     public void addEnergyOutputs(int freq, List<IMultiPart> parts) {
         List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
                 (f) -> new ArrayList<>());
+        boolean changed = false;
         for (IMultiPart part : parts) {
             if (part instanceof MetaMachine machine) {
                 ServerLevel level = (ServerLevel) machine.getLevel();
@@ -186,16 +196,20 @@ public class PTERBSavedData extends SavedData {
                 Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
                 if (!outputPairs.contains(pair)) {
                     outputPairs.add(pair);
+                    changed = true;
                 }
             }
         }
+        if (changed) {
+            setDirty();
+        }
         energyOutputs.put(freq, outputPairs);
-        setDirty();
     }
 
     public void removeEnergyOutputs(int freq, List<IMultiPart> parts) {
         List<Pair<ResourceLocation, BlockPos>> outputPairs = energyOutputs.computeIfAbsent(freq,
                 (f) -> new ArrayList<>());
+        boolean changed = false;
         for (IMultiPart part : parts) {
             if (part instanceof MetaMachine machine) {
                 ServerLevel level = (ServerLevel) machine.getLevel();
@@ -203,11 +217,22 @@ public class PTERBSavedData extends SavedData {
                 ResourceLocation dimension = level.dimension().location();
                 BlockPos pos = machine.getPos();
                 Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
-                outputPairs.remove(pair);
+                if (outputPairs.remove(pair)) {
+                    changed = true;
+                }
             }
         }
+        if (changed) {
+            setDirty();
+        }
         energyOutputs.put(freq, outputPairs);
-        setDirty();
+    }
+
+    public void saveDataToCache() {
+        if (isDirty()) {
+            serverLevel.getDataStorage().save();
+            setDirty(false);
+        }
     }
 
     public EnergyContainerList getWirelessEnergyInputs(int freq) {
