@@ -137,7 +137,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         }
         if (isWorkingEnabled()) {
             if (getLevel() instanceof ServerLevel serverLevel) {
-                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
 
                 savedData.addEnergyInputs(frequency, localPowerInput);
                 savedData.addEnergyOutputs(frequency, localPowerOutput);
@@ -252,7 +252,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         }
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.removeEnergyInputs(frequency, localPowerInput);
             savedData.removeEnergyOutputs(frequency, localPowerOutput);
         }
@@ -307,7 +307,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
 
     public void setFrequencyFromString(String str) {
         if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.removeEnergyInputs(frequency, localPowerInput);
             savedData.removeEnergyOutputs(frequency, localPowerOutput);
         }
