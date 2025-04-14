@@ -43,6 +43,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.saveddata.PTERBSavedData;
+import net.neganote.gtutilities.utils.EnergyUtils;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import org.jetbrains.annotations.NotNull;
@@ -69,25 +70,11 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     @DescSynced
     private BlockPos coolantHatchPos;
 
+    private long coolantDrain;
+
     @Persisted
     @DescSynced
     private int frequency;
-
-    @Persisted
-    @DescSynced
-    private long inputAmperage;
-
-    @Persisted
-    @DescSynced
-    private long inputVoltage;
-
-    @Persisted
-    @DescSynced
-    private long outputAmperage;
-
-    @Persisted
-    @DescSynced
-    private long outputVoltage;
 
     @Persisted
     @DescSynced
@@ -116,10 +103,9 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                     (FluidHatchPartMachine) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
 
             FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
-            int amountToDrain = calculateCoolantDrain();
-            if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= amountToDrain) {
+            if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= coolantDrain) {
                 coolantHatch.tank.handleRecipe(IO.IN, null,
-                        List.of(FluidIngredient.of(amountToDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
+                        List.of(FluidIngredient.of((int) coolantDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
                         false);
             } else {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
@@ -149,13 +135,27 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         converterSubscription.updateSubscription();
     }
 
-    private int calculateCoolantDrain() {
-        long scalingFactor;
+    private long calculateCoolantDrain() {
+        long inputAmperage = 0;
+        long inputVoltage = 0;
+        long outputAmperage = 0;
+        long outputVoltage = 0;
 
-        scalingFactor = Math.max(inputAmperage * inputVoltage,
-                outputAmperage * outputVoltage);
+        if (!localPowerInput.isEmpty()) {
+            EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
+            inputAmperage = localInputs.getInputAmperage();
+            inputVoltage = localInputs.getInputVoltage();
+        }
+
+        if (!localPowerOutput.isEmpty()) {
+            EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
+            outputAmperage = localOutputs.getOutputAmperage();
+            outputVoltage = localOutputs.getOutputVoltage();
+        }
+
+        long scalingFactor = Math.max(inputAmperage * inputVoltage, outputAmperage * outputVoltage);
         return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
-                (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
+                (long) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -212,6 +212,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         this.localPowerInput = localPowerInput;
         this.localPowerOutput = localPowerOutput;
 
+        this.coolantDrain = calculateCoolantDrain();
+
         if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
             savedData.addEnergyInputs(frequency, localPowerInput);
@@ -263,10 +265,6 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
         }
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
-        this.inputAmperage = 0;
-        this.inputVoltage = 0;
-        this.outputAmperage = 0;
-        this.outputVoltage = 0;
         this.coolantHatchPos = null;
         getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
         converterSubscription.unsubscribe();
@@ -287,18 +285,43 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             if (!isWorkingEnabled()) {
                 textList.add(Component.translatable("gtceu.multiblock.work_paused"));
             } else if (isActive()) {
+                long inputAmperage = 0;
+                long inputVoltage = 0;
+                long outputAmperage = 0;
+                long outputVoltage = 0;
+
+                if (!localPowerInput.isEmpty()) {
+                    EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
+                    inputAmperage = localInputs.getInputAmperage();
+                    inputVoltage = localInputs.getInputVoltage();
+                }
+
+                if (!localPowerOutput.isEmpty()) {
+                    EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
+                    outputAmperage = localOutputs.getOutputAmperage();
+                    outputVoltage = localOutputs.getOutputVoltage();
+                }
+
+                long inputTotal = inputVoltage * inputAmperage;
+                long outputTotal = outputVoltage * outputAmperage;
+
                 textList.add(Component.translatable("gtceu.multiblock.running"));
-                textList.add(Component
-                        .translatable("gtceu.multiblock.active_transformer.max_input",
-                                FormattingUtil.formatNumbers(
-                                        Math.abs(inputVoltage * inputAmperage))));
-                textList.add(Component
-                        .translatable("gtceu.multiblock.active_transformer.max_output",
-                                FormattingUtil.formatNumbers(
-                                        Math.abs(outputVoltage * outputAmperage))));
+                if (inputTotal > 0) {
+                    textList.add(Component
+                            .translatable("gtceu.multiblock.active_transformer.max_input",
+                                    FormattingUtil.formatNumbers(
+                                            Math.abs(inputTotal))));
+                }
+                if (outputTotal > 0) {
+                    textList.add(Component
+                            .translatable("gtceu.multiblock.active_transformer.max_output",
+                                    FormattingUtil.formatNumbers(
+                                            Math.abs(outputTotal))));
+                }
+
                 textList.add(Component
                         .translatable("gtmutils.multiblock.power_wormhole_machine.coolant_usage",
-                                FormattingUtil.formatNumbers(calculateCoolantDrain()),
+                                FormattingUtil.formatNumbers(coolantDrain),
                                 UtilMaterials.QuantumCoolant.getLocalizedName()));
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     textList.add(Component
