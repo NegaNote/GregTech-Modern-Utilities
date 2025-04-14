@@ -3,6 +3,7 @@ package net.neganote.gtutilities.integration.jade;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neganote.gtutilities.integration.jade.provider.PTERBFrequencyProvider;
+
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;

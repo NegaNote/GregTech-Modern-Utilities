@@ -21,6 +21,7 @@ public class UtilLangHandler {
         provider.add("tooltip.power_wormhole_machine.uses_coolant", "Drains %s to function!");
 
         provider.add("gtmutils.multiblock.power_wormhole_machine.coolant_usage", "§cDrains %sL of %s per second");
+        provider.add("gtmutils.power_wormhole_machine.invalid_frequency", "PTERBs will not work on frequency 0!");
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
 

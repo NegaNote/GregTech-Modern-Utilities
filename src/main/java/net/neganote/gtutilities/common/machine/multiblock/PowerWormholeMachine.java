@@ -34,7 +34,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import lombok.Getter;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -47,6 +47,7 @@ import net.neganote.gtutilities.saveddata.PTERBSavedData;
 import net.neganote.gtutilities.utils.EnergyUtils;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -284,6 +285,11 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     @Override
     public void addDisplayText(@NotNull List<Component> textList) {
         if (isFormed()) {
+            if (frequency == 0) {
+                textList.add(Component.translatable("gtmutils.power_wormhole_machine.invalid_frequency")
+                        .withStyle(ChatFormatting.RED));
+                return;
+            }
             if (!isWorkingEnabled()) {
                 textList.add(Component.translatable("gtceu.multiblock.work_paused"));
             } else if (isActive()) {
@@ -343,6 +349,9 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             savedData.saveDataToCache();
         }
         frequency = Integer.parseInt(str);
+        if (frequency == 0) {
+            setWorkingEnabled(false);
+        }
         if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.addEnergyInputs(frequency, localPowerInput);
