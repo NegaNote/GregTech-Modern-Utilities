@@ -33,5 +33,7 @@
   "tooltip.omnibreaker.can_break_anything": "The Omni-breaker can insta-mine ANYTHING!",
   "tooltip.omnibreaker.charge_status": "Energy: %s EU / %s EU",
   "tooltip.omnibreaker.right_click_function": "Break individual blocks with right-click!",
+  "tooltip.power_wormhole_machine.frequencies": "All PTERBs with the same frequency act like a single Active Transformer.",
+  "tooltip.power_wormhole_machine.purpose": "Wireless Active Transformer (PTERB)",
   "tooltip.power_wormhole_machine.uses_coolant": "Drains %s to function!"
 }

@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
-import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
@@ -126,14 +125,10 @@ public class UtilMachines {
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(HIGH_POWER_CASING)
-                    .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
-                            Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
-                    .tooltipBuilder(
-                            (stack,
-                             components) -> components.add(Component
-                                     .translatable("gtceu.machine.active_transformer.tooltip.2")
-                                     .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
-                                             .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+                    .tooltips(Component.translatable("tooltip.power_wormhole_machine.purpose"),
+                            Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
+                            Component.translatable("tooltip.power_wormhole_machine.frequencies")
+                                    .withStyle(ChatFormatting.GRAY))
                     .conditionalTooltip(
                             Component
                                     .translatable("tooltip.power_wormhole_machine.uses_coolant",
@@ -155,7 +150,6 @@ public class UtilMachines {
                             GTCEu.id("block/multiblock/data_bank"))
                     .register();
         }
-
     }
 
     public static void init() {}

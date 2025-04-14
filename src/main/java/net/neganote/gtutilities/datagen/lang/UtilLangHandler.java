@@ -24,6 +24,10 @@ public class UtilLangHandler {
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
 
+        provider.add("tooltip.power_wormhole_machine.purpose", "Wireless Active Transformer (PTERB)");
+        provider.add("tooltip.power_wormhole_machine.frequencies",
+                "All PTERBs with the same frequency act like a single Active Transformer.");
+
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
 

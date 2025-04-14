@@ -355,6 +355,10 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
+        if (frequency == 0) {
+            super.setWorkingEnabled(false);
+            return;
+        }
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
