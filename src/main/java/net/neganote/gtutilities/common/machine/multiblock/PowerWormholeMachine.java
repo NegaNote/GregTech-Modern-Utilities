@@ -34,6 +34,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -74,6 +75,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
 
     @Persisted
     @DescSynced
+    @Getter
     private int frequency;
 
     @Persisted

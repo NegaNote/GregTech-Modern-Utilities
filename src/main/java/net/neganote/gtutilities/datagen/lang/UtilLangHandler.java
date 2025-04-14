@@ -27,6 +27,9 @@ public class UtilLangHandler {
         provider.add("tooltip.power_wormhole_machine.purpose", "Wireless Active Transformer (PTERB)");
         provider.add("tooltip.power_wormhole_machine.frequencies",
                 "All PTERBs with the same frequency act like a single Active Transformer.");
+        provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
+
+        provider.add("config.jade.plugin_gtmutils.frequency_info", "PTERB Frequency Info");
 
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
