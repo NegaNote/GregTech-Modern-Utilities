@@ -1,6 +1,5 @@
 package net.neganote.gtutilities.common.machine;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -22,6 +21,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
+import net.neganote.gtutilities.client.renderer.machine.PTERBRenderer;
 import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
 import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
@@ -146,8 +146,8 @@ public class UtilMachines {
                                     .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(1)))
                             .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
                             .build())
-                    .workableCasingRenderer(GTCEu.id("block/casings/hpca/high_power_casing"),
-                            GTCEu.id("block/multiblock/data_bank"))
+                    .renderer(PTERBRenderer::new)
+                    .hasTESR(true)
                     .register();
         }
     }
