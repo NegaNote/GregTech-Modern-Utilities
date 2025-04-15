@@ -55,12 +55,12 @@ import java.util.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
-public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
+public class PTERBMachine extends WorkableElectricMultiblockMachine
                                   implements IControllable, IExplosionMachine, IFancyUIMachine,
                                   IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            PowerWormholeMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            PTERBMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private List<IMultiPart> localPowerOutput;
 
@@ -83,7 +83,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     @DescSynced
     private int coolantTimer = 0;
 
-    public PowerWormholeMachine(IMachineBlockEntity holder) {
+    public PTERBMachine(IMachineBlockEntity holder) {
         super(holder);
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
@@ -286,7 +286,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
     public void addDisplayText(@NotNull List<Component> textList) {
         if (isFormed()) {
             if (frequency == 0) {
-                textList.add(Component.translatable("gtmutils.power_wormhole_machine.invalid_frequency")
+                textList.add(Component.translatable("gtmutils.pterb_machine.invalid_frequency")
                         .withStyle(ChatFormatting.RED));
                 return;
             }
@@ -328,7 +328,7 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
                 }
 
                 textList.add(Component
-                        .translatable("gtmutils.multiblock.power_wormhole_machine.coolant_usage",
+                        .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
                                 FormattingUtil.formatNumbers(coolantDrain),
                                 UtilMaterials.QuantumCoolant.getLocalizedName()));
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
@@ -404,8 +404,8 @@ public class PowerWormholeMachine extends WorkableElectricMultiblockMachine
             public Widget createConfigurator() {
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
-                                .setTextResponder(PowerWormholeMachine.this::setFrequencyFromString)
-                                .setTextSupplier(PowerWormholeMachine.this::getFrequencyString));
+                                .setTextResponder(PTERBMachine.this::setFrequencyFromString)
+                                .setTextSupplier(PTERBMachine.this::getFrequencyString));
             }
         });
     }

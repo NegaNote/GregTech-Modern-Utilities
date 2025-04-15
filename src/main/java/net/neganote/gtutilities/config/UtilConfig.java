@@ -46,7 +46,7 @@ public class UtilConfig {
 
         @Configurable
         @Configurable.Comment({ "Whether the Power-Transfer Einstein-Rosen Bridge is enabled." })
-        public boolean powerWormholeEnabled = true;
+        public boolean pterbEnabled = true;
 
         @Configurable
         @Configurable.Comment({ "Base amount of PTERB coolant to drain every second.",

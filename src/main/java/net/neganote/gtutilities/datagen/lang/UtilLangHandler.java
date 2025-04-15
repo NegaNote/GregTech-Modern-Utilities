@@ -18,15 +18,15 @@ public class UtilLangHandler {
         provider.add("tooltip.omnibreaker.charge_status", "Energy: %s EU / %s EU");
         provider.add("tooltip.omnibreaker.right_click_function", "Break individual blocks with right-click!");
 
-        provider.add("tooltip.power_wormhole_machine.uses_coolant", "Drains %s to function!");
+        provider.add("tooltip.pterb_machine.uses_coolant", "Drains %s to function!");
 
-        provider.add("gtmutils.multiblock.power_wormhole_machine.coolant_usage", "§cDrains %sL of %s per second");
-        provider.add("gtmutils.power_wormhole_machine.invalid_frequency", "PTERBs will not work on frequency 0!");
+        provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %sL of %s per second");
+        provider.add("gtmutils.pterb_machine.invalid_frequency", "PTERBs will not work on frequency 0!");
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
 
-        provider.add("tooltip.power_wormhole_machine.purpose", "Wireless Active Transformer (PTERB)");
-        provider.add("tooltip.power_wormhole_machine.frequencies",
+        provider.add("tooltip.pterb_machine.purpose", "Wireless Active Transformer (PTERB)");
+        provider.add("tooltip.pterb_machine.frequencies",
                 "All PTERBs with the same frequency act like a single Active Transformer.");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
 

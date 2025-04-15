@@ -23,7 +23,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
-import net.neganote.gtutilities.common.machine.multiblock.PowerWormholeMachine;
+import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 
@@ -115,23 +115,23 @@ public class UtilMachines {
         }
     }
 
-    public static MultiblockMachineDefinition POWER_WORMHOLE_MACHINE = null;
+    public static MultiblockMachineDefinition PTERB_MACHINE = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.powerWormholeEnabled) {
-            POWER_WORMHOLE_MACHINE = REGISTRATE
-                    .multiblock("power_wormhole_machine", PowerWormholeMachine::new)
+        if (UtilConfig.INSTANCE.features.pterbEnabled) {
+            PTERB_MACHINE = REGISTRATE
+                    .multiblock("pterb_machine", PTERBMachine::new)
                     .langValue("Power Transfer Einstein-Rosen Bridge")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(HIGH_POWER_CASING)
-                    .tooltips(Component.translatable("tooltip.power_wormhole_machine.purpose"),
+                    .tooltips(Component.translatable("tooltip.pterb_machine.purpose"),
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
-                            Component.translatable("tooltip.power_wormhole_machine.frequencies")
+                            Component.translatable("tooltip.pterb_machine.frequencies")
                                     .withStyle(ChatFormatting.GRAY))
                     .conditionalTooltip(
                             Component
-                                    .translatable("tooltip.power_wormhole_machine.uses_coolant",
+                                    .translatable("tooltip.pterb_machine.uses_coolant",
                                             UtilMaterials.QuantumCoolant.getLocalizedName()
                                                     .withStyle(ChatFormatting.AQUA))
                                     .withStyle(ChatFormatting.DARK_RED),
@@ -142,7 +142,7 @@ public class UtilMachines {
                             .aisle("XXX", "XSX", "XXX")
                             .where('S', controller(blocks(definition.getBlock())))
                             .where('X', blocks(GTBlocks.HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
-                                    .or(PowerWormholeMachine.getEnergyHatchPredicates())
+                                    .or(PTERBMachine.getEnergyHatchPredicates())
                                     .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(1)))
                             .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
                             .build())
