@@ -147,6 +147,7 @@ public class UtilMachines {
                             .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
                             .build())
                     .renderer(PTERBRenderer::new)
+                    .allowExtendedFacing(true)
                     .hasTESR(true)
                     .register();
         }
