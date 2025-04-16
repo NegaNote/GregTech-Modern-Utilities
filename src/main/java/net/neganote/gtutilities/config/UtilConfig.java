@@ -51,12 +51,12 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Base amount of PTERB coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
-        public int pterbCoolantBaseDrain = 4;
+        public int pterbCoolantBaseDrain = 0;
 
         @Configurable
         @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
                 "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
-        public float pterbCoolantIOMultiplier = 0.000005f;
+        public float pterbCoolantIOMultiplier = 0;
     }
 
     public static boolean coolantEnabled() {
