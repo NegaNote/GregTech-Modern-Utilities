@@ -124,7 +124,7 @@ public class UtilMachines {
                     .langValue("Power Transfer Einstein-Rosen Bridge")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-                    .appearanceBlock(HIGH_POWER_CASING)
+                    .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
                     .tooltips(Component.translatable("tooltip.pterb_machine.purpose"),
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
                             Component.translatable("tooltip.pterb_machine.frequencies")

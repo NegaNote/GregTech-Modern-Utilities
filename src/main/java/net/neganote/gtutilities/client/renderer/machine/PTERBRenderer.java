@@ -3,6 +3,7 @@ package net.neganote.gtutilities.client.renderer.machine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
 
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,7 @@ import java.util.function.Consumer;
 
 public class PTERBRenderer extends WorkableCasingMachineRenderer {
 
-    public static final ResourceLocation TEXTURE = GTCEu.id("block/casings/hpca/high_power_casing");
+    public static final ResourceLocation TEXTURE = GTCEu.id("block/casings/solid/machine_casing_palladium_substation");
     // TODO: replace this texture with custom casing
     public static final ResourceLocation OVERLAY_MODEL_TEXTURES = GTCEu.id("block/multiblock/data_bank");
 
@@ -40,7 +41,10 @@ public class PTERBRenderer extends WorkableCasingMachineRenderer {
                        int combinedLight, int combinedOverlay) {
         if (blockEntity instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof PTERBMachine pterb &&
                 pterb.isFormed() && pterb.isActive()) {
-            var upwards = pterb.getUpwardsFacing();
+            var frontFacing = pterb.getFrontFacing();
+            var upwardsFacing = pterb.getUpwardsFacing();
+
+            Direction upwards = RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, false);
 
             renderWormhole(stack, buffer, upwards, combinedLight, combinedOverlay);
         }
