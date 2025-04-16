@@ -12,7 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.V;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.HIGH_POWER_CASING;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 @SuppressWarnings("unused")
@@ -137,14 +137,27 @@ public class UtilMachines {
                                     .withStyle(ChatFormatting.DARK_RED),
                             UtilConfig.coolantEnabled())
                     .pattern((definition) -> FactoryBlockPattern.start()
-                            .aisle("XXX", "XXX", "XXX")
-                            .aisle("XXX", "XCX", "XXX")
-                            .aisle("XXX", "XSX", "XXX")
-                            .where('S', controller(blocks(definition.getBlock())))
-                            .where('X', blocks(GTBlocks.HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
-                                    .or(PTERBMachine.getEnergyHatchPredicates())
-                                    .or(abilities(PartAbility.IMPORT_FLUIDS_1X).setExactLimit(1)))
-                            .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                            // spotless:off
+                            .aisle("   XXX   ", "    F    ", "         ", "    H    ", "    H    ", "    H    ", "    H    ", "    H    ")
+                            .aisle(" XXXXXXX ", "   FHF   ", "    H    ", "    H    ", "    H    ", "    F    ", "         ", "         ")
+                            .aisle(" XXHHHXX ", "         ", "         ", "         ", "    F    ", "    F    ", "         ", "         ")
+                            .aisle("XXHHHHHXX", " F     F ", "         ", "    X    ", "   XXX   ", "   XXX   ", "   X#X   ", "   ###   ")
+                            .aisle("XXHHHHHXX", "FH  H  HF", " H  C  H ", "HH XXX HH", "HHFXXXFHH", "HFFXXXFFH", "H  ###  H", "H  ###  H")
+                            .aisle("XXHHHHHXX", " F     F ", "         ", "    X    ", "   XXX   ", "   XXX   ", "   X#X   ", "   ###   ")
+                            .aisle(" XXHHHXX ", "         ", "         ", "         ", "    F    ", "    F    ", "         ", "         ")
+                            .aisle(" XXXXXXX ", "   FHF   ", "    H    ", "    H    ", "    H    ", "    F    ", "         ", "         ")
+                            .aisle("   XXX   ", "    F    ", "         ", "    H    ", "    H    ", "    H    ", "    H    ", "    H    ")
+                            // spotless:on
+                            .where(' ', any())
+                            .where('#', air())
+                            .where('X',
+                                    blocks(CASING_PALLADIUM_SUBSTATION.get())
+                                            .or(PTERBMachine.getEnergyHatchPredicates())
+                                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X)
+                                                    .setExactLimit(UtilConfig.coolantEnabled() ? 1 : 0)))
+                            .where('H', blocks(HIGH_POWER_CASING.get()))
+                            .where('C', controller(blocks(definition.getBlock())))
+                            .where('F', frames(GTMaterials.Neutronium))
                             .build())
                     .renderer(PTERBRenderer::new)
                     .allowExtendedFacing(true)
