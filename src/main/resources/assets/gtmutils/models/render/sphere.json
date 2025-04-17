@@ -1,5 +1,5 @@
 {
   "loader": "forge:obj",
-  "model": "gtmutils:models/render/cube.obj",
+  "model": "gtmutils:models/render/sphere.obj",
   "automatic_culling": false
 }

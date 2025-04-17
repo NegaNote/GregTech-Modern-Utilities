@@ -30,7 +30,7 @@ public class PTERBRenderer extends WorkableCasingMachineRenderer {
     // TODO: replace this texture with custom casing
     public static final ResourceLocation OVERLAY_MODEL_TEXTURES = GTCEu.id("block/multiblock/data_bank");
 
-    public static final ResourceLocation CUBE = GregTechModernUtilities.id("render/cube");
+    public static final ResourceLocation SPHERE = GregTechModernUtilities.id("render/sphere");
 
     public PTERBRenderer() {
         super(TEXTURE, OVERLAY_MODEL_TEXTURES);
@@ -55,7 +55,7 @@ public class PTERBRenderer extends WorkableCasingMachineRenderer {
                                 int combinedLight, int combinedOverlay) {
         stack.pushPose();
         var modelManager = Minecraft.getInstance().getModelManager();
-        BakedModel sphere = modelManager.getModel(CUBE);
+        BakedModel sphere = modelManager.getModel(SPHERE);
         Vec3i movement = upwards.getNormal();
         stack.translate(movement.getX() * 8 + 0.5f, movement.getY() * 8 + 0.5f, movement.getZ() * 8 + 0.5f);
         PoseStack.Pose pose = stack.last();
@@ -85,6 +85,6 @@ public class PTERBRenderer extends WorkableCasingMachineRenderer {
     @Override
     public void onAdditionalModel(Consumer<ResourceLocation> registry) {
         super.onAdditionalModel(registry);
-        registry.accept(CUBE);
+        registry.accept(SPHERE);
     }
 }
