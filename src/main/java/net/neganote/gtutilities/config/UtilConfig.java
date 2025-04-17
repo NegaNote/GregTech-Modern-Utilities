@@ -6,6 +6,7 @@ import net.neganote.gtutilities.GregTechModernUtilities;
 
 import dev.toma.configuration.Configuration;
 import dev.toma.configuration.config.Config;
+import dev.toma.configuration.config.ConfigHolder;
 import dev.toma.configuration.config.Configurable;
 import dev.toma.configuration.config.format.ConfigFormats;
 
@@ -14,8 +15,11 @@ public class UtilConfig {
 
     public static UtilConfig INSTANCE;
 
+    public static ConfigHolder<UtilConfig> CONFIG_HOLDER;
+
     public static void init() {
-        INSTANCE = Configuration.registerConfig(UtilConfig.class, ConfigFormats.yaml()).getConfigInstance();
+        CONFIG_HOLDER = Configuration.registerConfig(UtilConfig.class, ConfigFormats.yaml());
+        INSTANCE = CONFIG_HOLDER.getConfigInstance();
     }
 
     @Configurable
@@ -39,5 +43,24 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment("The energy capacity of the Omni-breaker.")
         public long omnibreakerEnergyCapacity = 40_960_000L;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the Power-Transfer Einstein-Rosen Bridge is enabled." })
+        public boolean pterbEnabled = true;
+
+        @Configurable
+        @Configurable.Comment({ "Base amount of PTERB coolant to drain every second.",
+                "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
+        public int pterbCoolantBaseDrain = 0;
+
+        @Configurable
+        @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
+                "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
+        public float pterbCoolantIOMultiplier = 0;
+    }
+
+    public static boolean coolantEnabled() {
+        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 &&
+                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f;
     }
 }

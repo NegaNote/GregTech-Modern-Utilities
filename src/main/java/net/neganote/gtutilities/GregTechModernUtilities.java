@@ -24,10 +24,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neganote.gtutilities.client.renderer.UtilShaders;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.machine.UtilMachines;
+import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
-import net.neganote.gtutilities.data.UtilDatagen;
+import net.neganote.gtutilities.datagen.UtilDatagen;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +51,7 @@ public class GregTechModernUtilities {
         modEventBus.addListener(this::commonSetup);
         if (GTCEu.isClientSide()) {
             modEventBus.addListener(this::clientSetup);
+            modEventBus.register(UtilShaders.class);
         }
         modEventBus.addListener(this::addMaterialRegistries);
         modEventBus.addListener(this::addMaterials);
@@ -127,7 +130,7 @@ public class GregTechModernUtilities {
 
     // As well as this.
     private void addMaterials(MaterialEvent event) {
-        // CustomMaterials.init();
+        UtilMaterials.register();
     }
 
     // This is optional, though.

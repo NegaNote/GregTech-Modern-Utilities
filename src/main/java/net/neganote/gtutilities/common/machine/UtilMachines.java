@@ -6,10 +6,14 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -17,7 +21,10 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
+import net.neganote.gtutilities.client.renderer.machine.PTERBRenderer;
 import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
+import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
+import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 
 import java.util.Locale;
@@ -25,6 +32,8 @@ import java.util.function.BiFunction;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.V;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 @SuppressWarnings("unused")
@@ -103,6 +112,57 @@ public class UtilMachines {
         if (UtilConfig.INSTANCE.features.converters64aEnabled &&
                 ConfigHolder.INSTANCE.compat.energy.enableFEConverters) {
             ENERGY_CONVERTER_64A = registerConverter(64);
+        }
+    }
+
+    public static MultiblockMachineDefinition PTERB_MACHINE = null;
+
+    static {
+        if (UtilConfig.INSTANCE.features.pterbEnabled) {
+            PTERB_MACHINE = REGISTRATE
+                    .multiblock("pterb_machine", PTERBMachine::new)
+                    .langValue("Power Transfer Einstein-Rosen Bridge")
+                    .rotationState(RotationState.ALL)
+                    .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+                    .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+                    .tooltips(Component.translatable("tooltip.pterb_machine.purpose"),
+                            Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
+                            Component.translatable("tooltip.pterb_machine.frequencies")
+                                    .withStyle(ChatFormatting.GRAY))
+                    .conditionalTooltip(
+                            Component
+                                    .translatable("tooltip.pterb_machine.uses_coolant",
+                                            UtilMaterials.QuantumCoolant.getLocalizedName()
+                                                    .withStyle(ChatFormatting.AQUA))
+                                    .withStyle(ChatFormatting.DARK_RED),
+                            UtilConfig.coolantEnabled())
+                    .pattern((definition) -> FactoryBlockPattern.start()
+                            // spotless:off
+                            .aisle("   XXX   ", "    F    ", "         ", "    H    ", "    H    ", "    H    ", "    H    ", "    H    ")
+                            .aisle(" XXXXXXX ", "   FHF   ", "    H    ", "    H    ", "    H    ", "    F    ", "         ", "         ")
+                            .aisle(" XXHHHXX ", "         ", "         ", "         ", "    F    ", "    F    ", "         ", "         ")
+                            .aisle("XXHHHHHXX", " F     F ", "         ", "    X    ", "   XXX   ", "   XXX   ", "   X X   ", "         ")
+                            .aisle("XXHHHHHXX", "FH  H  HF", " H  C  H ", "HH XXX HH", "HHFXXXFHH", "HFFXXXFFH", "H       H", "H       H")
+                            .aisle("XXHHHHHXX", " F     F ", "         ", "    X    ", "   XXX   ", "   XXX   ", "   X X   ", "         ")
+                            .aisle(" XXHHHXX ", "         ", "         ", "         ", "    F    ", "    F    ", "         ", "         ")
+                            .aisle(" XXXXXXX ", "   FHF   ", "    H    ", "    H    ", "    H    ", "    F    ", "         ", "         ")
+                            .aisle("   XXX   ", "    F    ", "         ", "    H    ", "    H    ", "    H    ", "    H    ", "    H    ")
+                            // spotless:on
+                            .where(' ', any())
+                            .where('#', air())
+                            .where('X',
+                                    blocks(CASING_PALLADIUM_SUBSTATION.get())
+                                            .or(PTERBMachine.getEnergyHatchPredicates())
+                                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X)
+                                                    .setExactLimit(UtilConfig.coolantEnabled() ? 1 : 0)))
+                            .where('H', blocks(HIGH_POWER_CASING.get()))
+                            .where('C', controller(blocks(definition.getBlock())))
+                            .where('F', frames(GTMaterials.Neutronium))
+                            .build())
+                    .renderer(PTERBRenderer::new)
+                    .allowExtendedFacing(true)
+                    .hasTESR(true)
+                    .register();
         }
     }
 
