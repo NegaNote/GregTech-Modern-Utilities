@@ -45,7 +45,7 @@ public class UtilRecipes {
                     .inputItems(TagPrefix.pipeLargeFluid, GTMaterials.Neutronium, 4)
                     .inputItems(CABLE_QUAD.getIngredient(GTValues.UV), 8)
                     .inputItems(LASER_PIPES[0], 8)
-                    .inputFluids(GTMaterials.SolderingAlloy.getFluid(144 * 32))
+                    .inputFluids(GTMaterials.SolderingAlloy.getFluid(GTValues.L * 32))
                     .EUt(1_600_000L)
                     .duration(1200)
                     .outputItems(UtilMachines.PTERB_MACHINE)
