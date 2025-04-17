@@ -46,7 +46,9 @@ public class PTERBRenderer extends WorkableCasingMachineRenderer {
 
             Direction upwards = RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, false);
 
-            renderWormhole(stack, buffer, upwards, combinedLight, combinedOverlay);
+            // Disable the rendering for now. Might finish it later if I ever become smart enough/able to understand
+            // Minecraft's rendering system better.
+            // renderWormhole(stack, buffer, upwards, combinedLight, combinedOverlay);
         }
     }
 
