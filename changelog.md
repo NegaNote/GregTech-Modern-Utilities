@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.0.3
+# GregTech Modern Utilities version 1.1.0
 
-HOTFIX - prevent server from trying to load client code
+Add the Power Transfer Einstein-Rosen Bridge, a wireless version of the Active Transformer.
