@@ -153,9 +153,7 @@ public class UtilMachines {
                             .where('#', air())
                             .where('X',
                                     blocks(CASING_PALLADIUM_SUBSTATION.get())
-                                            .or(PTERBMachine.getEnergyHatchPredicates())
-                                            .or(abilities(PartAbility.IMPORT_FLUIDS_1X)
-                                                    .setExactLimit(UtilConfig.coolantEnabled() ? 1 : 0)))
+                                            .or(PTERBMachine.getHatchPredicates()))
                             .where('H', blocks(HIGH_POWER_CASING.get()))
                             .where('C', controller(blocks(definition.getBlock())))
                             .where('F', frames(GTMaterials.Neutronium))

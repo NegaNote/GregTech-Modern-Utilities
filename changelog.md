@@ -1,5 +1,3 @@
-# GregTech Modern Utilities version 1.1.1
+# GregTech Modern Utilities version 1.1.2
 
-1.1.0 added PTERB
-
-HOTFIX: prevent crashing when Quantum Coolant is disabled
+HOTFIX: fix yet another PTERB crash, sorry

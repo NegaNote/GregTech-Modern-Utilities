@@ -273,13 +273,20 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         converterSubscription.unsubscribe();
     }
 
-    public static TraceabilityPredicate getEnergyHatchPredicates() {
-        return abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
+    public static TraceabilityPredicate getHatchPredicates() {
+        return UtilConfig.coolantEnabled() ? abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
                 .or(abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2))
                 .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))
                 .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
                 .or(abilities(PartAbility.INPUT_LASER).setPreviewCount(1))
-                .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1));
+                .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1))
+                .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1)) :
+                abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
+                        .or(abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2))
+                        .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))
+                        .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
+                        .or(abilities(PartAbility.INPUT_LASER).setPreviewCount(1))
+                        .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1));
     }
 
     @Override
@@ -326,11 +333,12 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                                     FormattingUtil.formatNumbers(
                                             Math.abs(outputTotal))));
                 }
-
-                textList.add(Component
-                        .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
-                                FormattingUtil.formatNumbers(coolantDrain),
-                                UtilMaterials.QuantumCoolant.getLocalizedName()));
+                if (UtilConfig.coolantEnabled()) {
+                    textList.add(Component
+                            .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
+                                    FormattingUtil.formatNumbers(coolantDrain),
+                                    UtilMaterials.QuantumCoolant.getLocalizedName()));
+                }
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     textList.add(Component
                             .translatable("gtceu.multiblock.active_transformer.danger_enabled"));
