@@ -132,8 +132,8 @@ public class UtilMachines {
                     .conditionalTooltip(
                             Component
                                     .translatable("tooltip.pterb_machine.uses_coolant",
-                                            UtilMaterials.QuantumCoolant.getLocalizedName()
-                                                    .withStyle(ChatFormatting.AQUA))
+                                            UtilMaterials.QuantumCoolant != null ? UtilMaterials.QuantumCoolant.getLocalizedName()
+                                                    .withStyle(ChatFormatting.AQUA) : "")
                                     .withStyle(ChatFormatting.DARK_RED),
                             UtilConfig.coolantEnabled())
                     .pattern((definition) -> FactoryBlockPattern.start()
