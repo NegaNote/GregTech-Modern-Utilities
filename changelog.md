@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.1.2
+# GregTech Modern Utilities version 1.1.3
 
-HOTFIX: fix yet another PTERB crash as well as a structure issue, sorry
+Fix Omni-breaker not looking right in third person
