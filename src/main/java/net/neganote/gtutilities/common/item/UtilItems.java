@@ -29,18 +29,18 @@ public class UtilItems {
                     .item("omnibreaker", (p) -> OmniBreakerItem.create(p, OMNIBREAKER_TIER))
                     .lang("Omni-breaker")
                     .model((ctx, prov) -> {
-                        ResourceLocation generatedItem = new ResourceLocation("item/generated");
+                        ResourceLocation handheldItem = new ResourceLocation("item/handheld");
                         prov
-                                .withExistingParent(ctx.getName(), generatedItem)
+                                .withExistingParent(ctx.getName(), handheldItem)
                                 .texture("layer0", GregTechModernUtilities.id("item/omnibreaker"));
                         // .override()
                         // .predicate(GregTechModernUtilities.id("omnibreaker_name"), 1)
-                        // .model(prov.withExistingParent("monibreaker", generatedItem)
+                        // .model(prov.withExistingParent("monibreaker", handheldItem)
                         // .texture("layer0", GregTechModernUtilities.id("item/monibreaker")))
                         // .end()
                         // .override()
                         // .predicate(GregTechModernUtilities.id("omnibreaker_name"), 2)
-                        // .model(prov.withExistingParent("meownibreaker", generatedItem)
+                        // .model(prov.withExistingParent("meownibreaker", handheldItem)
                         // .texture("layer0", GregTechModernUtilities.id("item/meownibreaker")))
                         // .end();
                     })
