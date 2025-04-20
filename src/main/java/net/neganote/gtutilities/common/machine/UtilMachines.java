@@ -137,6 +137,8 @@ public class UtilMachines {
                                                             .withStyle(ChatFormatting.AQUA) : "")
                                     .withStyle(ChatFormatting.DARK_RED),
                             UtilConfig.coolantEnabled())
+                    .conditionalTooltip(Component.translatable("tooltip.pterb_machine.input_coolant_before_use")
+                            .withStyle(ChatFormatting.DARK_RED), UtilConfig.coolantEnabled())
                     .pattern((definition) -> FactoryBlockPattern.start()
                             // spotless:off
                             .aisle("   XXX   ", "    F    ", "         ", "    H    ", "    H    ", "    H    ", "    H    ", "    H    ")

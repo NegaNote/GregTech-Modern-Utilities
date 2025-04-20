@@ -158,8 +158,13 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         }
 
         long scalingFactor = Math.max(inputAmperage * inputVoltage, outputAmperage * outputVoltage);
-        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
+
+        int coolantDrain = UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
                 (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
+        if (coolantDrain <= 0) {
+            coolantDrain = 1;
+        }
+        return coolantDrain;
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -180,6 +185,12 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+
+        if (frequency == 0) {
+            getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
+            return;
+        }
+
         // capture all energy containers
         List<IMultiPart> localPowerInput = new ArrayList<>();
         List<IMultiPart> localPowerOutput = new ArrayList<>();
