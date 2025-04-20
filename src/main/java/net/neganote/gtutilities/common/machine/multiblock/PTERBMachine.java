@@ -109,7 +109,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
             if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= coolantDrain) {
                 coolantHatch.tank.handleRecipe(IO.IN, null,
-                        List.of(FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
+                        List.of(FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid())),
                         false);
             } else {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
@@ -196,14 +196,15 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                 var handlerIO = handler.getHandlerIO();
                 // If IO not compatible
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP &&
+                if (handler.hasCapability(EURecipeCapability.CAP) &&
                         handler instanceof IEnergyContainer) {
                     if (handlerIO == IO.IN) {
                         localPowerInput.add(part);
                     } else if (handlerIO == IO.OUT) {
                         localPowerOutput.add(part);
                     }
-                    traitSubscriptions.add(handler.addChangedListener(converterSubscription::updateSubscription));
+                    handler.subscribe(converterSubscription::updateSubscription);
+                    // traitSubscriptions.add(handler.addChangedListener(converterSubscription::updateSubscription));
                 }
             }
         }
