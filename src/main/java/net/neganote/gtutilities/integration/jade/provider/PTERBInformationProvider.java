@@ -9,9 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
-
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
+
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
