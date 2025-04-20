@@ -72,7 +72,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     @DescSynced
     private BlockPos coolantHatchPos;
 
-    private long coolantDrain;
+    @Getter
+    private int coolantDrain;
 
     @Persisted
     @DescSynced
@@ -108,7 +109,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
             if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= coolantDrain) {
                 coolantHatch.tank.handleRecipe(IO.IN, null,
-                        List.of(FluidIngredient.of((int) coolantDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
+                        List.of(FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
                         false);
             } else {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
@@ -138,7 +139,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         converterSubscription.updateSubscription();
     }
 
-    private long calculateCoolantDrain() {
+    private int calculateCoolantDrain() {
         long inputAmperage = 0;
         long inputVoltage = 0;
         long outputAmperage = 0;
@@ -158,7 +159,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
         long scalingFactor = Math.max(inputAmperage * inputVoltage, outputAmperage * outputVoltage);
         return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
-                (long) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
+                (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -280,7 +281,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                 .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
                 .or(abilities(PartAbility.INPUT_LASER).setPreviewCount(1))
                 .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1))
-                .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1)) :
+                .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)) :
                 abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
                         .or(abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2))
                         .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))

@@ -60,7 +60,7 @@ public class UtilConfig {
     }
 
     public static boolean coolantEnabled() {
-        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 &&
+        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 ||
                 UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f;
     }
 }

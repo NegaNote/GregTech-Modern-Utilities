@@ -17,6 +17,7 @@ public class UtilLangHandler {
         provider.add("tooltip.omnibreaker.can_break_anything", "The Omni-breaker can insta-mine ANYTHING!");
         provider.add("tooltip.omnibreaker.charge_status", "Energy: %s EU / %s EU");
         provider.add("tooltip.omnibreaker.right_click_function", "Break individual blocks with right-click!");
+        provider.add("tooltip.omnibreaker.modern_vajra", "A Modern Vajra");
 
         provider.add("tooltip.pterb_machine.uses_coolant", "Drains %s to function!");
 
@@ -30,7 +31,7 @@ public class UtilLangHandler {
                 "All PTERBs with the same frequency act like a single Active Transformer.");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
 
-        provider.add("config.jade.plugin_gtmutils.frequency_info", "PTERB Frequency Info");
+        provider.add("config.jade.plugin_gtmutils.pterb_info", "PTERB Info");
 
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }

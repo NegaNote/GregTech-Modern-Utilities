@@ -2,7 +2,7 @@ package net.neganote.gtutilities.integration.jade;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neganote.gtutilities.integration.jade.provider.PTERBFrequencyProvider;
+import net.neganote.gtutilities.integration.jade.provider.PTERBInformationProvider;
 
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
@@ -15,11 +15,11 @@ public class UtilJadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerBlockDataProvider(new PTERBFrequencyProvider(), BlockEntity.class);
+        registration.registerBlockDataProvider(new PTERBInformationProvider(), BlockEntity.class);
     }
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(new PTERBFrequencyProvider(), Block.class);
+        registration.registerBlockComponent(new PTERBInformationProvider(), Block.class);
     }
 }
