@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.config.UtilConfig;
 
@@ -45,6 +46,7 @@ public class UtilItems {
                         // .end();
                     })
                     .properties(p -> p.stacksTo(1).durability(0))
+                    .tag(ItemTags.PICKAXES, ItemTags.AXES, ItemTags.SHOVELS, ItemTags.TOOLS)
                     .onRegister(attach(
                             ElectricStats.createElectricItem(UtilConfig.INSTANCE.features.omnibreakerEnergyCapacity,
                                     OMNIBREAKER_TIER),
