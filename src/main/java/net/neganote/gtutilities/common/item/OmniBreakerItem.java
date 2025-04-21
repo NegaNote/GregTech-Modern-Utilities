@@ -100,6 +100,11 @@ public class OmniBreakerItem extends ComponentItem {
     }
 
     @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return super.isBookEnchantable(stack, book);
+    }
+
+    @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level,
                                 @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(stack));
