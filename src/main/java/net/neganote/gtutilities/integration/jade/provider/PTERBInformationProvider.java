@@ -29,7 +29,8 @@ public class PTERBInformationProvider implements IBlockComponentProvider, IServe
                 var tag = data.getCompound("pterbData");
                 iTooltip.add(Component.translatable("gtmutils.pterb.current_frequency",
                         FormattingUtil.formatNumbers(tag.getInt("currentFrequency"))));
-                if (tag.contains("coolantDrain") && UtilConfig.coolantEnabled() && pterb.isFormed()) {
+                if (tag.contains("coolantDrain") && UtilConfig.coolantEnabled() && pterb.isFormed() &&
+                        pterb.isActive()) {
                     iTooltip.add(Component.translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
                             FormattingUtil.formatNumbers(tag.getInt("coolantDrain")),
                             UtilMaterials.QuantumCoolant.getLocalizedName()));

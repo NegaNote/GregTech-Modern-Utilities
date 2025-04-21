@@ -25,6 +25,7 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
@@ -95,7 +96,32 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         this.frequency = 0;
     }
 
+    public void explode() {
+        long inputVoltage = 0;
+        long outputVoltage = 0;
+
+        if (!localPowerInput.isEmpty()) {
+            EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
+            inputVoltage = localInputs.getInputVoltage();
+        }
+
+        if (!localPowerOutput.isEmpty()) {
+            EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
+            outputVoltage = localOutputs.getOutputVoltage();
+        }
+
+        long tier = Math.max(GTUtil.getFloorTierByVoltage(inputVoltage), GTUtil.getFloorTierByVoltage(outputVoltage));
+
+        removeWirelessEnergy();
+
+        doExplosion(6f + tier);
+    }
+
     public void convertEnergyTick() {
+        if (frequency == 0) {
+            getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
+            return;
+        }
         if (isWorkingEnabled()) {
             getRecipeLogic()
                     .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
@@ -113,7 +139,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                         false);
             } else {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
-                    doExplosion(6.0f + getTier());
+                    explode();
                 } else {
                     coolantTimer = 0;
                     getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
@@ -186,11 +212,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     public void onStructureFormed() {
         super.onStructureFormed();
 
-        if (frequency == 0) {
-            getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
-            return;
-        }
-
         // capture all energy containers
         List<IMultiPart> localPowerInput = new ArrayList<>();
         List<IMultiPart> localPowerOutput = new ArrayList<>();
@@ -229,11 +250,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
         this.coolantDrain = calculateCoolantDrain();
 
-        if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
-            savedData.addEnergyInputs(frequency, localPowerInput);
-            savedData.addEnergyOutputs(frequency, localPowerOutput);
-            savedData.saveDataToCache();
+        if (frequency != 0) {
+            addWirelessEnergy();
         }
 
         converterSubscription.updateSubscription();
@@ -269,20 +287,33 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         coolantTimer = 0;
         if ((isWorkingEnabled() && recipeLogic.getStatus() == RecipeLogic.Status.WORKING) &&
                 !ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
-            doExplosion(6f + getTier());
+            explode();
         }
         super.onStructureInvalid();
+        removeWirelessEnergy();
+        this.localPowerOutput = new ArrayList<>();
+        this.localPowerInput = new ArrayList<>();
+        this.coolantHatchPos = null;
+        getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
+        converterSubscription.unsubscribe();
+    }
+
+    private void removeWirelessEnergy() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.removeEnergyInputs(frequency, localPowerInput);
             savedData.removeEnergyOutputs(frequency, localPowerOutput);
             savedData.saveDataToCache();
         }
-        this.localPowerOutput = new ArrayList<>();
-        this.localPowerInput = new ArrayList<>();
-        this.coolantHatchPos = null;
-        getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
-        converterSubscription.unsubscribe();
+    }
+
+    private void addWirelessEnergy() {
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            savedData.addEnergyInputs(frequency, localPowerInput);
+            savedData.addEnergyOutputs(frequency, localPowerOutput);
+            savedData.saveDataToCache();
+        }
     }
 
     public static TraceabilityPredicate getHatchPredicates() {
@@ -362,21 +393,13 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     }
 
     public void setFrequencyFromString(String str) {
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.removeEnergyInputs(frequency, localPowerInput);
-            savedData.removeEnergyOutputs(frequency, localPowerOutput);
-            savedData.saveDataToCache();
-        }
+        removeWirelessEnergy();
         frequency = Integer.parseInt(str);
         if (frequency == 0) {
             setWorkingEnabled(false);
         }
-        if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.addEnergyInputs(frequency, localPowerInput);
-            savedData.addEnergyOutputs(frequency, localPowerOutput);
-            savedData.saveDataToCache();
+        if (frequency != 0) {
+            addWirelessEnergy();
         }
     }
 
@@ -391,16 +414,11 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             return;
         }
         super.setWorkingEnabled(isWorkingAllowed);
-        if (getLevel() instanceof ServerLevel serverLevel && frequency != 0) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
+        if (frequency != 0) {
             if (isWorkingAllowed) {
-                savedData.addEnergyInputs(frequency, localPowerInput);
-                savedData.addEnergyOutputs(frequency, localPowerOutput);
-                savedData.saveDataToCache();
+                addWirelessEnergy();
             } else {
-                savedData.removeEnergyInputs(frequency, localPowerInput);
-                savedData.removeEnergyOutputs(frequency, localPowerOutput);
-                savedData.saveDataToCache();
+                removeWirelessEnergy();
             }
         }
     }
