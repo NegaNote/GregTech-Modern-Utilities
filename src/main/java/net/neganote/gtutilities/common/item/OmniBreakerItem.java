@@ -12,6 +12,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -66,13 +68,35 @@ public class OmniBreakerItem extends ComponentItem {
 
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(pStack));
 
+        var unbreaking = getAllEnchantments(pStack).getOrDefault(Enchantments.UNBREAKING, 0);
+        double chance = 1.0f / (unbreaking + 1);
+
+        double rand = Math.random();
+
         if (electricItem.getCharge() >= GTValues.VEX[tier]) {
-            // Only discharge if possible to discharge the full amount
-            electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
+            // Only discharge if possible to discharge the full amount and unbreaking chance doesn't proc
+            if (rand <= chance) {
+                electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
+            }
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int getEnchantmentValue(ItemStack stack) {
+        return 22;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment == Enchantments.UNBREAKING;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
     }
 
     @Override

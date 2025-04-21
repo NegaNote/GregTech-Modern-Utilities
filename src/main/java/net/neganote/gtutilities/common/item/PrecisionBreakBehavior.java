@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -29,11 +30,18 @@ public class PrecisionBreakBehavior implements IInteractionItem {
                 return InteractionResult.PASS;
             }
 
+            int unbreaking = context.getItemInHand().getItem().getAllEnchantments(context.getItemInHand())
+                    .getOrDefault(Enchantments.UNBREAKING, 0);
+            double chance = 1.0f / (unbreaking + 1);
+            double rand = Math.random();
+
             var electricItem = GTCapabilityHelper.getElectricItem(context.getItemInHand());
 
             if (electricItem != null) {
                 if (electricItem.getCharge() >= GTValues.VEX[tier]) {
-                    electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
+                    if (rand >= chance) {
+                        electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
+                    }
                 } else {
                     return InteractionResult.PASS;
                 }
