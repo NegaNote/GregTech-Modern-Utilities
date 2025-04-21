@@ -21,6 +21,7 @@ public class UtilLangHandler {
 
         provider.add("tooltip.pterb_machine.uses_coolant", "Drains %s to function!");
         provider.add("tooltip.pterb_machine.input_coolant_before_use", "Always input coolant before turning it on!");
+        provider.add("tooltip.pterb_machine.dont_use_terminal", "DO NOT BUILD WITH THE TERMINAL, VERY BUGGY");
 
         provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %sL of %s per second");
         provider.add("gtmutils.pterb_machine.invalid_frequency", "PTERBs will not work on frequency 0!");

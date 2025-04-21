@@ -128,7 +128,9 @@ public class UtilMachines {
                     .tooltips(Component.translatable("tooltip.pterb_machine.purpose"),
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
                             Component.translatable("tooltip.pterb_machine.frequencies")
-                                    .withStyle(ChatFormatting.GRAY))
+                                    .withStyle(ChatFormatting.GRAY),
+                            Component.translatable("tooltip.pterb_machine.dont_use_terminal")
+                                    .withStyle(ChatFormatting.RED))
                     .conditionalTooltip(
                             Component
                                     .translatable("tooltip.pterb_machine.uses_coolant",

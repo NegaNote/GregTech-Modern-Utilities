@@ -97,6 +97,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     }
 
     public void explode() {
+        removeWirelessEnergy();
+
         long inputVoltage = 0;
         long outputVoltage = 0;
 
@@ -112,9 +114,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
         long tier = Math.max(GTUtil.getFloorTierByVoltage(inputVoltage), GTUtil.getFloorTierByVoltage(outputVoltage));
 
-        removeWirelessEnergy();
-
-        doExplosion(6f + tier);
+        doExplosion(15f + tier);
     }
 
     public void convertEnergyTick() {
@@ -212,6 +212,10 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     public void onStructureFormed() {
         super.onStructureFormed();
 
+        if (frequency == 0) {
+            setWorkingEnabled(false);
+        }
+
         // capture all energy containers
         List<IMultiPart> localPowerInput = new ArrayList<>();
         List<IMultiPart> localPowerOutput = new ArrayList<>();
@@ -294,7 +298,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
         this.coolantHatchPos = null;
-        getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
+        setWorkingEnabled(false);
         converterSubscription.unsubscribe();
     }
 
