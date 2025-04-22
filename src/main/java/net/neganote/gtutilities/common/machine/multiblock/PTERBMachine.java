@@ -254,7 +254,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
         this.coolantDrain = calculateCoolantDrain();
 
-        if (frequency != 0) {
+        if (frequency != 0 && isActive()) {
             addWirelessEnergy();
         }
 
