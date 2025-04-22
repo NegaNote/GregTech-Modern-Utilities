@@ -313,7 +313,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
     private void addWirelessEnergy() {
         if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
+            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
             savedData.addEnergyInputs(frequency, localPowerInput);
             savedData.addEnergyOutputs(frequency, localPowerOutput);
             savedData.saveDataToCache();
