@@ -230,6 +230,7 @@ public class PTERBSavedData extends SavedData {
 
     public void saveDataToCache() {
         if (isDirty()) {
+            serverLevel.getDataStorage().set(DATA_NAME, this);
             serverLevel.getDataStorage().save();
             setDirty(false);
         }
