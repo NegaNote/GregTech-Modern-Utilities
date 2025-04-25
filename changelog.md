@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.1.6
+# GregTech Modern Utilities version 1.1.7
 
-* Fix PTERBs that aren't in the overworld not sending power
+* Change PTERB structure to use superconducting coils, force limit on amount of energy/laser hatches
