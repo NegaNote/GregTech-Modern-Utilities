@@ -77,7 +77,7 @@ public class UtilMachines {
                                 amperage))
                         .renderer(() -> new UtilConverterRenderer(tier, amperage))
                         .tooltips(Component.translatable("gtceu.machine.energy_converter.description"),
-                                Component.translatable("gtceu.machine.energy_converter.tooltip_tool_usage"),
+                                Component.translatable("gtmutils.machine.64a_energy_converter.tooltip_tool_usage"),
                                 Component.translatable("gtceu.machine.energy_converter.tooltip_conversion_native",
                                         FeCompat.toFeLong(V[tier] * amperage,
                                                 FeCompat.ratio(true)),
