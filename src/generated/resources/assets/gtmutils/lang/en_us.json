@@ -33,6 +33,7 @@
   "gtmutils.pterb_machine.invalid_frequency": "PTERBs will not work on frequency 0!",
   "item.gtmutils.omnibreaker": "Omni-breaker",
   "itemGroup.gtmutils.creative_tab": "GregTech Modern Utilities",
+  "material.gtmutils.quantum_coolant": "Quantum Coolant",
   "tooltip.omnibreaker.can_break_anything": "The Omni-breaker can insta-mine ANYTHING!",
   "tooltip.omnibreaker.charge_status": "Energy: %s EU / %s EU",
   "tooltip.omnibreaker.modern_vajra": "A Modern Vajra",

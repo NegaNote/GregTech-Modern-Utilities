@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.1.8
+# GregTech Modern Utilities version 1.1.9
 
-* Fix tooltip to reflect 64a converters starting as EU in
+* Fix Quantum Coolant not having a lang entry

@@ -38,6 +38,8 @@ public class UtilLangHandler {
 
         provider.add("config.jade.plugin_gtmutils.pterb_info", "PTERB Info");
 
+        provider.add("material.gtmutils.quantum_coolant", "Quantum Coolant");
+
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
 
