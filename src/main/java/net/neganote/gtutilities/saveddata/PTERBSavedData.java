@@ -251,7 +251,7 @@ public class PTERBSavedData extends SavedData {
                 if (machine instanceof LaserHatchPartMachine hatch) {
                     // unfortunately the laser hatch's buffer is private, so I have to do this instead
                     for (var handler : hatch.getRecipeHandlers()) {
-                        if (handler.getCapability() == EURecipeCapability.CAP &&
+                        if (handler.hasCapability(EURecipeCapability.CAP) &&
                                 handler instanceof IEnergyContainer container) {
                             energyContainerList.add(container);
                         }
@@ -278,7 +278,7 @@ public class PTERBSavedData extends SavedData {
                 if (machine instanceof LaserHatchPartMachine hatch) {
                     // unfortunately the laser hatch's buffer is private, so I have to do this instead
                     for (var handler : hatch.getRecipeHandlers()) {
-                        if (handler.getCapability() == EURecipeCapability.CAP &&
+                        if (handler.hasCapability(EURecipeCapability.CAP) &&
                                 handler instanceof IEnergyContainer container) {
                             energyContainerList.add(container);
                         }
