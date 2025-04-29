@@ -17,11 +17,13 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.DualHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -41,7 +43,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.fluids.FluidStack;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.saveddata.PTERBSavedData;
@@ -129,15 +130,22 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
                 UtilConfig.coolantEnabled() && coolantTimer == 0 && frequency != 0) {
 
-            FluidHatchPartMachine coolantHatch = Objects.requireNonNull(
-                    (FluidHatchPartMachine) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
+            MetaMachine coolantHatch = Objects
+                    .requireNonNull(getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
 
-            FluidStack coolant = coolantHatch.tank.getFluidInTank(0);
-            if (coolant.getFluid() == UtilMaterials.QuantumCoolant.getFluid() && coolant.getAmount() >= coolantDrain) {
-                coolantHatch.tank.handleRecipe(IO.IN, null,
-                        List.of(FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid())), null,
-                        false);
+            NotifiableFluidTank tank;
+
+            if (coolantHatch instanceof FluidHatchPartMachine fluidHatch) {
+                tank = fluidHatch.tank;
+            } else if (coolantHatch instanceof DualHatchPartMachine dualHatch) {
+                tank = dualHatch.tank;
             } else {
+                throw new IllegalStateException("Tank must be a valid fluid or dual input hatch");
+            }
+
+            var ingredient = FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid());
+            List<FluidIngredient> left = tank.handleRecipe(IO.IN, null, List.of(ingredient), null, false);
+            if (left != null && !left.isEmpty()) {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     explode();
                 } else {
@@ -223,6 +231,9 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
         for (IMultiPart part : getPrioritySortedParts()) {
             if (part instanceof FluidHatchPartMachine machine) {
+                this.coolantHatchPos = machine.getPos();
+                continue;
+            } else if (part instanceof DualHatchPartMachine machine) {
                 this.coolantHatchPos = machine.getPos();
                 continue;
             }
