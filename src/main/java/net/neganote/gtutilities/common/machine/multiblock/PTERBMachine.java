@@ -3,6 +3,7 @@ package net.neganote.gtutilities.common.machine.multiblock;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
@@ -23,8 +24,6 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.machine.multiblock.part.DualHatchPartMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -130,18 +129,18 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
                 UtilConfig.coolantEnabled() && coolantTimer == 0 && frequency != 0) {
 
-            MetaMachine coolantHatch = Objects
-                    .requireNonNull(getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
+            IMultiPart coolantHatch = Objects
+                    .requireNonNull((IMultiPart) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
 
-            NotifiableFluidTank tank;
+            NotifiableFluidTank tank = null;
 
-            if (coolantHatch instanceof FluidHatchPartMachine fluidHatch) {
-                tank = fluidHatch.tank;
-            } else if (coolantHatch instanceof DualHatchPartMachine dualHatch) {
-                tank = dualHatch.tank;
-            } else {
-                throw new IllegalStateException("Tank must be a valid fluid or dual input hatch");
+            for (var handler : coolantHatch.getRecipeHandlers()) {
+                if (handler instanceof NotifiableFluidTank notifiableFluidTank) {
+                    tank = notifiableFluidTank;
+                }
             }
+
+            assert tank != null;
 
             var ingredient = FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid());
             List<FluidIngredient> left = tank.handleRecipe(IO.IN, null, List.of(ingredient), null, false);
@@ -230,13 +229,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
         for (IMultiPart part : getPrioritySortedParts()) {
-            if (part instanceof FluidHatchPartMachine machine) {
-                this.coolantHatchPos = machine.getPos();
-                continue;
-            } else if (part instanceof DualHatchPartMachine machine) {
-                this.coolantHatchPos = machine.getPos();
-                continue;
-            }
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
             for (var handler : part.getRecipeHandlers()) {
@@ -251,6 +243,9 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                         localPowerOutput.add(part);
                     }
                     traitSubscriptions.add(handler.addChangedListener(converterSubscription::updateSubscription));
+                }
+                if (handler.getCapability() == FluidRecipeCapability.CAP && handler instanceof NotifiableFluidTank) {
+                    this.coolantHatchPos = part.self().getPos();
                 }
             }
         }
@@ -435,6 +430,9 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             } else {
                 removeWirelessEnergy();
             }
+        }
+        if (!isWorkingAllowed) {
+            coolantTimer = 0;
         }
     }
 
