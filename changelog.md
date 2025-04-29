@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.1.9
+# GregTech Modern Utilities version 1.1.10
 
-* Fix Quantum Coolant not having a lang entry
+* Fix crash when using dual hatches for PTERB coolant
