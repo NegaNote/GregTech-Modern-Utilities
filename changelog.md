@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.1.10
+# GregTech Modern Utilities version 1.1.11
 
-* Fix crash when using dual hatches for PTERB coolant
+* Fix terminal problems (as much as possible) and remove warning about building PTERB with terminal
