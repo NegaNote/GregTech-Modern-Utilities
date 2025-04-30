@@ -298,12 +298,12 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     @Override
     public void onStructureInvalid() {
         coolantTimer = 0;
+        removeWirelessEnergy();
         if ((isWorkingEnabled() && recipeLogic.getStatus() == RecipeLogic.Status.WORKING) &&
                 !ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
             explode();
         }
         super.onStructureInvalid();
-        removeWirelessEnergy();
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
         this.coolantHatchPos = null;
