@@ -38,7 +38,6 @@
   "tooltip.omnibreaker.charge_status": "Energy: %s EU / %s EU",
   "tooltip.omnibreaker.modern_vajra": "A Modern Vajra",
   "tooltip.omnibreaker.right_click_function": "Break individual blocks with right-click!",
-  "tooltip.pterb_machine.dont_use_terminal": "DO NOT BUILD WITH THE TERMINAL, VERY BUGGY",
   "tooltip.pterb_machine.frequencies": "All PTERBs with the same frequency act like a single Active Transformer.",
   "tooltip.pterb_machine.input_coolant_before_use": "Always input coolant before turning it on!",
   "tooltip.pterb_machine.purpose": "Wireless Active Transformer (PTERB)",

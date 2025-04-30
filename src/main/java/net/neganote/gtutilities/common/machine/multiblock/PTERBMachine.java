@@ -22,6 +22,7 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
+import com.gregtechceu.gtceu.api.pattern.error.PatternError;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -253,6 +254,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         // Invalidate the structure if there is not at least one output or one input
         if (localPowerInput.isEmpty() && localPowerOutput.isEmpty()) {
             this.onStructureInvalid();
+            getMultiblockState().setError(new PatternError());
+            return;
         }
 
         this.localPowerInput = localPowerInput;

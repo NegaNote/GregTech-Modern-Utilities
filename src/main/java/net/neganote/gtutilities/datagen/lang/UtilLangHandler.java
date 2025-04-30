@@ -21,7 +21,6 @@ public class UtilLangHandler {
 
         provider.add("tooltip.pterb_machine.uses_coolant", "Drains %s to function!");
         provider.add("tooltip.pterb_machine.input_coolant_before_use", "Always input coolant before turning it on!");
-        provider.add("tooltip.pterb_machine.dont_use_terminal", "DO NOT BUILD WITH THE TERMINAL, VERY BUGGY");
 
         provider.add("gtmutils.machine.64a_energy_converter.tooltip_tool_usage",
                 "Starts as §fEU Converter§7, use Soft Mallet to change");
