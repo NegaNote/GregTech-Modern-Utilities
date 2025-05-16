@@ -136,7 +136,9 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             NotifiableFluidTank tank = null;
 
             for (var handler : coolantHatch.getRecipeHandlers()) {
-                if (handler instanceof NotifiableFluidTank notifiableFluidTank) {
+                var fluidCapabilityList = handler.getCapability(FluidRecipeCapability.CAP);
+                if (!fluidCapabilityList.isEmpty() &&
+                        fluidCapabilityList.get(0) instanceof NotifiableFluidTank notifiableFluidTank) {
                     tank = notifiableFluidTank;
                 }
             }
@@ -144,7 +146,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             assert tank != null;
 
             var ingredient = FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid());
-            List<FluidIngredient> left = tank.handleRecipe(IO.IN, null, List.of(ingredient), null, false);
+            List<FluidIngredient> left = tank.handleRecipe(IO.IN, null, List.of(ingredient), false);
             if (left != null && !left.isEmpty()) {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     explode();
@@ -232,21 +234,27 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         for (IMultiPart part : getPrioritySortedParts()) {
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
-            for (var handler : part.getRecipeHandlers()) {
-                var handlerIO = handler.getHandlerIO();
+            for (var handlerList : part.getRecipeHandlers()) {
+                var handlerIO = handlerList.getHandlerIO();
                 // If IO not compatible
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP &&
-                        handler instanceof IEnergyContainer) {
+                var energyContainers = handlerList.getCapability(EURecipeCapability.CAP).stream()
+                        .filter(IEnergyContainer.class::isInstance)
+                        .map(IEnergyContainer.class::cast)
+                        .toList();
+                if (!energyContainers.isEmpty()) {
                     if (handlerIO == IO.IN) {
                         localPowerInput.add(part);
                     } else if (handlerIO == IO.OUT) {
                         localPowerOutput.add(part);
                     }
-                    traitSubscriptions.add(handler.addChangedListener(converterSubscription::updateSubscription));
                 }
-                if (handler.getCapability() == FluidRecipeCapability.CAP && handler instanceof NotifiableFluidTank) {
-                    this.coolantHatchPos = part.self().getPos();
+                var fluidContainers = handlerList.getCapability(FluidRecipeCapability.CAP).stream()
+                        .filter(NotifiableFluidTank.class::isInstance)
+                        .map(NotifiableFluidTank.class::cast)
+                        .toList();
+                if (!fluidContainers.isEmpty()) {
+                    coolantHatchPos = part.self().getPos();
                 }
             }
         }
