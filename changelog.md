@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 1.1.11
+# GregTech Modern Utilities version 1.1.12
 
-* Fix terminal problems (as much as possible) and remove warning about building PTERB with terminal
+* HOTFIX: 64A converters were not properly respecting the high tier content config
