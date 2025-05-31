@@ -29,11 +29,8 @@ repositories {
         url "https://maven.firstdarkdev.xyz/snapshots/"
     }
     maven {
-        // saps.dev Maven (KubeJS and Rhino)
-        url = "https://maven.saps.dev/minecraft"
-        content {
-            includeGroup "dev.latvian.mods"
-        }
+        // latvian.dev Maven (KubeJS and Rhino)
+        url = "https://maven.latvian.dev/releases"
     }
     maven { // Registrate
         url = "https://maven.tterrag.com/"
