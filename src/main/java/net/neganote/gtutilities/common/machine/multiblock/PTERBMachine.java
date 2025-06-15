@@ -3,7 +3,6 @@ package net.neganote.gtutilities.common.machine.multiblock;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
@@ -25,6 +24,7 @@ import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternError;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -38,7 +38,6 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -69,10 +68,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     private List<IMultiPart> localPowerInput;
 
     protected ConditionalSubscriptionHandler converterSubscription;
-
-    @Persisted
-    @DescSynced
-    private BlockPos coolantHatchPos;
 
     @Getter
     private int coolantDrain;
@@ -130,23 +125,19 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
                 UtilConfig.coolantEnabled() && coolantTimer == 0 && frequency != 0) {
 
-            IMultiPart coolantHatch = Objects
-                    .requireNonNull((IMultiPart) getMachine(Objects.requireNonNull(getLevel()), coolantHatchPos));
+            var coolantTanks = getCapabilitiesFlat(IO.IN, GTRecipeCapabilities.FLUID).stream()
+                    .map(NotifiableFluidTank.class::cast).toList();
 
-            NotifiableFluidTank tank = null;
+            List<FluidIngredient> left = List
+                    .of(FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid()));
 
-            for (var handler : coolantHatch.getRecipeHandlers()) {
-                var fluidCapabilityList = handler.getCapability(FluidRecipeCapability.CAP);
-                if (!fluidCapabilityList.isEmpty() &&
-                        fluidCapabilityList.get(0) instanceof NotifiableFluidTank notifiableFluidTank) {
-                    tank = notifiableFluidTank;
+            for (var tank : coolantTanks) {
+                left = tank.handleRecipe(IO.IN, null, left, false);
+                if (left == null) {
+                    break;
                 }
             }
 
-            assert tank != null;
-
-            var ingredient = FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid());
-            List<FluidIngredient> left = tank.handleRecipe(IO.IN, null, List.of(ingredient), false);
             if (left != null && !left.isEmpty()) {
                 if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                     explode();
@@ -249,13 +240,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                         localPowerOutput.add(part);
                     }
                 }
-                var fluidContainers = handlerList.getCapability(FluidRecipeCapability.CAP).stream()
-                        .filter(NotifiableFluidTank.class::isInstance)
-                        .map(NotifiableFluidTank.class::cast)
-                        .toList();
-                if (!fluidContainers.isEmpty()) {
-                    coolantHatchPos = part.self().getPos();
-                }
             }
         }
 
@@ -314,7 +298,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         super.onStructureInvalid();
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
-        this.coolantHatchPos = null;
         setWorkingEnabled(false);
         converterSubscription.unsubscribe();
     }
