@@ -2,8 +2,14 @@ package net.neganote.gtutilities.common.item;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 
+import com.gregtechceu.gtceu.api.item.IGTTool;
+import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.gregtechceu.gtceu.api.item.tool.IGTToolDefinition;
+import com.gregtechceu.gtceu.api.item.tool.ToolDefinitionBuilder;
+import com.gregtechceu.gtceu.api.sound.SoundEntry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -25,9 +31,10 @@ import java.util.Objects;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class OmniBreakerItem extends ComponentItem {
+public class OmniBreakerItem extends ComponentItem implements IGTTool {
 
     protected int tier;
+    protected int mode;
 
     protected OmniBreakerItem(Properties properties, int tier) {
         super(properties);
@@ -112,5 +119,50 @@ public class OmniBreakerItem extends ComponentItem {
         tooltipComponents
                 .add(Component.translatable("tooltip.omnibreaker.right_click_function").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+    }
+
+    @Override
+    public GTToolType getToolType() {
+        if (mode == 1) {
+            return GTToolType.WRENCH_IV;
+        } else if (mode == 2) {
+            return GTToolType.SCREWDRIVER;
+        } else if (mode == 3) {
+            return GTToolType.CROWBAR;
+        } else if (mode == 4) {
+            return GTToolType.WIRE_CUTTER_IV;
+        } else {
+            return GTToolType.builder("meowni").build();
+        }
+    }
+
+    @Override
+    public Material getMaterial() {
+        return null;
+    }
+
+    @Override
+    public boolean isElectric() {
+        return true;
+    }
+
+    @Override
+    public int getElectricTier() {
+        return tier;
+    }
+
+    @Override
+    public IGTToolDefinition getToolStats() {
+        return new ToolDefinitionBuilder().build();
+    }
+
+    @Override
+    public @Nullable SoundEntry getSound() {
+        return null;
+    }
+
+    @Override
+    public boolean playSoundOnBlockDestroy() {
+        return false;
     }
 }
