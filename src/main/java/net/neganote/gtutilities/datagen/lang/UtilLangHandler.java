@@ -30,7 +30,7 @@ public class UtilLangHandler {
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
 
-        provider.add("tooltip.pterb_machine.purpose", "Wireless Active Transformer (PTERB)");
+        provider.add("tooltip.pterb_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
         provider.add("tooltip.pterb_machine.frequencies",
                 "All PTERBs with the same frequency act like a single Active Transformer.");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");

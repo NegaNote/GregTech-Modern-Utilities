@@ -7,7 +7,7 @@
   "block.gtmutils.max_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§XⱯWן§ɔ§",
   "block.gtmutils.mv_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§ΛWq§",
   "block.gtmutils.opv_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§ΛdOן§6§",
-  "block.gtmutils.pterb_machine": "ǝbpıɹᗺ uǝsoᴚ-uıǝʇsuıƎ ɹǝɟsuɐɹ⟘ ɹǝʍoԀ",
+  "block.gtmutils.pterb_machine": "ɹǝɯɹoɟsuɐɹ⟘ ǝʌıʇɔⱯ ssǝןǝɹıM",
   "block.gtmutils.sterile_cleaning_maintenance_hatch": "ɥɔʇɐH ǝɔuɐuǝʇuıɐW buıuɐǝןƆ ǝןıɹǝʇS",
   "block.gtmutils.uev_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§ΛƎ∩ɐ§",
   "block.gtmutils.uhv_64a_energy_converter": "ɹǝʇɹǝʌuoƆ ʎbɹǝuƎ ɹ§Ɐǝ§ㄣ9 ɹ§ΛH∩ㄣ§",
@@ -40,6 +40,6 @@
   "tooltip.omnibreaker.right_click_function": "¡ʞɔıןɔ-ʇɥbıɹ ɥʇıʍ sʞɔoןq ןɐnpıʌıpuı ʞɐǝɹᗺ",
   "tooltip.pterb_machine.frequencies": "˙ɹǝɯɹoɟsuɐɹ⟘ ǝʌıʇɔⱯ ǝןbuıs ɐ ǝʞıן ʇɔɐ ʎɔuǝnbǝɹɟ ǝɯɐs ǝɥʇ ɥʇıʍ sᗺᴚƎ⟘Ԁ ןןⱯ",
   "tooltip.pterb_machine.input_coolant_before_use": "¡uo ʇı buıuɹnʇ ǝɹoɟǝq ʇuɐןooɔ ʇnduı sʎɐʍןⱯ",
-  "tooltip.pterb_machine.purpose": ")ᗺᴚƎ⟘Ԁ( ɹǝɯɹoɟsuɐɹ⟘ ǝʌıʇɔⱯ ssǝןǝɹıM",
+  "tooltip.pterb_machine.purpose": ")ᗺᴚƎ⟘Ԁ( ǝbpıɹᗺ uǝsoᴚ-uıǝʇsuıƎ ɹǝɟsuɐɹ⟘ ɹǝʍoԀ",
   "tooltip.pterb_machine.uses_coolant": "¡uoıʇɔunɟ oʇ %s suıɐɹᗡ"
 }

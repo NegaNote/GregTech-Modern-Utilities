@@ -122,7 +122,7 @@ public class UtilMachines {
         if (UtilConfig.INSTANCE.features.pterbEnabled) {
             PTERB_MACHINE = REGISTRATE
                     .multiblock("pterb_machine", PTERBMachine::new)
-                    .langValue("Power Transfer Einstein-Rosen Bridge")
+                    .langValue("Wireless Active Transformer")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
