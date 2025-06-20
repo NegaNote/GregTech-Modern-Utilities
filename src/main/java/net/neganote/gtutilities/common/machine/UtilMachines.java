@@ -55,7 +55,7 @@ public class UtilMachines {
                     .langValue("Sterile Cleaning Maintenance Hatch")
                     .rotationState(RotationState.ALL)
                     .abilities(PartAbility.MAINTENANCE)
-                    .tooltips(Component.translatable("gtceu.universal.disabled"),
+                    .tooltips(Component.translatable("gtceu.part_sharing.disabled"),
                             Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.0"),
                             Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.1"))
                     .tooltipBuilder((stack, tooltips) -> tooltips.add(Component.literal("  ").append(Component
