@@ -4,12 +4,12 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-
 import com.gregtechceu.gtceu.api.item.IGTTool;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.api.item.tool.IGTToolDefinition;
 import com.gregtechceu.gtceu.api.item.tool.ToolDefinitionBuilder;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -25,8 +25,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -34,7 +36,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class OmniBreakerItem extends ComponentItem implements IGTTool {
 
     protected int tier;
-    protected int mode;
 
     protected OmniBreakerItem(Properties properties, int tier) {
         super(properties);
@@ -123,17 +124,30 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
 
     @Override
     public GTToolType getToolType() {
-        if (mode == 1) {
-            return GTToolType.WRENCH_IV;
-        } else if (mode == 2) {
-            return GTToolType.SCREWDRIVER;
-        } else if (mode == 3) {
-            return GTToolType.CROWBAR;
-        } else if (mode == 4) {
-            return GTToolType.WIRE_CUTTER_IV;
-        } else {
-            return GTToolType.builder("meowni").build();
+        // This should be unbreakable wtf?
+        return GTToolType.builder("Meowni").toolStats(b -> b.baseDurability(Integer.MAX_VALUE)).build();
+    }
+
+    @Override
+    public Set<GTToolType> getToolClasses(ItemStack stack) {
+        Set<GTToolType> set = new HashSet<>();
+        var compound = stack.getOrCreateTag();
+        if (!compound.contains("OmniModeTag")) {
+            compound.putByte("OmniModeTag", (byte) 0);
         }
+        var mode = compound.getByte("OmniModeTag");
+
+        if (mode == 1) {
+            set.add(GTToolType.WRENCH);
+        } else if (mode == 2) {
+            set.add(GTToolType.SCREWDRIVER);
+        } else if (mode == 3) {
+            set.add(GTToolType.WIRE_CUTTER);
+        } else if (mode == 4) {
+            set.add(GTToolType.CROWBAR);
+        }
+
+        return set;
     }
 
     @Override

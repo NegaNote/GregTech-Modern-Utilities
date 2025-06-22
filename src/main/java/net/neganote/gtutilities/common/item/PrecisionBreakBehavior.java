@@ -4,8 +4,6 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.LiteralContents;
@@ -20,9 +18,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class PrecisionBreakBehavior implements IInteractionItem {
 
     public int tier;
@@ -33,14 +28,25 @@ public class PrecisionBreakBehavior implements IInteractionItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
-        if (level.isClientSide && player.isShiftKeyDown()) {
-            var breaker = (OmniBreakerItem) item;
-            breaker.mode += 1;
-            if (breaker.mode > 3) {
-                breaker.mode = 0;
+        if (player.isShiftKeyDown()) {
+            var stack = player.getItemInHand(usedHand);
+            var compound = stack.getOrCreateTag();
+
+            if (!compound.contains("OmniModeTag")) {
+                compound.putInt("OmniModeTag", 0);
             }
-            player.displayClientMessage(MutableComponent.create(new LiteralContents(String.format("Mode: %d", breaker.mode))), true);
-            return InteractionResultHolder.success(player.getItemInHand(usedHand));
+
+            var currentMode = compound.getInt("OmniModeTag");
+            currentMode += 1;
+            if (currentMode > 4) {
+                currentMode = 0;
+            }
+
+            compound.putInt("OmniModeTag", currentMode);
+            stack.setTag(compound);
+
+            player.displayClientMessage(
+                    MutableComponent.create(new LiteralContents(String.format("Mode: %d", currentMode))), true);
         }
 
         return IInteractionItem.super.use(item, level, player, usedHand);
@@ -54,14 +60,6 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             BlockState blockState = level.getBlockState(pos);
 
             var itemStack = context.getItemInHand();
-            var breaker = (OmniBreakerItem) itemStack.getItem();
-            var meta = MetaMachine.getMachine(level, pos);
-            if (breaker.mode > 0 && meta != null) {
-                Set<GTToolType> set = new HashSet<>();
-                set.add(breaker.getToolType());
-                meta.onToolClick(set, itemStack, context);
-                return InteractionResult.SUCCESS;
-            }
 
             float hardness = blockState.getBlock().defaultDestroyTime();
             if (!blockState.canHarvestBlock(level, pos, context.getPlayer()) || hardness < 0.0f) {
