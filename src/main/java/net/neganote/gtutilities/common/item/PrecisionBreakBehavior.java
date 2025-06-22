@@ -4,9 +4,9 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -46,7 +46,9 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             stack.setTag(compound);
 
             player.displayClientMessage(
-                    MutableComponent.create(new LiteralContents(String.format("Mode: %d", currentMode))), true);
+                    Component.translatable("tooltip.omnibreaker.tool_mode", OmniBreakerItem.getToolMode(currentMode))
+                            .withStyle(ChatFormatting.WHITE),
+                    true);
         }
 
         return IInteractionItem.super.use(item, level, player, usedHand);
