@@ -7,7 +7,7 @@
   "block.gtmutils.max_64a_energy_converter": "§c§lMAX§r 64§eA§r Energy Converter",
   "block.gtmutils.mv_64a_energy_converter": "§bMV§r 64§eA§r Energy Converter",
   "block.gtmutils.opv_64a_energy_converter": "§9§lOpV§r 64§eA§r Energy Converter",
-  "block.gtmutils.pterb_machine": "Wireless Active Transformer",
+  "block.gtmutils.pterb_machine": "Power Transfer Einstein-Rosen Bridge",
   "block.gtmutils.sterile_cleaning_maintenance_hatch": "Sterile Cleaning Maintenance Hatch",
   "block.gtmutils.uev_64a_energy_converter": "§aUEV§r 64§eA§r Energy Converter",
   "block.gtmutils.uhv_64a_energy_converter": "§4UHV§r 64§eA§r Energy Converter",
@@ -40,6 +40,6 @@
   "tooltip.omnibreaker.right_click_function": "Break individual blocks with right-click!",
   "tooltip.pterb_machine.frequencies": "All PTERBs with the same frequency act like a single Active Transformer.",
   "tooltip.pterb_machine.input_coolant_before_use": "Always input coolant before turning it on!",
-  "tooltip.pterb_machine.purpose": "Power Transfer Einstein-Rosen Bridge (PTERB)",
+  "tooltip.pterb_machine.purpose": "Wireless Active Transformer (PTERB)",
   "tooltip.pterb_machine.uses_coolant": "Drains %s to function!"
 }

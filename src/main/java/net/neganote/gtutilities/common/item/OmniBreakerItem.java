@@ -3,16 +3,14 @@ package net.neganote.gtutilities.common.item;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IGTTool;
-import com.gregtechceu.gtceu.api.item.tool.GTToolItem;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.api.item.tool.IGTToolDefinition;
 import com.gregtechceu.gtceu.api.item.tool.ToolDefinitionBuilder;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
-
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -122,7 +120,26 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
                 .add(Component.translatable("tooltip.omnibreaker.can_break_anything").withStyle(ChatFormatting.GRAY));
         tooltipComponents
                 .add(Component.translatable("tooltip.omnibreaker.right_click_function").withStyle(ChatFormatting.GRAY));
+        tooltipComponents
+                .add(Component.translatable("tooltip.omnibreaker.swappable_tools").withStyle(ChatFormatting.GRAY));
+
+        var nbt = stack.getOrCreateTag();
+        var mode = nbt.getByte("OmniModeTag");
+
+        tooltipComponents
+                .add(Component.translatable("tooltip.omnibreaker.tool_mode", getToolMode(mode))
+                        .withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+    }
+
+    protected static String getToolMode(int mode) {
+        return switch (mode) {
+            case 1 -> "Wrench";
+            case 2 -> "Screwdriver";
+            case 3 -> "Wire-Cutter";
+            case 4 -> "Crowbar";
+            default -> "Omnibreaker";
+        };
     }
 
     @Override
