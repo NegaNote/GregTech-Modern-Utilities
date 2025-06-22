@@ -3,13 +3,16 @@ package net.neganote.gtutilities.common.item;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IGTTool;
+import com.gregtechceu.gtceu.api.item.tool.GTToolItem;
 import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.api.item.tool.IGTToolDefinition;
 import com.gregtechceu.gtceu.api.item.tool.ToolDefinitionBuilder;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
 
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -124,8 +127,7 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
 
     @Override
     public GTToolType getToolType() {
-        // This should be unbreakable wtf?
-        return GTToolType.builder("Meowni").toolStats(b -> b.baseDurability(Integer.MAX_VALUE)).build();
+        return GTToolType.builder("Meowni").build();
     }
 
     @Override
@@ -134,6 +136,9 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
         var compound = stack.getOrCreateTag();
         if (!compound.contains("OmniModeTag")) {
             compound.putByte("OmniModeTag", (byte) 0);
+        }
+        if (!compound.contains("Unbreakable")) {
+            compound.putBoolean("Unbreakable", true);
         }
         var mode = compound.getByte("OmniModeTag");
 
@@ -152,7 +157,7 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
 
     @Override
     public Material getMaterial() {
-        return null;
+        return GTMaterials.Neutronium;
     }
 
     @Override
@@ -177,6 +182,6 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
 
     @Override
     public boolean playSoundOnBlockDestroy() {
-        return false;
+        return true;
     }
 }

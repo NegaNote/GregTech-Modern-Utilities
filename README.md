@@ -4,7 +4,8 @@ A GregTech Modern addon, adding some nice quality-of-life features.
 Current features:
 
 * A Sterile Cleaning Maintenance Hatch
-* An omni-breaker, that can break anything instantly
+* An omni-breaker, a tool that can break anything instantly and combines multiple GregTech tools into one
+  * Swappable by shift-right-clicking the air, the current mode is displayed on the tooltip
 * 64A Energy Converters
 * The Power Transfer Einstein-Rosen Bridge (PTERB), a wireless version of the Active Transformer
   * Has an opt-in coolant system, where the PTERB requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
