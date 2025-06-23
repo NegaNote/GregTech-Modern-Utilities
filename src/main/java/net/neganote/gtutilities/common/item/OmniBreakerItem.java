@@ -132,13 +132,13 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 
-    protected static String getToolMode(int mode) {
+    protected static Component getToolMode(int mode) {
         return switch (mode) {
-            case 1 -> "Wrench";
-            case 2 -> "Screwdriver";
-            case 3 -> "Wire-Cutter";
-            case 4 -> "Crowbar";
-            default -> "Omnibreaker";
+            case 1 -> Component.translatable("tooltip.omnibreaker.tool_mode_1");
+            case 2 -> Component.translatable("tooltip.omnibreaker.tool_mode_2");
+            case 3 -> Component.translatable("tooltip.omnibreaker.tool_mode_3");
+            case 4 -> Component.translatable("tooltip.omnibreaker.tool_mode_4");
+            default -> Component.translatable("tooltip.omnibreaker.tool_mode_0");
         };
     }
 
