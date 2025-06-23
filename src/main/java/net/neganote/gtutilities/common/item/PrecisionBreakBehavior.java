@@ -4,8 +4,11 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 
+import com.gregtechceu.gtceu.api.item.tool.GTToolType;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,6 +20,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class PrecisionBreakBehavior implements IInteractionItem {
 
@@ -85,7 +91,17 @@ public class PrecisionBreakBehavior implements IInteractionItem {
                 }
             }
 
-            level.destroyBlock(pos, true);
+            CompoundTag tag = itemStack.getTag();
+            byte omniModeTag = tag.getByte("OmniModeTag");
+            if (omniModeTag > 0) {
+                var meta = MetaMachine.getMachine(level, context.getClickedPos());
+                if (meta != null) {
+                    var item = (OmniBreakerItem) itemStack.getItem();
+                    var set = item.getToolClasses(itemStack);
+                    meta.onToolClick(set, itemStack, context);
+                }
+            } else
+                level.destroyBlock(pos, true);
         }
         return InteractionResult.SUCCESS;
     }
