@@ -46,5 +46,7 @@
   "tooltip.pterb_machine.frequencies": "All PTERBs with the same frequency act like a single Active Transformer.",
   "tooltip.pterb_machine.input_coolant_before_use": "Always input coolant before turning it on!",
   "tooltip.pterb_machine.purpose": "Wireless Active Transformer (PTERB)",
-  "tooltip.pterb_machine.uses_coolant": "Drains %s to function!"
+  "tooltip.pterb_machine.uses_coolant": "Drains %s to function!",
+  "tooltip.omnibreaker.tool_mode": "Current mode: %s",
+  "tooltip.omnibreaker.swappable_tools": "Also contains multiple tools in one!"
 }
