@@ -20,7 +20,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neganote.gtutilities.GregTechModernUtilities;
 
 public class PrecisionBreakBehavior implements IInteractionItem {
 
@@ -101,12 +100,6 @@ public class PrecisionBreakBehavior implements IInteractionItem {
                 toolResult = mmbe.getMetaMachine().onToolClick(set, itemStack, context).getSecond();
             } else {
                 return InteractionResult.PASS;
-            }
-
-            if (level.isClientSide()) {
-                GregTechModernUtilities.LOGGER.info("Client: {}", toolResult);
-            } else {
-                GregTechModernUtilities.LOGGER.info("Server: {}", toolResult);
             }
 
             if (toolResult.consumesAction() && !level.isClientSide() && rand <= chance) {
