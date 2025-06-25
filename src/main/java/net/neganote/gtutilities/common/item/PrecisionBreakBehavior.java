@@ -1,9 +1,10 @@
 package net.neganote.gtutilities.common.item;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.capability.IToolable;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neganote.gtutilities.GregTechModernUtilities;
 
 public class PrecisionBreakBehavior implements IInteractionItem {
 
@@ -70,6 +72,10 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             return InteractionResult.PASS;
         }
 
+        CompoundTag tag = itemStack.getTag();
+        assert tag != null;
+        byte omniModeTag = tag.getByte("OmniModeTag");
+
         int unbreaking = context.getItemInHand().getItem().getAllEnchantments(itemStack)
                 .getOrDefault(Enchantments.UNBREAKING, 0);
         double chance = 1.0 / (unbreaking + 1);
@@ -77,30 +83,39 @@ public class PrecisionBreakBehavior implements IInteractionItem {
 
         var electricItem = GTCapabilityHelper.getElectricItem(context.getItemInHand());
 
-        if (electricItem != null) {
-            if (electricItem.getCharge() >= GTValues.VEX[tier]) {
-                if (rand <= chance && !level.isClientSide()) {
-                    electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
-                }
+        assert electricItem != null;
+
+        if (electricItem.getCharge() < GTValues.VEX[tier]) {
+            return InteractionResult.PASS;
+        }
+
+        if (omniModeTag > 0) {
+            var be = level.getBlockEntity(context.getClickedPos());
+            var item = (OmniBreakerItem) itemStack.getItem();
+            var set = item.getToolClasses(itemStack);
+
+            InteractionResult toolResult;
+            if (be instanceof IToolable toolable) {
+                toolResult = toolable.onToolClick(set, itemStack, context).getSecond();
+            } else if (be instanceof MetaMachineBlockEntity mmbe) {
+                toolResult = mmbe.getMetaMachine().onToolClick(set, itemStack, context).getSecond();
             } else {
                 return InteractionResult.PASS;
             }
-        }
 
-        CompoundTag tag = itemStack.getTag();
-        assert tag != null;
-        byte omniModeTag = tag.getByte("OmniModeTag");
-        if (omniModeTag > 0) {
-            var meta = MetaMachine.getMachine(level, context.getClickedPos());
-            if (meta != null && !level.isClientSide()) {
-                var item = (OmniBreakerItem) itemStack.getItem();
-                var set = item.getToolClasses(itemStack);
-                meta.onToolClick(set, itemStack, context);
+            if (level.isClientSide()) {
+                GregTechModernUtilities.LOGGER.info("Client: {}", toolResult);
+            } else {
+                GregTechModernUtilities.LOGGER.info("Server: {}", toolResult);
             }
-        } else {
-            if (!level.isClientSide()) {
-                level.destroyBlock(pos, true);
+
+            if (toolResult.consumesAction() && !level.isClientSide() && rand <= chance) {
+                electricItem.discharge(GTValues.V[tier], tier, true, false, false);
             }
+            return toolResult;
+        } else if (!level.isClientSide()) {
+            level.destroyBlock(pos, true);
+            electricItem.discharge(GTValues.V[tier], tier, true, false, false);
         }
 
         return InteractionResult.SUCCESS;
