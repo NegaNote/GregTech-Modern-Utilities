@@ -108,7 +108,9 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             return toolResult;
         } else if (!level.isClientSide()) {
             level.destroyBlock(pos, true);
-            electricItem.discharge(GTValues.V[tier], tier, true, false, false);
+            if (rand <= chance) {
+                electricItem.discharge(GTValues.V[tier], tier, true, false, false);
+            }
         }
 
         return InteractionResult.SUCCESS;
