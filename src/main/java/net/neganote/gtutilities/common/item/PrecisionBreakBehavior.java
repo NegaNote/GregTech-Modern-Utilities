@@ -3,8 +3,8 @@ package net.neganote.gtutilities.common.item;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
-
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -70,16 +70,16 @@ public class PrecisionBreakBehavior implements IInteractionItem {
                 return InteractionResult.PASS;
             }
 
-            int unbreaking = context.getItemInHand().getItem().getAllEnchantments(context.getItemInHand())
+            int unbreaking = context.getItemInHand().getItem().getAllEnchantments(itemStack)
                     .getOrDefault(Enchantments.UNBREAKING, 0);
-            double chance = 1.0f / (unbreaking + 1);
+            double chance = 1.0 / (unbreaking + 1);
             double rand = Math.random();
 
             var electricItem = GTCapabilityHelper.getElectricItem(context.getItemInHand());
 
             if (electricItem != null) {
                 if (electricItem.getCharge() >= GTValues.VEX[tier]) {
-                    if (rand >= chance) {
+                    if (rand <= chance) {
                         electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
                     }
                 } else {
@@ -88,6 +88,7 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             }
 
             CompoundTag tag = itemStack.getTag();
+            assert tag != null;
             byte omniModeTag = tag.getByte("OmniModeTag");
             if (omniModeTag > 0) {
                 var meta = MetaMachine.getMachine(level, context.getClickedPos());
