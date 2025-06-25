@@ -59,47 +59,50 @@ public class PrecisionBreakBehavior implements IInteractionItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        if (!level.isClientSide()) {
-            BlockPos pos = context.getClickedPos();
-            BlockState blockState = level.getBlockState(pos);
 
-            var itemStack = context.getItemInHand();
+        BlockPos pos = context.getClickedPos();
+        BlockState blockState = level.getBlockState(pos);
 
-            float hardness = blockState.getBlock().defaultDestroyTime();
-            if (!blockState.canHarvestBlock(level, pos, context.getPlayer()) || hardness < 0.0f) {
+        var itemStack = context.getItemInHand();
+
+        float hardness = blockState.getBlock().defaultDestroyTime();
+        if (!blockState.canHarvestBlock(level, pos, context.getPlayer()) || hardness < 0.0f) {
+            return InteractionResult.PASS;
+        }
+
+        int unbreaking = context.getItemInHand().getItem().getAllEnchantments(itemStack)
+                .getOrDefault(Enchantments.UNBREAKING, 0);
+        double chance = 1.0 / (unbreaking + 1);
+        double rand = Math.random();
+
+        var electricItem = GTCapabilityHelper.getElectricItem(context.getItemInHand());
+
+        if (electricItem != null) {
+            if (electricItem.getCharge() >= GTValues.VEX[tier]) {
+                if (rand <= chance && !level.isClientSide()) {
+                    electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
+                }
+            } else {
                 return InteractionResult.PASS;
             }
-
-            int unbreaking = context.getItemInHand().getItem().getAllEnchantments(itemStack)
-                    .getOrDefault(Enchantments.UNBREAKING, 0);
-            double chance = 1.0 / (unbreaking + 1);
-            double rand = Math.random();
-
-            var electricItem = GTCapabilityHelper.getElectricItem(context.getItemInHand());
-
-            if (electricItem != null) {
-                if (electricItem.getCharge() >= GTValues.VEX[tier]) {
-                    if (rand <= chance) {
-                        electricItem.discharge(GTValues.VEX[tier], tier, true, false, false);
-                    }
-                } else {
-                    return InteractionResult.PASS;
-                }
-            }
-
-            CompoundTag tag = itemStack.getTag();
-            assert tag != null;
-            byte omniModeTag = tag.getByte("OmniModeTag");
-            if (omniModeTag > 0) {
-                var meta = MetaMachine.getMachine(level, context.getClickedPos());
-                if (meta != null) {
-                    var item = (OmniBreakerItem) itemStack.getItem();
-                    var set = item.getToolClasses(itemStack);
-                    meta.onToolClick(set, itemStack, context);
-                }
-            } else
-                level.destroyBlock(pos, true);
         }
+
+        CompoundTag tag = itemStack.getTag();
+        assert tag != null;
+        byte omniModeTag = tag.getByte("OmniModeTag");
+        if (omniModeTag > 0) {
+            var meta = MetaMachine.getMachine(level, context.getClickedPos());
+            if (meta != null && !level.isClientSide()) {
+                var item = (OmniBreakerItem) itemStack.getItem();
+                var set = item.getToolClasses(itemStack);
+                meta.onToolClick(set, itemStack, context);
+            }
+        } else {
+            if (!level.isClientSide()) {
+                level.destroyBlock(pos, true);
+            }
+        }
+
         return InteractionResult.SUCCESS;
     }
 }
