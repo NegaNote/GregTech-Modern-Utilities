@@ -78,7 +78,7 @@ public class UtilMachines {
                         .modelProperty(ConverterMachine.FE_TO_EU_PROPERTY, false)
                         .model(GTMachineModels.createConverterModel(64))
                         .tooltips(Component.translatable("gtceu.machine.energy_converter.description"),
-                                Component.translatable("gtmutils.machine.64a_energy_converter.tooltip_tool_usage"),
+                                Component.translatable("gtceu.machine.energy_converter.tooltip_tool_usage"),
                                 Component.translatable("gtceu.machine.energy_converter.tooltip_conversion_native",
                                         FeCompat.toFeLong(V[tier] * amperage,
                                                 FeCompat.ratio(true)),
