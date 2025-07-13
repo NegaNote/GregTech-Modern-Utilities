@@ -56,6 +56,9 @@ jobs:
           curseforge-id: ${{ vars.CURSE_ID }}
           curseforge-token: ${{ secrets.CURSE_TOKEN }}
 
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-generate-changelog: true
           github-tag: "1.20.1-${{ steps.gradle_properties.outputs.mod_version }}"

@@ -33,16 +33,16 @@ public class UtilLangHandler {
                 "Starts as §fEU Converter§7, use Soft Mallet to change");
 
         provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %sL of %s per second");
-        provider.add("gtmutils.pterb_machine.invalid_frequency", "PTERBs will not work on frequency 0!");
+        provider.add("gtmutils.pterb_machine.invalid_frequency", "WATs will not work on frequency 0!");
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
 
         provider.add("tooltip.pterb_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
         provider.add("tooltip.pterb_machine.frequencies",
-                "All PTERBs with the same frequency act like a single Active Transformer.");
+                "All WATs with the same frequency act like a single Active Transformer.");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
 
-        provider.add("config.jade.plugin_gtmutils.pterb_info", "PTERB Info");
+        provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
 
         provider.add("material.gtmutils.quantum_coolant", "Quantum Coolant");
 

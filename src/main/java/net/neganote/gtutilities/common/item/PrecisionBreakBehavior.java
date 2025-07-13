@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import static net.minecraft.world.level.block.Block.getDrops;
 
 public class PrecisionBreakBehavior implements IInteractionItem {
 
@@ -107,7 +110,11 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             }
             return toolResult;
         } else if (!level.isClientSide()) {
-            level.destroyBlock(pos, true);
+            var drops = getDrops(blockState, (ServerLevel) level, pos, level.getBlockEntity(pos));
+            var player = context.getPlayer();
+            assert player != null;
+            drops.forEach(player::addItem);
+            level.destroyBlock(pos, false);
             if (rand <= chance) {
                 electricItem.discharge(GTValues.V[tier], tier, true, false, false);
             }

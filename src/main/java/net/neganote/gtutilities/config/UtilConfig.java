@@ -45,11 +45,11 @@ public class UtilConfig {
         public long omnibreakerEnergyCapacity = 40_960_000L;
 
         @Configurable
-        @Configurable.Comment({ "Whether the Power-Transfer Einstein-Rosen Bridge is enabled." })
+        @Configurable.Comment({ "Whether the Wireless Active Transformer is enabled." })
         public boolean pterbEnabled = true;
 
         @Configurable
-        @Configurable.Comment({ "Base amount of PTERB coolant to drain every second.",
+        @Configurable.Comment({ "Base amount of WAT coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
         public int pterbCoolantBaseDrain = 0;
 
