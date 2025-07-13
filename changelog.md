@@ -1,3 +1,4 @@
-# GregTech Modern Utilities version 1.1.12
+# GregTech Modern Utilities version 2.0.0
 
-* HOTFIX: 64A converters were not properly respecting the high tier content config
+* Port to GTM 7.0.0
+* Make omni-breaker teleport drops to player on right-click

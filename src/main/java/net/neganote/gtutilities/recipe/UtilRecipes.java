@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.LASER_PIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLY_LINE_RECIPES;
-import static com.gregtechceu.gtceu.data.recipe.CraftingComponent.*;
+import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
 import static net.neganote.gtutilities.common.item.UtilItems.OMNIBREAKER;
 import static net.neganote.gtutilities.common.machine.UtilMachines.ENERGY_CONVERTER_64A;
 
@@ -39,12 +39,12 @@ public class UtilRecipes {
             ASSEMBLY_LINE_RECIPES.recipeBuilder("pterb")
                     .inputItems(GTMultiMachines.ACTIVE_TRANSFORMER)
                     .inputItems(TagPrefix.plate, GTMaterials.Neutronium, 32)
-                    .inputItems(SENSOR.getIngredient(GTValues.UV), 8)
-                    .inputItems(EMITTER.getIngredient(GTValues.UV), 8)
-                    .inputItems(FIELD_GENERATOR.getIngredient(GTValues.UV), 4)
+                    .inputItems(SENSOR.get(GTValues.UV), 8)
+                    .inputItems(EMITTER.get(GTValues.UV), 8)
+                    .inputItems(FIELD_GENERATOR.get(GTValues.UV), 4)
                     .inputItems(CustomTags.UHV_CIRCUITS, 2)
                     .inputItems(TagPrefix.pipeLargeFluid, GTMaterials.Neutronium, 4)
-                    .inputItems(CABLE_QUAD.getIngredient(GTValues.UV), 8)
+                    .inputItems(CABLE_QUAD.get(GTValues.UV), 8)
                     .inputItems(LASER_PIPES[0], 8)
                     .inputFluids(GTMaterials.SolderingAlloy.getFluid(GTValues.L * 32))
                     .EUt(1_600_000L)
@@ -59,10 +59,10 @@ public class UtilRecipes {
     public static void register64AConverterRecipes(Consumer<FinishedRecipe> provider) {
         for (int tier : GTValues.tiersBetween(GTValues.ULV, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV)) {
             ASSEMBLER_RECIPES.recipeBuilder("converter_64a_" + GTValues.VN[tier])
-                    .inputItems(HULL.getIngredient(tier))
-                    .inputItems(CIRCUIT.getIngredient(tier))
-                    .inputItems(CABLE_HEX.getIngredient(0), 4)
-                    .inputItems(CABLE_HEX.getIngredient(tier), 16)
+                    .inputItems(HULL.get(tier))
+                    .inputItems(CIRCUIT.get(tier))
+                    .inputItems(CABLE_HEX.get(0), 4)
+                    .inputItems(CABLE_HEX.get(tier), 16)
                     .outputItems(ENERGY_CONVERTER_64A[tier])
                     .EUt(GTValues.VEX[tier]).duration(40)
                     .save(provider);
@@ -84,10 +84,10 @@ public class UtilRecipes {
     public static void registerOmnitoolRecipe(Consumer<FinishedRecipe> provider) {
         ASSEMBLER_RECIPES.recipeBuilder("omnibreaker")
                 .inputItems(getPowerUnit(UtilConfig.INSTANCE.features.omnibreakerTier))
-                .inputItems(CIRCUIT.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
-                .inputItems(EMITTER.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 1)
-                .inputItems(CABLE_QUAD.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 3)
-                .inputItems(MOTOR.getIngredient(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
+                .inputItems(CIRCUIT.get(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
+                .inputItems(EMITTER.get(UtilConfig.INSTANCE.features.omnibreakerTier), 1)
+                .inputItems(CABLE_QUAD.get(UtilConfig.INSTANCE.features.omnibreakerTier), 3)
+                .inputItems(MOTOR.get(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
                 .outputItems(OMNIBREAKER)
                 .EUt(GTValues.VEX[UtilConfig.INSTANCE.features.omnibreakerTier]).duration(20 * 60)
                 .save(provider);

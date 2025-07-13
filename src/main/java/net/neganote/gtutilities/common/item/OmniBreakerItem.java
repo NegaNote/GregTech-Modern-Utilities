@@ -3,7 +3,6 @@ package net.neganote.gtutilities.common.item;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -107,17 +106,12 @@ public class OmniBreakerItem extends ComponentItem {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level,
                                 @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-        var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(stack));
-        long charge = electricItem.getCharge();
-        long maxCharge = electricItem.getMaxCharge();
-        tooltipComponents.add(Component.translatable("tooltip.omnibreaker.charge_status",
-                Component.translatable(FormattingUtil.formatNumbers(charge)).withStyle(ChatFormatting.GREEN),
-                Component.translatable(FormattingUtil.formatNumbers(maxCharge)).withStyle(ChatFormatting.YELLOW)));
         tooltipComponents.add(Component.translatable("tooltip.omnibreaker.modern_vajra"));
         tooltipComponents
                 .add(Component.translatable("tooltip.omnibreaker.can_break_anything").withStyle(ChatFormatting.GRAY));
         tooltipComponents
                 .add(Component.translatable("tooltip.omnibreaker.right_click_function").withStyle(ChatFormatting.GRAY));
+
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

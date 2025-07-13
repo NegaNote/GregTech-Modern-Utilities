@@ -14,6 +14,13 @@ import java.util.Set;
 public class UtilLangHandler {
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("tooltip.omnibreaker.swappable_tools", "Also contains multiple tools in one!");
+        provider.add("tooltip.omnibreaker.tool_mode", "Current mode: %s");
+        provider.add("tooltip.omnibreaker.tool_mode_0", "Omnibreaker");
+        provider.add("tooltip.omnibreaker.tool_mode_1", "Wrench");
+        provider.add("tooltip.omnibreaker.tool_mode_2", "Screwdriver");
+        provider.add("tooltip.omnibreaker.tool_mode_3", "Wire-cutter");
+        provider.add("tooltip.omnibreaker.tool_mode_4", "Crowbar");
         provider.add("tooltip.omnibreaker.can_break_anything", "The Omni-breaker can insta-mine ANYTHING!");
         provider.add("tooltip.omnibreaker.charge_status", "Energy: %s EU / %s EU");
         provider.add("tooltip.omnibreaker.right_click_function", "Break individual blocks with right-click!");
@@ -26,16 +33,16 @@ public class UtilLangHandler {
                 "Starts as §fEU Converter§7, use Soft Mallet to change");
 
         provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %sL of %s per second");
-        provider.add("gtmutils.pterb_machine.invalid_frequency", "PTERBs will not work on frequency 0!");
+        provider.add("gtmutils.pterb_machine.invalid_frequency", "WATs will not work on frequency 0!");
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
 
-        provider.add("tooltip.pterb_machine.purpose", "Wireless Active Transformer (PTERB)");
+        provider.add("tooltip.pterb_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
         provider.add("tooltip.pterb_machine.frequencies",
-                "All PTERBs with the same frequency act like a single Active Transformer.");
+                "All WATs with the same frequency act like a single Active Transformer.");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
 
-        provider.add("config.jade.plugin_gtmutils.pterb_info", "PTERB Info");
+        provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
 
         provider.add("material.gtmutils.quantum_coolant", "Quantum Coolant");
 

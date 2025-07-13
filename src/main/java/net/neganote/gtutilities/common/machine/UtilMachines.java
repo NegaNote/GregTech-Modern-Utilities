@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.common.machine;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -11,10 +12,10 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.client.renderer.machine.MaintenanceHatchPartRenderer;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
+import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -22,8 +23,6 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
-import net.neganote.gtutilities.client.renderer.machine.PTERBRenderer;
-import net.neganote.gtutilities.client.renderer.machine.UtilConverterRenderer;
 import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
@@ -55,14 +54,15 @@ public class UtilMachines {
                     .langValue("Sterile Cleaning Maintenance Hatch")
                     .rotationState(RotationState.ALL)
                     .abilities(PartAbility.MAINTENANCE)
-                    .tooltips(Component.translatable("gtceu.universal.disabled"),
+                    .tooltips(Component.translatable("gtceu.part_sharing.disabled"),
                             Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.0"),
                             Component.translatable("gtceu.machine.maintenance_hatch_cleanroom_auto.tooltip.1"))
                     .tooltipBuilder((stack, tooltips) -> tooltips.add(Component.literal("  ").append(Component
                             .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
                             .withStyle(ChatFormatting.GREEN))))
-                    .renderer(() -> new MaintenanceHatchPartRenderer(GTValues.UHV,
-                            GregTechModernUtilities.id("block/machine/part/maintenance.sterile_cleaning")))
+                    .tier(UHV)
+                    .overlayTieredHullModel(
+                            GregTechModernUtilities.id("block/machine/part/sterile_cleaning_maintenance_hatch"))
                     // Tier can always be changed later
                     .register();
         }
@@ -76,9 +76,10 @@ public class UtilMachines {
                         .rotationState(RotationState.ALL)
                         .langValue("%s %s§eA§r Energy Converter".formatted(VCF[tier] + VN[tier] + ChatFormatting.RESET,
                                 amperage))
-                        .renderer(() -> new UtilConverterRenderer(tier, amperage))
+                        .modelProperty(ConverterMachine.FE_TO_EU_PROPERTY, false)
+                        .model(GTMachineModels.createConverterModel(64))
                         .tooltips(Component.translatable("gtceu.machine.energy_converter.description"),
-                                Component.translatable("gtmutils.machine.64a_energy_converter.tooltip_tool_usage"),
+                                Component.translatable("gtceu.machine.energy_converter.tooltip_tool_usage"),
                                 Component.translatable("gtceu.machine.energy_converter.tooltip_conversion_native",
                                         FeCompat.toFeLong(V[tier] * amperage,
                                                 FeCompat.ratio(true)),
@@ -122,7 +123,7 @@ public class UtilMachines {
         if (UtilConfig.INSTANCE.features.pterbEnabled) {
             PTERB_MACHINE = REGISTRATE
                     .multiblock("pterb_machine", PTERBMachine::new)
-                    .langValue("Power Transfer Einstein-Rosen Bridge")
+                    .langValue("Wireless Active Transformer")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
@@ -161,9 +162,10 @@ public class UtilMachines {
                             .where('C', controller(blocks(definition.getBlock())))
                             .where('F', frames(GTMaterials.Neutronium))
                             .build())
-                    .renderer(PTERBRenderer::new)
+                    .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                            GTCEu.id("block/multiblock/data_bank"))
                     .allowExtendedFacing(true)
-                    .hasTESR(true)
+                    .hasBER(true)
                     .register();
         }
     }

@@ -20,11 +20,12 @@ public class EnergyUtils {
             }
             if (part instanceof LaserHatchPartMachine hatch) {
                 // unfortunately the laser hatch's buffer is private, so I have to do this instead
-                for (var handler : hatch.getRecipeHandlers()) {
-                    if (handler.getCapability() == EURecipeCapability.CAP &&
-                            handler instanceof IEnergyContainer container) {
-                        energyContainerList.add(container);
-                    }
+                for (var handlerList : hatch.getRecipeHandlers()) {
+                    var containers = handlerList.getCapability(EURecipeCapability.CAP).stream()
+                            .filter(IEnergyContainer.class::isInstance)
+                            .map(IEnergyContainer.class::cast)
+                            .toList();
+                    energyContainerList.addAll(containers);
                 }
             }
         }

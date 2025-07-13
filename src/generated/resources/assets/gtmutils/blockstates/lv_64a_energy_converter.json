@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "gtmutils:block/machine/lv_64a_energy_converter",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "gtmutils:block/machine/lv_64a_energy_converter",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gtmutils:block/machine/lv_64a_energy_converter"
+    },
+    "facing=south": {
+      "model": "gtmutils:block/machine/lv_64a_energy_converter",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "gtmutils:block/machine/lv_64a_energy_converter",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "gtmutils:block/machine/lv_64a_energy_converter",
+      "y": 270
+    }
+  }
+}
