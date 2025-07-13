@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.recipe;
 
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTItems;
@@ -56,7 +57,7 @@ public class UtilRecipes {
     }
 
     public static void register64AConverterRecipes(Consumer<FinishedRecipe> provider) {
-        for (int tier : GTValues.tiersBetween(GTValues.ULV, GTValues.MAX)) {
+        for (int tier : GTValues.tiersBetween(GTValues.ULV, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV)) {
             ASSEMBLER_RECIPES.recipeBuilder("converter_64a_" + GTValues.VN[tier])
                     .inputItems(HULL.get(tier))
                     .inputItems(CIRCUIT.get(tier))
