@@ -4,17 +4,16 @@ A GregTech Modern addon, adding some nice quality-of-life features.
 Current features:
 
 * A Sterile Cleaning Maintenance Hatch
-* An omni-breaker, a tool that can break anything instantly and combines multiple GregTech tools into one
-  * Swappable by shift-right-clicking the air, the current mode is displayed on the tooltip (tool switching developed by Kolatra)
+* An omni-breaker, a tool that can break anything instantly like a modern Vajra
 * 64A Energy Converters
-* The Power Transfer Einstein-Rosen Bridge (PTERB), a wireless version of the Active Transformer
-  * Has an opt-in coolant system, where the PTERB requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
+* The Wireless Active Transformer (WAT)
+  * Has an opt-in coolant system, where the WAT requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
 
 All features can be enabled or disabled in the config.
 
 While this mod was originally created for Monifactory, feel free to use it in any GregTech modpack you like!
 
-All features (except for the sterile cleaning hatch and optional coolant for the PTERB) have default recipes.
+All features (except for the sterile cleaning hatch and optional coolant for the WAT) have default recipes.
 Feel free to change recipes in your own pack!
 
 ## License

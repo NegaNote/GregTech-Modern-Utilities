@@ -61,7 +61,8 @@ public class UtilMachines {
                             .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
                             .withStyle(ChatFormatting.GREEN))))
                     .tier(UHV)
-                    .overlayTieredHullModel(GregTechModernUtilities.id("block/machine/part/sterile_cleaning_maintenance_hatch"))
+                    .overlayTieredHullModel(
+                            GregTechModernUtilities.id("block/machine/part/sterile_cleaning_maintenance_hatch"))
                     // Tier can always be changed later
                     .register();
         }
@@ -161,7 +162,8 @@ public class UtilMachines {
                             .where('C', controller(blocks(definition.getBlock())))
                             .where('F', frames(GTMaterials.Neutronium))
                             .build())
-                    .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"), GTCEu.id("block/multiblock/data_bank"))
+                    .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                            GTCEu.id("block/multiblock/data_bank"))
                     .allowExtendedFacing(true)
                     .hasBER(true)
                     .register();

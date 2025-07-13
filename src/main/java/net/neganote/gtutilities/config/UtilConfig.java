@@ -29,7 +29,7 @@ public class UtilConfig {
 
         @Configurable
         @Configurable.Comment({ "Whether the Sterile Cleaning Maintenance Hatch is enabled." })
-        public boolean sterileHatchEnabled = true;
+        public boolean sterileHatchEnabled = false;
         @Configurable
         @Configurable.Comment({ "Whether the 64A energy converters are enabled." })
         public boolean converters64aEnabled = true;

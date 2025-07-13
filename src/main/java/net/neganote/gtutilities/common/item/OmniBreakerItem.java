@@ -2,14 +2,7 @@ package net.neganote.gtutilities.common.item;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-import com.gregtechceu.gtceu.api.item.IGTTool;
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
-import com.gregtechceu.gtceu.api.item.tool.IGTToolDefinition;
-import com.gregtechceu.gtceu.api.item.tool.ToolDefinitionBuilder;
-import com.gregtechceu.gtceu.api.sound.SoundEntry;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -26,15 +19,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class OmniBreakerItem extends ComponentItem implements IGTTool {
+public class OmniBreakerItem extends ComponentItem {
 
     protected int tier;
 
@@ -120,85 +111,7 @@ public class OmniBreakerItem extends ComponentItem implements IGTTool {
                 .add(Component.translatable("tooltip.omnibreaker.can_break_anything").withStyle(ChatFormatting.GRAY));
         tooltipComponents
                 .add(Component.translatable("tooltip.omnibreaker.right_click_function").withStyle(ChatFormatting.GRAY));
-        tooltipComponents
-                .add(Component.translatable("tooltip.omnibreaker.swappable_tools").withStyle(ChatFormatting.GRAY));
 
-        var nbt = stack.getOrCreateTag();
-        var mode = nbt.getByte("OmniModeTag");
-
-        tooltipComponents
-                .add(Component.translatable("tooltip.omnibreaker.tool_mode", getToolMode(mode))
-                        .withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-    }
-
-    protected static Component getToolMode(int mode) {
-        return switch (mode) {
-            case 1 -> Component.translatable("tooltip.omnibreaker.tool_mode_1");
-            case 2 -> Component.translatable("tooltip.omnibreaker.tool_mode_2");
-            case 3 -> Component.translatable("tooltip.omnibreaker.tool_mode_3");
-            case 4 -> Component.translatable("tooltip.omnibreaker.tool_mode_4");
-            default -> Component.translatable("tooltip.omnibreaker.tool_mode_0");
-        };
-    }
-
-    @Override
-    public GTToolType getToolType() {
-        return GTToolType.builder("Meowni").build();
-    }
-
-    @Override
-    public Set<GTToolType> getToolClasses(ItemStack stack) {
-        Set<GTToolType> set = new HashSet<>();
-        var compound = stack.getOrCreateTag();
-        if (!compound.contains("OmniModeTag")) {
-            compound.putByte("OmniModeTag", (byte) 0);
-        }
-        if (!compound.contains("Unbreakable")) {
-            compound.putBoolean("Unbreakable", true);
-        }
-        var mode = compound.getByte("OmniModeTag");
-
-        if (mode == 1) {
-            set.add(GTToolType.WRENCH);
-        } else if (mode == 2) {
-            set.add(GTToolType.SCREWDRIVER);
-        } else if (mode == 3) {
-            set.add(GTToolType.WIRE_CUTTER);
-        } else if (mode == 4) {
-            set.add(GTToolType.CROWBAR);
-        }
-
-        return set;
-    }
-
-    @Override
-    public Material getMaterial() {
-        return GTMaterials.Neutronium;
-    }
-
-    @Override
-    public boolean isElectric() {
-        return true;
-    }
-
-    @Override
-    public int getElectricTier() {
-        return tier;
-    }
-
-    @Override
-    public IGTToolDefinition getToolStats() {
-        return new ToolDefinitionBuilder().build();
-    }
-
-    @Override
-    public @Nullable SoundEntry getSound() {
-        return null;
-    }
-
-    @Override
-    public boolean playSoundOnBlockDestroy() {
-        return true;
     }
 }
