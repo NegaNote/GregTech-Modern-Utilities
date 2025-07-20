@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -53,8 +54,13 @@ public class PrecisionBreakBehavior implements IInteractionItem {
             var drops = getDrops(blockState, (ServerLevel) level, pos, level.getBlockEntity(pos));
             var player = context.getPlayer();
             assert player != null;
-            drops.forEach(player::addItem);
             level.destroyBlock(pos, false);
+            drops.removeIf(player::addItem);
+            for (var drop : drops) {
+                var center = pos.getCenter();
+                var entity = new ItemEntity(level, center.x(), center.y(), center.z(), drop);
+                level.addFreshEntity(entity);
+            }
             if (rand <= chance) {
                 electricItem.discharge(GTValues.V[tier], tier, true, false, false);
             }
