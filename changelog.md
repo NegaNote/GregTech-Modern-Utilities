@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 2.0.1
+# GregTech Modern Utilities version 2.1.0
 
-* Fix omni-breaker voiding drops on right-click if inventory is full
+* Add the credits and coins that were previously removed from GTm itself

@@ -129,7 +129,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                     .map(NotifiableFluidTank.class::cast).toList();
 
             List<FluidIngredient> left = List
-                    .of(FluidIngredient.of(coolantDrain, UtilMaterials.QuantumCoolant.getFluid()));
+                    .of(FluidIngredient.of(UtilMaterials.QuantumCoolant.getFluid(), coolantDrain));
 
             for (var tank : coolantTanks) {
                 left = tank.handleRecipe(IO.IN, null, left, false);
@@ -321,19 +321,16 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     }
 
     public static TraceabilityPredicate getHatchPredicates() {
-        return UtilConfig.coolantEnabled() ? abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
+        var predicate = abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
                 .or(abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2))
                 .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))
                 .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
                 .or(abilities(PartAbility.INPUT_LASER).setPreviewCount(1))
-                .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1))
-                .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)) :
-                abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
-                        .or(abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2))
-                        .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))
-                        .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
-                        .or(abilities(PartAbility.INPUT_LASER).setPreviewCount(1))
-                        .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1));
+                .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1));
+        if (UtilConfig.coolantEnabled()) {
+            predicate = predicate.or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1));
+        }
+        return predicate;
     }
 
     @Override
@@ -431,7 +428,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     }
 
     @Override
-    public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
+    public void attachConfigurators(@NotNull ConfiguratorPanel configuratorPanel) {
         super.attachConfigurators(configuratorPanel);
         configuratorPanel.attachConfigurators(new IFancyConfigurator() {
 

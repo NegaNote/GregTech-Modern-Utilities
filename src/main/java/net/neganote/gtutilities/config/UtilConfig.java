@@ -57,6 +57,10 @@ public class UtilConfig {
         @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
                 "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
         public float pterbCoolantIOMultiplier = 0;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the coins/credits are enabled." })
+        public boolean coinsEnabled = false;
     }
 
     public static boolean coolantEnabled() {
