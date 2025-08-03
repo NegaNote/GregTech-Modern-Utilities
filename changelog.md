@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 2.1.0
+# GregTech Modern Utilities version 2.1.1
 
-* Add the credits and coins that were previously removed from GTm itself
+* Fix crashing when omnibreaker is disabled

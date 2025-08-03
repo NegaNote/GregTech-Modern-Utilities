@@ -110,16 +110,21 @@ public class GregTechModernUtilities {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void clientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> ItemProperties.register(UtilItems.OMNIBREAKER.get(), id("omnibreaker_name"),
-                (itemStack, clientLevel, livingEntity, i) -> {
-                    String hoverName = itemStack.getHoverName().getString().toLowerCase();
-                    if (hoverName.equals("monibreaker") || hoverName.equals("moni-breaker")) {
-                        return 1;
-                    } else if (hoverName.equals("meownibreaker") || hoverName.equals("meowni-breaker")) {
-                        return 2;
-                    }
-                    return 0;
-                }));
+        event.enqueueWork(() -> {
+            if (UtilConfig.INSTANCE.features.omnibreakerEnabled) {
+                ItemProperties.register(UtilItems.OMNIBREAKER.get(), id("omnibreaker_name"),
+                        (itemStack, clientLevel, livingEntity, i) -> {
+                            String hoverName = itemStack.getHoverName().getString().toLowerCase();
+                            if (hoverName.equals("monibreaker") || hoverName.equals("moni-breaker")) {
+                                return 1;
+                            } else if (hoverName.equals("meownibreaker") || hoverName.equals("meowni-breaker")) {
+                                return 2;
+                            }
+                            return 0;
+                        });
+            }
+
+        });
     }
 
     // You MUST have this for custom materials.
