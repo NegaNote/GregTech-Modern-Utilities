@@ -64,7 +64,7 @@ public class UtilRecipes {
                     .inputItems(CABLE_HEX.get(0), 4)
                     .inputItems(CABLE_HEX.get(tier), 16)
                     .outputItems(ENERGY_CONVERTER_64A[tier])
-                    .EUt(GTValues.VEX[tier]).duration(40)
+                    .EUt(GTValues.VA[tier]).duration(40)
                     .save(provider);
         }
     }
@@ -89,7 +89,7 @@ public class UtilRecipes {
                 .inputItems(CABLE_QUAD.get(UtilConfig.INSTANCE.features.omnibreakerTier), 3)
                 .inputItems(MOTOR.get(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
                 .outputItems(OMNIBREAKER)
-                .EUt(GTValues.VEX[UtilConfig.INSTANCE.features.omnibreakerTier]).duration(20 * 60)
+                .EUt(GTValues.VA[UtilConfig.INSTANCE.features.omnibreakerTier], 2).duration(20 * 60)
                 .save(provider);
     }
 }
