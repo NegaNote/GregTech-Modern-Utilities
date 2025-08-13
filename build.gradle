@@ -132,12 +132,9 @@ dependencies {
     runtimeOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
     implementation fg.deobf("appeng:appliedenergistics2-forge:${appeng_version}")
 
-
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
-
-    // implementation fg.deobf("curse.maven:configuration-444699:5840405")
 }
 
 tasks.named('processResources', ProcessResources).configure {

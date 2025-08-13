@@ -8,10 +8,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
+import java.util.List;
 
 import static net.minecraft.world.level.block.Block.getDrops;
 
@@ -51,7 +56,8 @@ public class PrecisionBreakBehavior implements IInteractionItem {
         }
 
         if (!level.isClientSide()) {
-            var drops = getDrops(blockState, (ServerLevel) level, pos, level.getBlockEntity(pos));
+            List<ItemStack> drops = new ObjectArrayList<>(
+                    getDrops(blockState, (ServerLevel) level, pos, level.getBlockEntity(pos)));
             var player = context.getPlayer();
             assert player != null;
             level.destroyBlock(pos, false);
