@@ -48,7 +48,7 @@ public class UtilLangHandler {
 
         multiLang(provider, "gtceu.placeholder_info.watfrequency",
                 "Returns the current frequency used by a Wireless Active Transformer.",
-                        "Usage:",
+                "Usage:",
                 "  {watfrequency} -> Current frequency: (insert frequency here)");
 
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
