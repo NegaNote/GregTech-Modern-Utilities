@@ -1,3 +1,4 @@
-# GregTech Modern Utilities version 2.2.1
+# GregTech Modern Utilities version 2.2.2
 
-* HOTFIX: fix some blocks not being properly broken by omni-breaker right click (fixes #15)
+* Update to GTm version 7.1.4
+* Add forgotten lang for the new "watfrequency" placeholder

@@ -46,6 +46,11 @@ public class UtilLangHandler {
 
         provider.add("material.gtmutils.quantum_coolant", "Quantum Coolant");
 
+        multiLang(provider, "gtceu.placeholder_info.watfrequency",
+                "Returns the current frequency used by a Wireless Active Transformer." +
+                        "Usage:",
+                "  {watfrequency} -> Current frequency: (insert frequency here)");
+
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
 
@@ -59,5 +64,15 @@ public class UtilLangHandler {
                 dfs(provider, added, objectValue.get());
             }
         }
+    }
+
+    protected static void multiLang(RegistrateLangProvider provider, String key, String... values) {
+        for (var i = 0; i < values.length; i++) {
+            provider.add(getSubKey(key, i), values[i]);
+        }
+    }
+
+    protected static String getSubKey(String key, int index) {
+        return key + "." + index;
     }
 }
