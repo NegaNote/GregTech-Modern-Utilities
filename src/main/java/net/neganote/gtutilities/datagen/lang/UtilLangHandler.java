@@ -47,7 +47,7 @@ public class UtilLangHandler {
         provider.add("material.gtmutils.quantum_coolant", "Quantum Coolant");
 
         multiLang(provider, "gtceu.placeholder_info.watfrequency",
-                "Returns the current frequency used by a Wireless Active Transformer." +
+                "Returns the current frequency used by a Wireless Active Transformer.",
                         "Usage:",
                 "  {watfrequency} -> Current frequency: (insert frequency here)");
 
