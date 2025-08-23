@@ -60,7 +60,7 @@
   "tooltip.omnibreaker.tool_mode_2": "Screwdriver",
   "tooltip.omnibreaker.tool_mode_3": "Wire-cutter",
   "tooltip.omnibreaker.tool_mode_4": "Crowbar",
-  "tooltip.pterb_machine.frequencies": "All WATs with the same frequency act like a single Active Transformer.",
+  "tooltip.pterb_machine.frequencies": "All WATs with the same frequency will wirelessly transfer energy between each other like a single Active Transformer.",
   "tooltip.pterb_machine.input_coolant_before_use": "Always input coolant before turning it on!",
   "tooltip.pterb_machine.purpose": "Power Transfer Einstein-Rosen Bridge (PTERB)",
   "tooltip.pterb_machine.uses_coolant": "Drains %s to function!"

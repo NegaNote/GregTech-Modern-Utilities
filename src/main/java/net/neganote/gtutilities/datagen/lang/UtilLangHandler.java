@@ -39,7 +39,7 @@ public class UtilLangHandler {
 
         provider.add("tooltip.pterb_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
         provider.add("tooltip.pterb_machine.frequencies",
-                "All WATs with the same frequency act like a single Active Transformer.");
+                "All WATs with the same frequency will wirelessly transfer energy between each other like a single Active Transformer.");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
 
         provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
