@@ -44,8 +44,6 @@ public class UtilLangHandler {
 
         provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
 
-        provider.add("material.gtmutils.quantum_coolant", "Quantum Coolant");
-
         multiLang(provider, "gtceu.placeholder_info.watfrequency",
                 "Returns the current frequency used by a Wireless Active Transformer.",
                 "Usage:",
