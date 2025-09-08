@@ -16,7 +16,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -61,8 +60,8 @@ public class OmniBreakerItem extends ComponentItem {
     }
 
     @Override
-    public boolean mineBlock(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull BlockState pState,
-                             @NotNull BlockPos pPos, @NotNull LivingEntity pMiningEntity) {
+    public boolean mineBlock(ItemStack pStack, Level pLevel, BlockState pState,
+                             BlockPos pPos, LivingEntity pMiningEntity) {
         super.mineBlock(pStack, pLevel, pState, pPos, pMiningEntity);
 
         var electricItem = Objects.requireNonNull(GTCapabilityHelper.getElectricItem(pStack));
@@ -104,8 +103,8 @@ public class OmniBreakerItem extends ComponentItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level,
-                                @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level,
+                                List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(Component.translatable("tooltip.omnibreaker.modern_vajra"));
         tooltipComponents
                 .add(Component.translatable("tooltip.omnibreaker.can_break_anything").withStyle(ChatFormatting.GRAY));
