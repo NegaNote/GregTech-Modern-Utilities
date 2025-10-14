@@ -11,7 +11,7 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 /**
- * Item registry for the LuV and ZPM tool power units.
+ * Item registry file for the LuV and ZPM tool power units.
  */
 public class UtilToolItems {
 
