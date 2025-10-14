@@ -1,0 +1,8 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "gtmutils:item/tools/handle_electric_screwdriver_hv",
+    "layer1": "gtceu:item/tools/screwdriver_short",
+    "layer2": "gtceu:item/tools/screwdriver_overlay"
+  }
+}

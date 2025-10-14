@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gtmutils:item/naquadah_credit"
+    "layer0": "gtmutils:item/tools/power_unit_zpm"
   }
 }

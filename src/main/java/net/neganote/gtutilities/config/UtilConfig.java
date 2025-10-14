@@ -61,6 +61,30 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Whether the coins/credits are enabled." })
         public boolean coinsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the custom MV tools are enabled." })
+        public boolean customMVToolsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the custom HV tools are enabled." })
+        public boolean customHVToolsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the custom EV tools are enabled." })
+        public boolean customEVToolsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the custom IV tools are enabled." })
+        public boolean customIVToolsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the custom LuV tools are enabled." })
+        public boolean customLuVToolsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the custom ZPM tools are enabled." })
+        public boolean customZPMToolsEnabled = false;
     }
 
     public static boolean coolantEnabled() {
