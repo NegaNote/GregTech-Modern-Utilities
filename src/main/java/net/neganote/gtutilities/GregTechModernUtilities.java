@@ -27,8 +27,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neganote.gtutilities.client.renderer.UtilShaders;
 import net.neganote.gtutilities.common.data.UtilPlaceholders;
 import net.neganote.gtutilities.common.item.UtilItems;
+import net.neganote.gtutilities.common.item.UtilToolItems;
 import net.neganote.gtutilities.common.machine.UtilMachines;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
+import net.neganote.gtutilities.common.tools.UtilToolConnection;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.datagen.UtilDatagen;
 
@@ -93,6 +95,7 @@ public class GregTechModernUtilities {
                     .register();
         }
         UtilItems.init();
+        UtilToolItems.init();
         REGISTRATE.registerRegistrate();
         UtilDatagen.init();
         UtilPlaceholders.init();
@@ -142,7 +145,7 @@ public class GregTechModernUtilities {
 
     // This is optional, though.
     private void modifyMaterials(PostMaterialEvent event) {
-        // CustomMaterials.modify();
+        UtilToolConnection.modifyMaterials();
     }
 
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {

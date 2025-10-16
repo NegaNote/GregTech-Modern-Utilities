@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.neganote.gtutilities.common.tools.recipe.UtilToolRecipes;
 import net.neganote.gtutilities.recipe.UtilRecipes;
 
 import java.util.function.Consumer;
@@ -34,6 +35,7 @@ public class GTMUtilitiesGTAddon implements IGTAddon {
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         UtilRecipes.init(provider);
+        UtilToolRecipes.init(provider);
     }
 
     // If you have custom ingredient types, uncomment this & change to match your capability.

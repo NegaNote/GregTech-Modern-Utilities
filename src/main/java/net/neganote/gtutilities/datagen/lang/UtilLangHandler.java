@@ -26,6 +26,40 @@ public class UtilLangHandler {
         provider.add("tooltip.omnibreaker.right_click_function", "Break individual blocks with right-click!");
         provider.add("tooltip.omnibreaker.modern_vajra", "A Modern Vajra");
 
+        provider.add("item.gtceu.tool.mv_screwdriver", "%s Electric Screwdriver (MV)");
+        provider.add("item.gtceu.tool.hv_screwdriver", "%s Electric Screwdriver (HV)");
+        provider.add("item.gtceu.tool.ev_screwdriver", "%s Electric Screwdriver (EV)");
+        provider.add("item.gtceu.tool.iv_screwdriver", "%s Electric Screwdriver (IV)");
+        provider.add("item.gtceu.tool.luv_screwdriver", "%s Electric Screwdriver (LuV)");
+        provider.add("item.gtceu.tool.zpm_screwdriver", "%s Electric Screwdriver (ZPM)");
+
+        provider.add("item.gtceu.tool.mv_chainsaw", "%s Chainsaw (MV)");
+        provider.add("item.gtceu.tool.hv_chainsaw", "%s Chainsaw (HV)");
+        provider.add("item.gtceu.tool.ev_chainsaw", "%s Chainsaw (EV)");
+        provider.add("item.gtceu.tool.iv_chainsaw", "%s Chainsaw (IV)");
+        provider.add("item.gtceu.tool.luv_chainsaw", "%s Chainsaw (LuV)");
+        provider.add("item.gtceu.tool.zpm_chainsaw", "%s Chainsaw (ZPM)");
+
+        provider.add("item.gtceu.tool.mv_buzzsaw", "%s Buzzsaw (MV)");
+        provider.add("item.gtceu.tool.hv_buzzsaw", "%s Buzzsaw (HV)");
+        provider.add("item.gtceu.tool.ev_buzzsaw", "%s Buzzsaw (EV)");
+        provider.add("item.gtceu.tool.iv_buzzsaw", "%s Buzzsaw (IV)");
+        provider.add("item.gtceu.tool.luv_buzzsaw", "%s Buzzsaw (LuV)");
+        provider.add("item.gtceu.tool.zpm_buzzsaw", "%s Buzzsaw (ZPM)");
+
+        provider.add("item.gtceu.tool.mv_wrench", "%s Wrench (MV)");
+        provider.add("item.gtceu.tool.ev_wrench", "%s Wrench (EV)");
+        provider.add("item.gtceu.tool.luv_wrench", "%s Wrench (LuV)");
+        provider.add("item.gtceu.tool.zpm_wrench", "%s Wrench (ZPM)");
+
+        provider.add("item.gtceu.tool.mv_wirecutter", "%s Wire Cutter (MV)");
+        provider.add("item.gtceu.tool.ev_wirecutter", "%s Wire Cutter (EV)");
+        provider.add("item.gtceu.tool.luv_wirecutter", "%s Wire Cutter (LuV)");
+        provider.add("item.gtceu.tool.zpm_wirecutter", "%s Wire Cutter (ZPM)");
+
+        provider.add("item.gtceu.tool.luv_drill", "%s Drill (LuV)");
+        provider.add("item.gtceu.tool.zpm_drill", "%s Drill (ZPM)");
+
         provider.add("tooltip.pterb_machine.uses_coolant", "Drains %s to function!");
         provider.add("tooltip.pterb_machine.input_coolant_before_use", "Always input coolant before turning it on!");
 

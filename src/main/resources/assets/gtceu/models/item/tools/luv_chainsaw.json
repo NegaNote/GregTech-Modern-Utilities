@@ -1,0 +1,9 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+	"layer0": "gtmutils:item/tools/power_unit_luv",
+	"layer1": "gtceu:item/tools/chainsaw",
+    "layer2": "gtceu:item/void",
+    "layer3": "gtmutils:item/tools/chainsaw_body_luv"
+  }
+}
