@@ -47,7 +47,7 @@ public class UtilMachines {
     public static MachineDefinition STERILE_CLEANING_MAINTENANCE_HATCH = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.sterileHatchEnabled) {
+        if (UtilConfig.INSTANCE.features.sterileHatchEnabled || GTCEu.isDataGen()) {
             STERILE_CLEANING_MAINTENANCE_HATCH = REGISTRATE
                     .machine("sterile_cleaning_maintenance_hatch",
                             holder -> new CleaningMaintenanceHatchPartMachine(holder, CleanroomType.STERILE_CLEANROOM))
@@ -111,8 +111,8 @@ public class UtilMachines {
     public static MachineDefinition[] ENERGY_CONVERTER_64A = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.converters64aEnabled &&
-                ConfigHolder.INSTANCE.compat.energy.enableFEConverters) {
+        if ((UtilConfig.INSTANCE.features.converters64aEnabled &&
+                ConfigHolder.INSTANCE.compat.energy.enableFEConverters) || GTCEu.isDataGen()) {
             ENERGY_CONVERTER_64A = registerConverter(64);
         }
     }
@@ -120,7 +120,7 @@ public class UtilMachines {
     public static MultiblockMachineDefinition PTERB_MACHINE = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.pterbEnabled) {
+        if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
             PTERB_MACHINE = REGISTRATE
                     .multiblock("pterb_machine", PTERBMachine::new)
                     .langValue("Wireless Active Transformer")

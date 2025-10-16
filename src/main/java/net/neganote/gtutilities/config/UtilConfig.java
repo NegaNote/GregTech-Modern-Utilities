@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.config;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.neganote.gtutilities.GregTechModernUtilities;
@@ -89,6 +90,6 @@ public class UtilConfig {
 
     public static boolean coolantEnabled() {
         return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 ||
-                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f;
+                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f || GTCEu.isDataGen();
     }
 }
