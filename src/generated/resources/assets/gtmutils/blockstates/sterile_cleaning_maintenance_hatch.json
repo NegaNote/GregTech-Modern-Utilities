@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "gtmutils:block/machine/sterile_cleaning_maintenance_hatch",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "gtmutils:block/machine/sterile_cleaning_maintenance_hatch",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gtmutils:block/machine/sterile_cleaning_maintenance_hatch"
+    },
+    "facing=south": {
+      "model": "gtmutils:block/machine/sterile_cleaning_maintenance_hatch",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "gtmutils:block/machine/sterile_cleaning_maintenance_hatch",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "gtmutils:block/machine/sterile_cleaning_maintenance_hatch",
+      "y": 270
+    }
+  }
+}
