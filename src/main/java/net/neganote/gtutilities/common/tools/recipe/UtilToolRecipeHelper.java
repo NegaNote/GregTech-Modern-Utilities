@@ -27,8 +27,9 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
@@ -48,7 +49,7 @@ public class UtilToolRecipeHelper {
 
     private UtilToolRecipeHelper() {}
 
-    public static void run(  Consumer<FinishedRecipe> provider,   Material material) {
+    public static void run(Consumer<FinishedRecipe> provider, Material material) {
         ToolProperty property = material.getProperty(PropertyKey.TOOL);
         if (property == null) {
             return;
@@ -57,8 +58,8 @@ public class UtilToolRecipeHelper {
         processElectricTool(provider, property, material);
     }
 
-    private static void processElectricTool(  Consumer<FinishedRecipe> provider,   ToolProperty property,
-                                              Material material) {
+    private static void processElectricTool(Consumer<FinishedRecipe> provider, ToolProperty property,
+                                            Material material) {
         if (!material.shouldGenerateRecipesFor(plate)) {
             return;
         }
@@ -170,9 +171,9 @@ public class UtilToolRecipeHelper {
         }
     }
 
-    private static void addElectricToolRecipe(  Consumer<FinishedRecipe> provider,   TagPrefix toolHead,
-                                                GTToolType   [] toolItems,
-                                                Material material) {
+    private static void addElectricToolRecipe(Consumer<FinishedRecipe> provider, TagPrefix toolHead,
+                                              GTToolType[] toolItems,
+                                              Material material) {
         for (GTToolType toolType : toolItems) {
             if (!material.getProperty(PropertyKey.TOOL).hasType(toolType)) continue;
 

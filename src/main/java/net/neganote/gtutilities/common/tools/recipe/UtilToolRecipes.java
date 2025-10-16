@@ -23,9 +23,10 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Consumer;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static net.neganote.gtutilities.common.tools.recipe.UtilToolRecipeHelper.powerUnitItems;
@@ -44,7 +45,7 @@ public final class UtilToolRecipes {
     private static final Int2ReferenceMap<Material> baseMaterials = new Int2ReferenceArrayMap<>();
     private static final Int2ReferenceMap<List<ItemEntry<? extends Item>>> batteryItems = new Int2ReferenceArrayMap<>();
 
-    public static void init(  Consumer<FinishedRecipe> provider) {
+    public static void init(Consumer<FinishedRecipe> provider) {
         initTierMaps();
         registerPowerUnitRecipes(provider);
 
@@ -74,7 +75,7 @@ public final class UtilToolRecipes {
     /**
      * Registers shaped recipes for the LuV and ZPM tool power units.
      */
-    private static void registerPowerUnitRecipes(  Consumer<FinishedRecipe> provider) {
+    private static void registerPowerUnitRecipes(Consumer<FinishedRecipe> provider) {
         for (int tier : powerUnitItems.keySet()) {
             var powerUnitEntry = powerUnitItems.get(tier);
             var motorEntry = motorItems.get(tier);
