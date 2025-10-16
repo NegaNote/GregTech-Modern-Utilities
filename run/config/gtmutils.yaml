@@ -1,0 +1,49 @@
+features:
+  # Whether the Sterile Cleaning Maintenance Hatch is enabled.
+  sterileHatchEnabled: true
+
+  # Whether the 64A energy converters are enabled.
+  converters64aEnabled: true
+
+  # Whether the Omni-breaker is enabled.
+  omnibreakerEnabled: true
+
+  # What tier the Omni-breaker is, if enabled. (ULV = 0, LV = 1, MV = 2, ...)
+  # (Unless the default recipe is overridden, can only support LV to IV!)
+  omnibreakerTier: 5
+
+  # The energy capacity of the Omni-breaker.
+  omnibreakerEnergyCapacity: 40960000
+
+  # Whether the Wireless Active Transformer is enabled.
+  pterbEnabled: true
+
+  # Base amount of WAT coolant to drain every second.
+  # (Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)
+  pterbCoolantBaseDrain: 10
+
+  # Multiplier over IO amount for additional coolant drain.
+  # (Setting both this and the base drain amount to 0 disables the coolant mechanic.)
+  pterbCoolantIOMultiplier: 3.0E-5
+
+  # Whether the coins/credits are enabled.
+  coinsEnabled: true
+
+  # Whether the custom MV tools are enabled.
+  customMVToolsEnabled: false
+
+  # Whether the custom HV tools are enabled.
+  customHVToolsEnabled: false
+
+  # Whether the custom EV tools are enabled.
+  customEVToolsEnabled: false
+
+  # Whether the custom IV tools are enabled.
+  customIVToolsEnabled: false
+
+  # Whether the custom LuV tools are enabled.
+  customLuVToolsEnabled: true
+
+  # Whether the custom ZPM tools are enabled.
+  customZPMToolsEnabled: true
+
