@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.utils.ToolItemHelper;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Item;
@@ -21,8 +22,8 @@ import net.neganote.gtutilities.config.UtilConfig;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -32,6 +33,8 @@ import static net.neganote.gtutilities.common.tools.recipe.UtilToolRecipeHelper.
 /**
  * Handles Custom tool & power unit recipes.
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public final class UtilToolRecipes {
 
     private UtilToolRecipes() {}
@@ -41,12 +44,12 @@ public final class UtilToolRecipes {
     private static final Int2ReferenceMap<Material> baseMaterials = new Int2ReferenceArrayMap<>();
     private static final Int2ReferenceMap<List<ItemEntry<? extends Item>>> batteryItems = new Int2ReferenceArrayMap<>();
 
-    public static void init(@NotNull Consumer<FinishedRecipe> provider) {
+    public static void init(  Consumer<FinishedRecipe> provider) {
         initTierMaps();
         registerPowerUnitRecipes(provider);
 
         for (Material material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
-            net.neganote.gtutilities.common.tools.recipe.UtilToolRecipeHelper.run(provider, material);
+            UtilToolRecipeHelper.run(provider, material);
         }
     }
 
@@ -71,7 +74,7 @@ public final class UtilToolRecipes {
     /**
      * Registers shaped recipes for the LuV and ZPM tool power units.
      */
-    private static void registerPowerUnitRecipes(@NotNull Consumer<FinishedRecipe> provider) {
+    private static void registerPowerUnitRecipes(  Consumer<FinishedRecipe> provider) {
         for (int tier : powerUnitItems.keySet()) {
             var powerUnitEntry = powerUnitItems.get(tier);
             var motorEntry = motorItems.get(tier);

@@ -16,15 +16,13 @@ public class UtilToolHelper {
 
     static {
         if (UtilConfig.INSTANCE.features.customLuVToolsEnabled) {
-            SUPPLY_POWER_UNIT_LUV = () -> UtilToolItems.POWER_UNIT_LUV != null ?
-                    UtilToolItems.POWER_UNIT_LUV.get().getDefaultInstance() : ItemStack.EMPTY;
+            SUPPLY_POWER_UNIT_LUV = () -> UtilToolItems.POWER_UNIT_LUV.get().getDefaultInstance();
         } else {
             SUPPLY_POWER_UNIT_LUV = () -> ItemStack.EMPTY;
         }
 
         if (UtilConfig.INSTANCE.features.customZPMToolsEnabled) {
-            SUPPLY_POWER_UNIT_ZPM = () -> UtilToolItems.POWER_UNIT_ZPM != null ?
-                    UtilToolItems.POWER_UNIT_ZPM.get().getDefaultInstance() : ItemStack.EMPTY;
+            SUPPLY_POWER_UNIT_ZPM = () -> UtilToolItems.POWER_UNIT_ZPM.get().getDefaultInstance();
         } else {
             SUPPLY_POWER_UNIT_ZPM = () -> ItemStack.EMPTY;
         }
