@@ -1,4 +1,3 @@
-# GregTech Modern Utilities version 2.3.0
+# GregTech Modern Utilities version 2.3.1
 
-* Update to GTm version 7.2.0
-* Add custom tool tiers for all electric tools, including new LuV and ZPM tools (all of which are opt-in)
+* fix model/datagen for sterile hatch, allowing proper formed look

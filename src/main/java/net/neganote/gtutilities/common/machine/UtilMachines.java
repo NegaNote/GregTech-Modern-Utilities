@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -61,6 +62,7 @@ public class UtilMachines {
                             .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
                             .withStyle(ChatFormatting.GREEN))))
                     .tier(UHV)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .overlayTieredHullModel(
                             GregTechModernUtilities.id("block/machine/part/sterile_cleaning_maintenance_hatch"))
                     // Tier can always be changed later
