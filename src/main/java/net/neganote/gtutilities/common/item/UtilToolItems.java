@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.common.item;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ElectricStats;
@@ -20,7 +21,7 @@ public class UtilToolItems {
 
     static {
 
-        if (UtilConfig.INSTANCE.features.customLuVToolsEnabled) {
+        if (UtilConfig.INSTANCE.features.customLuVToolsEnabled || GTCEu.isDataGen()) {
             POWER_UNIT_LUV = REGISTRATE.item("luv_power_unit", ComponentItem::create)
                     .lang("LuV Power Unit")
                     .properties(p -> p.stacksTo(8))
@@ -29,7 +30,7 @@ public class UtilToolItems {
                     .register();
         }
 
-        if (UtilConfig.INSTANCE.features.customZPMToolsEnabled) {
+        if (UtilConfig.INSTANCE.features.customZPMToolsEnabled || GTCEu.isDataGen()) {
             POWER_UNIT_ZPM = REGISTRATE.item("zpm_power_unit", ComponentItem::create)
                     .lang("ZPM Power Unit")
                     .properties(p -> p.stacksTo(8))
