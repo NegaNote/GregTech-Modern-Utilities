@@ -1,3 +1,3 @@
-# GregTech Modern Utilities version 2.3.1
+# GregTech Modern Utilities version 2.3.2
 
-* fix model/datagen for sterile hatch, allowing proper formed look
+* add option to make parallel hatches start at max parallels, courtesy of iluha
