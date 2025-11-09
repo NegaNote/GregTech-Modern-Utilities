@@ -8,6 +8,7 @@ Current features:
 * 64A Energy Converters
 * The Wireless Active Transformer (WAT)
   * Has an opt-in coolant system, where the WAT requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
+* Automatically set placed Parallel Hatches to their maximum parallels
 
 All features can be enabled or disabled in the config.
 
