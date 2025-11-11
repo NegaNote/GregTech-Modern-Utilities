@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -47,7 +48,7 @@ public class UtilMachines {
     public static MachineDefinition STERILE_CLEANING_MAINTENANCE_HATCH = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.sterileHatchEnabled) {
+        if (UtilConfig.INSTANCE.features.sterileHatchEnabled || GTCEu.isDataGen()) {
             STERILE_CLEANING_MAINTENANCE_HATCH = REGISTRATE
                     .machine("sterile_cleaning_maintenance_hatch",
                             holder -> new CleaningMaintenanceHatchPartMachine(holder, CleanroomType.STERILE_CLEANROOM))
@@ -61,6 +62,7 @@ public class UtilMachines {
                             .translatable(CleanroomType.STERILE_CLEANROOM.getTranslationKey())
                             .withStyle(ChatFormatting.GREEN))))
                     .tier(UHV)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .overlayTieredHullModel(
                             GregTechModernUtilities.id("block/machine/part/sterile_cleaning_maintenance_hatch"))
                     // Tier can always be changed later
@@ -111,8 +113,8 @@ public class UtilMachines {
     public static MachineDefinition[] ENERGY_CONVERTER_64A = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.converters64aEnabled &&
-                ConfigHolder.INSTANCE.compat.energy.enableFEConverters) {
+        if ((UtilConfig.INSTANCE.features.converters64aEnabled &&
+                ConfigHolder.INSTANCE.compat.energy.enableFEConverters) || GTCEu.isDataGen()) {
             ENERGY_CONVERTER_64A = registerConverter(64);
         }
     }
@@ -120,7 +122,7 @@ public class UtilMachines {
     public static MultiblockMachineDefinition PTERB_MACHINE = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.pterbEnabled) {
+        if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
             PTERB_MACHINE = REGISTRATE
                     .multiblock("pterb_machine", PTERBMachine::new)
                     .langValue("Wireless Active Transformer")

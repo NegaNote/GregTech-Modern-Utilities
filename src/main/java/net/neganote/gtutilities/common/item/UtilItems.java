@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.common.item;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -38,7 +39,7 @@ public class UtilItems {
     public static ItemEntry<Item> SILVER_CREDIT = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.omnibreakerEnabled) {
+        if (UtilConfig.INSTANCE.features.omnibreakerEnabled || GTCEu.isDataGen()) {
             OMNIBREAKER = REGISTRATE
                     .item("omnibreaker", (p) -> OmniBreakerItem.create(p, OMNIBREAKER_TIER))
                     .lang("Omni-breaker")
@@ -65,7 +66,7 @@ public class UtilItems {
                     .register();
         }
 
-        if (UtilConfig.INSTANCE.features.coinsEnabled) {
+        if (UtilConfig.INSTANCE.features.coinsEnabled || GTCEu.isDataGen()) {
             ANCIENT_GOLD_COIN = registerBasicItem("ancient_gold_coin");
             CHOCOLATE_COIN = registerBasicItem("chocolate_coin");
             COPPER_CREDIT = registerBasicItem("copper_credit");

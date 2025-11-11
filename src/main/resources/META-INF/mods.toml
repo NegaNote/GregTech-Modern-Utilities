@@ -23,6 +23,9 @@ GregTech Utilities
 A GregTech Modern addon, adding some nice quality-of-life features.
 '''
 
+    [[mixins]]
+        config="${mod_id}.mixins.json"
+
     [[dependencies.${mod_id}]]
         modId = "forge"
         mandatory = true

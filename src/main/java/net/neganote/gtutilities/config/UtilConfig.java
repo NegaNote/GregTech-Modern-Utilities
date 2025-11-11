@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.config;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.neganote.gtutilities.GregTechModernUtilities;
@@ -49,6 +50,11 @@ public class UtilConfig {
         public boolean pterbEnabled = true;
 
         @Configurable
+        @Configurable.Comment({
+                "Whether placed Parallel Hatches should be automatically set to their maximum parallels." })
+        public boolean parallelHatchAutoConfigure = false;
+
+        @Configurable
         @Configurable.Comment({ "Base amount of WAT coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
         public int pterbCoolantBaseDrain = 0;
@@ -89,6 +95,6 @@ public class UtilConfig {
 
     public static boolean coolantEnabled() {
         return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 ||
-                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f;
+                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f || GTCEu.isDataGen();
     }
 }
