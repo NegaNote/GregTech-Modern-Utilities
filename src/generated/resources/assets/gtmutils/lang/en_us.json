@@ -49,6 +49,7 @@
   "config.gtmutils.option.omnibreakerEnabled": "omnibreakerEnabled",
   "config.gtmutils.option.omnibreakerEnergyCapacity": "omnibreakerEnergyCapacity",
   "config.gtmutils.option.omnibreakerTier": "omnibreakerTier",
+  "config.gtmutils.option.parallelHatchAutoConfigure": "parallelHatchAutoConfigure",
   "config.gtmutils.option.pterbCoolantBaseDrain": "pterbCoolantBaseDrain",
   "config.gtmutils.option.pterbCoolantIOMultiplier": "pterbCoolantIOMultiplier",
   "config.gtmutils.option.pterbEnabled": "pterbEnabled",
