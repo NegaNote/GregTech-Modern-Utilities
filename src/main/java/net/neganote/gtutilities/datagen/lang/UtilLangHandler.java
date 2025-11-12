@@ -66,7 +66,7 @@ public class UtilLangHandler {
         provider.add("gtmutils.machine.64a_energy_converter.tooltip_tool_usage",
                 "Starts as §fEU Converter§7, use Soft Mallet to change");
 
-        provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %sL of %s per second");
+        provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %smb of %s per second");
         provider.add("gtmutils.pterb_machine.invalid_frequency", "WATs will not work on frequency 0!");
 
         provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
