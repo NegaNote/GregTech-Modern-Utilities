@@ -1,9 +1,9 @@
 {
   "required": true,
-  "package": "net.neganote.gtutilities.mixin",
+  "package": "com.example.examplemod.mixin",
   "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
   "mixins": [
-    "ParallelHatchPartMachineMixin"
   ],
   "client": [
   ],
