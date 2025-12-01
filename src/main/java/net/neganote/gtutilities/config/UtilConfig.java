@@ -50,11 +50,6 @@ public class UtilConfig {
         public boolean pterbEnabled = true;
 
         @Configurable
-        @Configurable.Comment({
-                "Whether placed Parallel Hatches should be automatically set to their maximum parallels." })
-        public boolean parallelHatchAutoConfigure = false;
-
-        @Configurable
         @Configurable.Comment({ "Base amount of WAT coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
         public int pterbCoolantBaseDrain = 0;

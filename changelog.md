@@ -1,3 +1,4 @@
-# GregTech Modern Utilities version 2.3.2
+# GregTech Modern Utilities version 2.4.0
 
-* add option to make parallel hatches start at max parallels, courtesy of iluha
+* Update to GTm 7.3.0
+* Revert addition of config for parallel hatches starting at max parallels, as this is now always the case in base GTm

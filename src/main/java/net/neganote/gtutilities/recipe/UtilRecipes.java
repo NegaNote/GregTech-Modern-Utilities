@@ -50,6 +50,7 @@ public class UtilRecipes {
                     .EUt(1_600_000L)
                     .duration(1200)
                     .outputItems(UtilMachines.PTERB_MACHINE)
+                    .addMaterialInfo(true)
                     .stationResearch(b -> b
                             .researchStack(GTMultiMachines.ACTIVE_TRANSFORMER.asStack()).CWUt(16))
                     .save(provider);
@@ -65,6 +66,7 @@ public class UtilRecipes {
                     .inputItems(CABLE_HEX.get(tier), 16)
                     .outputItems(ENERGY_CONVERTER_64A[tier])
                     .EUt(GTValues.VA[tier]).duration(40)
+                    .addMaterialInfo(true)
                     .save(provider);
         }
     }
@@ -90,6 +92,7 @@ public class UtilRecipes {
                 .inputItems(MOTOR.get(UtilConfig.INSTANCE.features.omnibreakerTier), 2)
                 .outputItems(OMNIBREAKER)
                 .EUt(GTValues.VA[UtilConfig.INSTANCE.features.omnibreakerTier], 2).duration(20 * 60)
+                .addMaterialInfo(true)
                 .save(provider);
     }
 }
