@@ -47,7 +47,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AutoChargerMachine extends TieredEnergyMachine
-        implements IFancyUIMachine, IMachineLife, IAutoOutputItem {
+                                implements IFancyUIMachine, IMachineLife, IAutoOutputItem {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AutoChargerMachine.class,
             TieredEnergyMachine.MANAGED_FIELD_HOLDER);
