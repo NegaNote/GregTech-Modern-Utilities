@@ -74,11 +74,11 @@ public class UtilMachines {
         }
     }
 
-    public static MachineDefinition[] CHARGER_4 = null;
+    public static MachineDefinition[] AUTO_CHARGER_4 = null;
 
     static {
         if (UtilConfig.INSTANCE.features.autoChargersEnabled || GTCEu.isDataGen()) {
-            CHARGER_4 = registerCharger(4);
+            AUTO_CHARGER_4 = registerCharger(4);
         }
     }
 
@@ -106,7 +106,7 @@ public class UtilMachines {
                                 Component.translatable("gtceu.universal.tooltip.amperage_in_till",
                                         itemSlotSize * ChargerMachine.AMPS_PER_ITEM))
                         .register(),
-                GTValues.tiersBetween(LV, maxTier));
+                GTValues.tiersBetween(ULV, maxTier));
     }
 
     // Copied from GTMachineUtils

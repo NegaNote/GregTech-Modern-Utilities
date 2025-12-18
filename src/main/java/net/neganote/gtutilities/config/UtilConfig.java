@@ -89,7 +89,7 @@ public class UtilConfig {
 
         @Configurable
         @Configurable.Comment({ "Whether the Auto Turbo Chargers are enabled." })
-        public boolean autoChargersEnabled = true;
+        public boolean autoChargersEnabled = false;
     }
 
     public static boolean coolantEnabled() {
