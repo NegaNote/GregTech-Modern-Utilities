@@ -1,4 +1,4 @@
-# GregTech Modern Utilities version 2.4.0
+# GregTech Modern Utilities version 2.5.0
 
-* Update to GTm 7.3.0
-* Revert addition of config for parallel hatches starting at max parallels, as this is now always the case in base GTm
+* Update to GTm 7.4.0
+* Add turbo-chargers with the ability to auto-output full batteries, courtesy of Phoenixvine (off by default)
