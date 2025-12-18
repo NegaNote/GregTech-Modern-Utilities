@@ -1,6 +1,7 @@
 package net.neganote.gtutilities.common.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -21,8 +22,8 @@ import com.gregtechceu.gtceu.common.machine.electric.ChargerMachine;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
@@ -73,7 +74,6 @@ public class UtilMachines {
         }
     }
 
-
     public static MachineDefinition[] CHARGER_4 = null;
 
     static {
@@ -84,7 +84,7 @@ public class UtilMachines {
 
     public static MachineDefinition[] registerCharger(int itemSlotSize) {
         int maxTier;
-        if (ConfigHolder.INSTANCE.machines.highTierContent) {
+        if (GTCEuAPI.isHighTier()) {
             maxTier = OpV;
         } else {
             maxTier = UHV;
@@ -157,7 +157,6 @@ public class UtilMachines {
             ENERGY_CONVERTER_64A = registerConverter(64);
         }
     }
-
 
     public static MultiblockMachineDefinition PTERB_MACHINE = null;
 
