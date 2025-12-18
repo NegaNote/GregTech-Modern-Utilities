@@ -86,6 +86,10 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Whether the custom ZPM tools are enabled." })
         public boolean customZPMToolsEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the Auto Turbo Chargers are enabled." })
+        public boolean autoChargersEnabled = true;
     }
 
     public static boolean coolantEnabled() {
