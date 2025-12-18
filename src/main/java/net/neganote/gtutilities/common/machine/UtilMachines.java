@@ -1,6 +1,7 @@
 package net.neganote.gtutilities.common.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -17,14 +18,17 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.common.data.models.GTMachineModels;
+import com.gregtechceu.gtceu.common.machine.electric.ChargerMachine;
 import com.gregtechceu.gtceu.common.machine.electric.ConverterMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.CleaningMaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
+import net.neganote.gtutilities.common.machine.singleblock.AutoChargerMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 
@@ -68,6 +72,41 @@ public class UtilMachines {
                     // Tier can always be changed later
                     .register();
         }
+    }
+
+    public static MachineDefinition[] AUTO_CHARGER_4 = null;
+
+    static {
+        if (UtilConfig.INSTANCE.features.autoChargersEnabled || GTCEu.isDataGen()) {
+            AUTO_CHARGER_4 = registerCharger(4);
+        }
+    }
+
+    public static MachineDefinition[] registerCharger(int itemSlotSize) {
+        int maxTier;
+        if (GTCEuAPI.isHighTier()) {
+            maxTier = OpV;
+        } else {
+            maxTier = UHV;
+        }
+
+        return registerTieredMachines("auto_charger_" + itemSlotSize + "x",
+                (holder, tier) -> new AutoChargerMachine(holder, tier, itemSlotSize),
+                (tier, builder) -> builder
+                        .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.CHARGER_STATE, ChargerMachine.State.IDLE)
+                        .model(GTMachineModels.createChargerModel())
+                        .langValue("%s %sx Auto Turbo Charger".formatted(
+                                VCF[tier] + VOLTAGE_NAMES[tier] + ChatFormatting.RESET,
+                                itemSlotSize))
+                        .tooltips(Component.translatable("gtceu.universal.tooltip.item_storage_capacity", itemSlotSize),
+                                Component.translatable("gtceu.universal.tooltip.voltage_in_out",
+                                        FormattingUtil.formatNumbers(GTValues.V[tier]),
+                                        GTValues.VNF[tier]),
+                                Component.translatable("gtceu.universal.tooltip.amperage_in_till",
+                                        itemSlotSize * ChargerMachine.AMPS_PER_ITEM))
+                        .register(),
+                GTValues.tiersBetween(ULV, maxTier));
     }
 
     // Copied from GTMachineUtils
