@@ -16,7 +16,7 @@ import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 public class UtilAEMachines {
 
     static {
-        if (UtilConfig.INSTANCE.features.aeMachinesEnabled) {
+        if (UtilConfig.INSTANCE.features.aeMachinesEnabled || GTCEu.isDataGen()) {
             final MachineDefinition EXPANDED_ME_PATTERN_BUFFER = REGISTRATE
                     .machine("expanded_me_pattern_buffer", ExpandedPatternBufferPartMachine::new)
                     .tier(ZPM)
