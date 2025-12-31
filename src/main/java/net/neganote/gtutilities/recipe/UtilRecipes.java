@@ -3,11 +3,14 @@ package net.neganote.gtutilities.recipe;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +24,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLY_LINE_RECIPES;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
 import static net.neganote.gtutilities.common.item.UtilItems.OMNIBREAKER;
+import static net.neganote.gtutilities.common.machine.UtilMachines.AUTO_CHARGER_4;
 import static net.neganote.gtutilities.common.machine.UtilMachines.ENERGY_CONVERTER_64A;
 
 public class UtilRecipes {
@@ -54,6 +58,20 @@ public class UtilRecipes {
                     .stationResearch(b -> b
                             .researchStack(GTMultiMachines.ACTIVE_TRANSFORMER.asStack()).CWUt(16))
                     .save(provider);
+        }
+
+        if (UtilConfig.INSTANCE.features.autoChargersEnabled) {
+            for (MachineDefinition autoChargerDef : AUTO_CHARGER_4) {
+                if (autoChargerDef == null) {
+                    continue;
+                }
+                var tier = autoChargerDef.getTier();
+                VanillaRecipeHelper.addShapedRecipe(provider, true, autoChargerDef.getId(), autoChargerDef.asStack(),
+                        "WRW", "WCW", "WRW",
+                        'W', WIRE_QUAD.get(tier),
+                        'R', ROBOT_ARM.get(tier),
+                        'C', GTMachines.CHARGER_4[tier].asStack());
+            }
         }
     }
 
