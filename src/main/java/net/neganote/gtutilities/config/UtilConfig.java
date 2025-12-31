@@ -90,6 +90,10 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({ "Whether the Auto Turbo Chargers are enabled." })
         public boolean autoChargersEnabled = true;
+
+        @Configurable
+        @Configurable.Comment({ "Whether the Expanded Pattern Buffer and Expanded Pattern Buffer Proxy are enabled." })
+        public boolean aeMachinesEnabled = true;
     }
 
     public static boolean coolantEnabled() {
