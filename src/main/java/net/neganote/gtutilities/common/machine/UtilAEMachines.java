@@ -15,9 +15,12 @@ import static net.neganote.gtutilities.GregTechModernUtilities.REGISTRATE;
 
 public class UtilAEMachines {
 
+    public static MachineDefinition EXPANDED_ME_PATTERN_BUFFER = null;
+    public static MachineDefinition EXPANDED_ME_PATTERN_BUFFER_PROXY = null;
+
     static {
         if (UtilConfig.INSTANCE.features.aeMachinesEnabled || GTCEu.isDataGen()) {
-            final MachineDefinition EXPANDED_ME_PATTERN_BUFFER = REGISTRATE
+            EXPANDED_ME_PATTERN_BUFFER = REGISTRATE
                     .machine("expanded_me_pattern_buffer", ExpandedPatternBufferPartMachine::new)
                     .tier(ZPM)
                     .rotationState(RotationState.ALL)
@@ -32,7 +35,7 @@ public class UtilAEMachines {
                             Component.translatable("gtceu.part_sharing.enabled"))
                     .register();
 
-            final MachineDefinition EXPANDED_ME_PATTERN_BUFFER_PROXY = REGISTRATE
+            EXPANDED_ME_PATTERN_BUFFER_PROXY = REGISTRATE
                     .machine("expanded_me_pattern_buffer_proxy", ExpandedPatternBufferProxyPartMachine::new)
                     .tier(ZPM)
                     .rotationState(RotationState.ALL)
