@@ -1,7 +1,5 @@
 package net.neganote.gtutilities.recipe;
 
-import appeng.core.definitions.AEBlocks;
-import appeng.core.definitions.AEItems;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -13,15 +11,16 @@ import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
-import com.gregtechceu.gtceu.data.recipe.GTCraftingComponents;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
-import net.minecraft.Util;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.neganote.gtutilities.common.machine.UtilAEMachines;
 import net.neganote.gtutilities.common.machine.UtilMachines;
 import net.neganote.gtutilities.config.UtilConfig;
+
+import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
 
 import java.util.function.Consumer;
 
@@ -109,7 +108,6 @@ public class UtilRecipes {
                     .duration(600).EUt(VA[ZPM]).save(provider);
         }
 
-
         if (UtilConfig.INSTANCE.features.autoChargersEnabled) {
             for (MachineDefinition autoChargerDef : AUTO_CHARGER_4) {
                 if (autoChargerDef == null) {
@@ -125,7 +123,6 @@ public class UtilRecipes {
         }
     }
 
-
     public static void register64AConverterRecipes(Consumer<FinishedRecipe> provider) {
         for (int tier : GTValues.tiersBetween(GTValues.ULV, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV)) {
             ASSEMBLER_RECIPES.recipeBuilder("converter_64a_" + GTValues.VN[tier])
@@ -139,7 +136,6 @@ public class UtilRecipes {
                     .save(provider);
         }
     }
-
 
     private static ItemStack getPowerUnit(int tier) {
         return switch (tier) {
