@@ -27,11 +27,11 @@ public class UtilAEMachines {
                     .abilities(PartAbility.IMPORT_ITEMS, PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
                             PartAbility.EXPORT_ITEMS)
                     .colorOverlayTieredHullModel(GTCEu.id("block/overlay/appeng/me_buffer_hatch"))
-                    .langValue("Expanded ME Pattern Buffer (72 Slots)")
+                    .langValue("Expanded ME Pattern Buffer")
                     .tooltips(
-                            Component.translatable("block.gtceu.pattern_buffer.desc.0"),
-                            Component.literal("§6Expanded to 72 Slots"),
-                            Component.translatable("block.gtceu.pattern_buffer.desc.2"),
+                            Component.translatable("block.gtmutils.pattern_buffer.desc.0"),
+                            Component.translatable("block.gtceu.pattern_buffer.desc.1"),
+                            Component.translatable("block.gtmutils.pattern_buffer.desc.2"),
                             Component.translatable("gtceu.part_sharing.enabled"))
                     .register();
 
@@ -44,8 +44,7 @@ public class UtilAEMachines {
                     .colorOverlayTieredHullModel(GTCEu.id("block/overlay/appeng/me_buffer_hatch_proxy"))
                     .langValue("Expanded ME Pattern Buffer Proxy")
                     .tooltips(
-                            Component.translatable("block.gtceu.pattern_buffer_proxy.desc.0"),
-                            Component.literal("§6Compatible with 72 Slot Buffer"),
+                            Component.translatable("block.gtmutils.pattern_buffer_proxy.desc.0"),
                             Component.translatable("block.gtceu.pattern_buffer_proxy.desc.2"),
                             Component.translatable("gtceu.part_sharing.enabled"))
                     .register();

@@ -94,7 +94,7 @@ public class UtilConfig {
         @Configurable
         @Configurable.Comment({
                 "Whether the Expanded Pattern Buffer and Expanded Pattern Buffer Proxy are enabled. If AE2 is not loaded, this config will not load the machines regardless. " })
-        public boolean expandedBuffersEnabled = false;
+        public boolean expandedBuffersEnabled = true;
     }
 
     public static boolean coolantEnabled() {

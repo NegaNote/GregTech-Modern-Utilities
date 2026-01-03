@@ -83,6 +83,13 @@ public class UtilLangHandler {
                 "Usage:",
                 "  {watfrequency} -> Current frequency: (insert frequency here)");
 
+        provider.add("block.gtmutils.pattern_buffer.desc.0",
+                "§fAllows expanded direct §6AE2 pattern storage §ffor GregTech Multiblocks.");
+        provider.add("block.gtmutils.pattern_buffer.desc.2",
+                "§fLink §6Expanded Pattern Buffer Proxies §fwith a §bdatastick §fto link machines together!");
+        provider.add("block.gtmutils.pattern_buffer_proxy.desc.0",
+                "§fAllows linking many machines to a singular §6Expanded ME Pattern Buffer§f.");
+
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
 
