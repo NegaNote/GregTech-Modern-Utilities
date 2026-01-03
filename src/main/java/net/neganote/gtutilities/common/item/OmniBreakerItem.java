@@ -89,7 +89,7 @@ public class OmniBreakerItem extends ComponentItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment == Enchantments.UNBREAKING;
+        return enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.SILK_TOUCH;
     }
 
     @Override

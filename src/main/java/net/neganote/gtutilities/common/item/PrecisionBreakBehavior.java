@@ -57,7 +57,7 @@ public class PrecisionBreakBehavior implements IInteractionItem {
 
         if (!level.isClientSide()) {
             List<ItemStack> drops = new ObjectArrayList<>(
-                    getDrops(blockState, (ServerLevel) level, pos, level.getBlockEntity(pos)));
+                    getDrops(blockState, (ServerLevel) level, pos, level.getBlockEntity(pos), null, itemStack));
             var player = context.getPlayer();
             assert player != null;
             level.destroyBlock(pos, false);
