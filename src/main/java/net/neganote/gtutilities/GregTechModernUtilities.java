@@ -28,6 +28,7 @@ import net.neganote.gtutilities.client.renderer.UtilShaders;
 import net.neganote.gtutilities.common.data.UtilPlaceholders;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.item.UtilToolItems;
+import net.neganote.gtutilities.common.machine.UtilAEMachines;
 import net.neganote.gtutilities.common.machine.UtilMachines;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.common.tools.UtilToolConnection;
@@ -154,5 +155,6 @@ public class GregTechModernUtilities {
 
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         UtilMachines.init();
+        UtilAEMachines.init();
     }
 }

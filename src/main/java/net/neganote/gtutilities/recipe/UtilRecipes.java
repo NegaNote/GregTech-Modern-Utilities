@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.recipe;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -7,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
@@ -14,12 +16,22 @@ import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
+import net.neganote.gtutilities.common.machine.UtilAEMachines;
 import net.neganote.gtutilities.common.machine.UtilMachines;
 import net.neganote.gtutilities.config.UtilConfig;
 
+import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
+
 import java.util.function.Consumer;
 
+import static com.gregtechceu.gtceu.api.GTValues.*;
+import static com.gregtechceu.gtceu.api.GTValues.ZPM;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.wireFine;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.LASER_PIPES;
+import static com.gregtechceu.gtceu.common.data.GTItems.*;
+import static com.gregtechceu.gtceu.common.data.GTMachines.DUAL_IMPORT_HATCH;
+import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLY_LINE_RECIPES;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
@@ -58,6 +70,43 @@ public class UtilRecipes {
                     .stationResearch(b -> b
                             .researchStack(GTMultiMachines.ACTIVE_TRANSFORMER.asStack()).CWUt(16))
                     .save(provider);
+        }
+
+        if (UtilConfig.INSTANCE.features.expandedBuffersEnabled && GTCEu.Mods.isAE2Loaded()) {
+            ASSEMBLY_LINE_RECIPES.recipeBuilder("expanded_me_pattern_buffer")
+                    .inputItems(DUAL_IMPORT_HATCH[ZPM], 1)
+                    .inputItems(EMITTER_ZPM, 4)
+                    .inputItems(CustomTags.ZPM_CIRCUITS, 4)
+                    .inputItems(AEBlocks.PATTERN_PROVIDER.asItem(), 4)
+                    .inputItems(AEBlocks.INTERFACE.asItem(), 4)
+                    .inputItems(AEItems.SPEED_CARD.asItem(), 8)
+                    .inputItems(AEItems.CAPACITY_CARD.asItem(), 4)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputFluids(SolderingAlloy, L * 8)
+                    .inputFluids(Lubricant, 4000)
+                    .outputItems(UtilAEMachines.EXPANDED_ME_PATTERN_BUFFER)
+                    .stationResearch(b -> b.researchStack(DUAL_IMPORT_HATCH[ZPM].asStack())
+                            .CWUt(16, 32000))
+                    .duration(4000).EUt(VA[ZPM]).save(provider);
+            ASSEMBLY_LINE_RECIPES.recipeBuilder("expanded_me_pattern_buffer_proxy")
+                    .inputItems(GTMachines.HULL[ZPM], 1)
+                    .inputItems(SENSOR_ZPM, 4)
+                    .inputItems(CustomTags.ZPM_CIRCUITS, 2)
+                    .inputItems(AEBlocks.QUANTUM_LINK.asItem(), 2)
+                    .inputItems(AEBlocks.QUANTUM_RING.asItem(), 4)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputItems(wireFine, UraniumRhodiumDinaquadide, 48)
+                    .inputFluids(SolderingAlloy, L * 8)
+                    .inputFluids(Lubricant, 2000)
+                    .outputItems(UtilAEMachines.EXPANDED_ME_PATTERN_BUFFER_PROXY)
+                    .stationResearch(b -> b.researchStack(GTAEMachines.ME_PATTERN_BUFFER_PROXY.asStack())
+                            .CWUt(32))
+                    .duration(600).EUt(VA[ZPM]).save(provider);
         }
 
         if (UtilConfig.INSTANCE.features.autoChargersEnabled) {
