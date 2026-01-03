@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.recipe;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
@@ -71,7 +72,7 @@ public class UtilRecipes {
                     .save(provider);
         }
 
-        if (UtilConfig.INSTANCE.features.aeMachinesEnabled) {
+        if (UtilConfig.INSTANCE.features.expandedBuffersEnabled & GTCEu.Mods.isAE2Loaded()) {
             ASSEMBLY_LINE_RECIPES.recipeBuilder("expanded_me_pattern_buffer")
                     .inputItems(DUAL_IMPORT_HATCH[ZPM], 1)
                     .inputItems(EMITTER_ZPM, 1)
@@ -87,7 +88,7 @@ public class UtilRecipes {
                     .inputFluids(SolderingAlloy, L * 8)
                     .inputFluids(Lubricant, 4000)
                     .outputItems(UtilAEMachines.EXPANDED_ME_PATTERN_BUFFER)
-                    .stationResearch(b -> b.researchStack(GTAEMachines.ME_PATTERN_BUFFER.asStack())
+                    .stationResearch(b -> b.researchStack(DUAL_IMPORT_HATCH[ZPM].asStack())
                             .CWUt(16, 32000))
                     .duration(4000).EUt(VA[ZPM]).save(provider);
             ASSEMBLY_LINE_RECIPES.recipeBuilder("me_pattern_buffer_proxy")
@@ -103,7 +104,7 @@ public class UtilRecipes {
                     .inputFluids(SolderingAlloy, L * 8)
                     .inputFluids(Lubricant, 2000)
                     .outputItems(UtilAEMachines.EXPANDED_ME_PATTERN_BUFFER_PROXY)
-                    .stationResearch(b -> b.researchStack(UtilAEMachines.EXPANDED_ME_PATTERN_BUFFER.asStack())
+                    .stationResearch(b -> b.researchStack(GTAEMachines.ME_PATTERN_BUFFER.asStack())
                             .CWUt(32))
                     .duration(600).EUt(VA[ZPM]).save(provider);
         }

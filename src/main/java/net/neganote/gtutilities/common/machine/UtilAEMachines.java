@@ -19,7 +19,7 @@ public class UtilAEMachines {
     public static MachineDefinition EXPANDED_ME_PATTERN_BUFFER_PROXY = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.aeMachinesEnabled || GTCEu.isDataGen()) {
+        if (UtilConfig.INSTANCE.features.expandedBuffersEnabled & GTCEu.Mods.isAE2Loaded() || GTCEu.isDataGen()) {
             EXPANDED_ME_PATTERN_BUFFER = REGISTRATE
                     .machine("expanded_me_pattern_buffer", ExpandedPatternBufferPartMachine::new)
                     .tier(ZPM)
