@@ -1,4 +1,4 @@
-# GregTech Modern Utilities version 2.5.0
+# GregTech Modern Utilities version 2.6.0
 
-* Update to GTm 7.4.0
-* Add turbo-chargers with the ability to auto-output full batteries, courtesy of Phoenixvine (off by default)
+* Add expanded 72-slot pattern buffers/proxies, courtesy of Phoenixvine
+* Allow silk touch on the Omni-breaker

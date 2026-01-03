@@ -7,6 +7,7 @@ Current features:
 * An omni-breaker, a tool that can break anything instantly like a modern Vajra (a standalone FE-based version of which is available [here](https://github.com/NegaNote/Omnibreaker/))
 * 64A Energy Converters
 * Turbo Chargers that can additionally auto-output fully-charged batteries/tools
+* Expanded 72-slot ME pattern buffers/proxies
 * The Wireless Active Transformer (WAT)
   * Has an opt-in coolant system, where the WAT requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
 
