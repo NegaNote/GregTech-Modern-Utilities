@@ -93,8 +93,23 @@ public class UtilConfig {
 
         @Configurable
         @Configurable.Comment({
-                "Whether the Expanded Pattern Buffer and Expanded Pattern Buffer Proxy are enabled. If AE2 is not loaded, this config will not load the machines regardless. " })
+                "Whether the Expanded Pattern Buffer and Expanded Pattern Buffer Proxy are enabled. If AE2 is not loaded, this config will not load the machines regardless." })
         public boolean expandedBuffersEnabled = true;
+
+        @Configurable
+        @Configurable.Comment({
+                "Whether the Enlarged Stocking Bus/Hatch are enabled. If AE2 is not loaded, this config will not load the machines regardless." })
+        public boolean enlargedStockingEnabled = false;
+
+        @Configurable
+        @Configurable.Comment({
+                "How many rows the Enlarged Stocking Input Bus/Hatch should have, max is 64 rows for 512 slots. (each row is 8 slots in size)" })
+        public int enlargedStockingSizeRows = 8;
+
+        @Configurable
+        @Configurable.Comment({
+                "Whether the Tag Stocking Input Bus/Hatch are enabled. If AE2 is not loaded, this config will not load the machines regardless." })
+        public boolean tagStockingEnabled = true;
     }
 
     public static boolean coolantEnabled() {
