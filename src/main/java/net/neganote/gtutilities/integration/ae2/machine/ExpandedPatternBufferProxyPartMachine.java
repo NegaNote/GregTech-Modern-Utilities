@@ -41,7 +41,6 @@ public class ExpandedPatternBufferProxyPartMachine extends TieredIOPartMachine
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             ExpandedPatternBufferProxyPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
-    //The proxy seems to be working fine now.
     @Getter
     private final ExpandedProxySlotRecipeHandler proxySlotRecipeHandler;
 
