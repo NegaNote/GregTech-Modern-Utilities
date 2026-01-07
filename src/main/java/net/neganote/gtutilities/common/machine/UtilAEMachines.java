@@ -31,8 +31,7 @@ public class UtilAEMachines {
                         .machine("expanded_me_pattern_buffer", ExpandedPatternBufferPartMachine::new)
                         .tier(ZPM)
                         .rotationState(RotationState.ALL)
-                        .abilities(PartAbility.IMPORT_ITEMS, PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
-                                PartAbility.EXPORT_ITEMS)
+                        .abilities(PartAbility.IMPORT_ITEMS, PartAbility.IMPORT_FLUIDS)
                         .colorOverlayTieredHullModel(GTCEu.id("block/overlay/appeng/me_buffer_hatch"))
                         .langValue("Expanded ME Pattern Buffer")
                         .tooltips(
@@ -46,8 +45,7 @@ public class UtilAEMachines {
                         .machine("expanded_me_pattern_buffer_proxy", ExpandedPatternBufferProxyPartMachine::new)
                         .tier(ZPM)
                         .rotationState(RotationState.ALL)
-                        .abilities(PartAbility.IMPORT_ITEMS, PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
-                                PartAbility.EXPORT_ITEMS)
+                        .abilities(PartAbility.IMPORT_ITEMS, PartAbility.IMPORT_FLUIDS)
                         .colorOverlayTieredHullModel(GTCEu.id("block/overlay/appeng/me_buffer_hatch_proxy"))
                         .langValue("Expanded ME Pattern Buffer Proxy")
                         .tooltips(
