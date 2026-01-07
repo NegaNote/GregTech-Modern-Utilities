@@ -370,7 +370,6 @@ public class MEEnlargedTagStockingInputBusPartMachine extends MEStockingBusPartM
                 refreshListFromTags();
                 super.syncME();
                 updateInventorySubscription();
-                this.setAutoPull(true);
             }
         }).setTexture(
                 new GuiTextureGroup(GuiTextures.VANILLA_BUTTON, new TextTexture("Confirm")),

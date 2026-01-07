@@ -271,7 +271,6 @@ public class METagStockingInputHatchPartMachine extends MEStockingHatchPartMachi
                 refreshListFromTags();
                 super.syncME();
                 updateTankSubscription();
-                this.setAutoPull(true);
             }
         }).setTexture(new GuiTextureGroup(GuiTextures.VANILLA_BUTTON, new TextTexture("Confirm")),
                 new GuiTextureGroup(GuiTextures.VANILLA_BUTTON, new TextTexture("Confirm"))));
