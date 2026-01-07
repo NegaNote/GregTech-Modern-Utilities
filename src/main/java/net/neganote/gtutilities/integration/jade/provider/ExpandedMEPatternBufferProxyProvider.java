@@ -9,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.integration.ae2.machine.ExpandedPatternBufferProxyPartMachine;
 
 import snownee.jade.api.BlockAccessor;
@@ -66,6 +67,6 @@ public class ExpandedMEPatternBufferProxyProvider implements IBlockComponentProv
 
     @Override
     public ResourceLocation getUid() {
-        return GTCEu.id("me_pattern_buffer_proxy");
+        return GregTechModernUtilities.id("me_expanded_pattern_buffer_proxy");
     }
 }

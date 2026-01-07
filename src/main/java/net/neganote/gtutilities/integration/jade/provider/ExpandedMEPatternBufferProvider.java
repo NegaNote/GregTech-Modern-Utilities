@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.integration.ae2.machine.ExpandedPatternBufferPartMachine;
 
 import snownee.jade.api.BlockAccessor;
@@ -57,7 +58,7 @@ public class ExpandedMEPatternBufferProvider implements IBlockComponentProvider,
 
     @Override
     public ResourceLocation getUid() {
-        return GTCEu.id("me_pattern_buffer");
+        return GregTechModernUtilities.id("me_expanded_pattern_buffer");
     }
 
     public static void writeBufferTag(CompoundTag compoundTag, ExpandedPatternBufferPartMachine buffer) {
