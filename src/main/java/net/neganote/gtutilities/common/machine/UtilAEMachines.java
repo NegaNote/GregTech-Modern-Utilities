@@ -25,7 +25,7 @@ public class UtilAEMachines {
     public static MachineDefinition ME_ENLARGED_TAG_STOCKING_INPUT_HATCH = null;
 
     static {
-        if (GTCEu.Mods.isAE2Loaded() || GTCEu.isDataGen()) {
+        if (GTCEu.Mods.isAE2Loaded()) {
             if (UtilConfig.INSTANCE.features.expandedBuffersEnabled || GTCEu.isDataGen()) {
                 EXPANDED_ME_PATTERN_BUFFER = REGISTRATE
                         .machine("expanded_me_pattern_buffer", ExpandedPatternBufferPartMachine::new)
