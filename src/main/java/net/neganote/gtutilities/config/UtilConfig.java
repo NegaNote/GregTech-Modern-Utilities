@@ -102,6 +102,7 @@ public class UtilConfig {
         public boolean enlargedStockingEnabled = false;
 
         @Configurable
+        @Configurable.DecimalRange(min = 1, max = 64)
         @Configurable.Comment({
                 "How many rows the Enlarged Stocking Input Bus/Hatch should have, max is 64 rows for 512 slots. (each row is 8 slots in size)" })
         public int enlargedStockingSizeRows = 8;
