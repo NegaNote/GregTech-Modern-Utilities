@@ -121,6 +121,15 @@ public class UtilLangHandler {
         provider.add("config.jade.plugin_gtmutils.enlarged_me_stocking_bus_info.desc",
                 "Shows a snapshot of enlarged ME stocking bus contents in Jade");
 
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_info", "Expanded ME Pattern Buffer Info");
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_info.desc",
+                "Shows a snapshot of expanded ME pattern buffer contents in Jade");
+
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_proxy_info",
+                "Expanded ME Pattern Buffer Proxy Info");
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_proxy_info.desc",
+                "Shows a snapshot of expanded ME pattern buffer proxy contents in Jade");
+
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
 

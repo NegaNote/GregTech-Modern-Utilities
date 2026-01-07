@@ -66,6 +66,6 @@ public class ExpandedMEPatternBufferProxyProvider implements IBlockComponentProv
 
     @Override
     public ResourceLocation getUid() {
-        return GregTechModernUtilities.id("me_expanded_pattern_buffer_proxy");
+        return GregTechModernUtilities.id("me_expanded_pattern_buffer_proxy_info");
     }
 }
