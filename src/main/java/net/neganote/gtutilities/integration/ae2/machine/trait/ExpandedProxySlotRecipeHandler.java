@@ -191,6 +191,7 @@ public final class ExpandedProxySlotRecipeHandler {
             return proxy == null ? 0 : proxy.getTotalContentAmount();
         }
 
+        @Override
         public int getPriority() {
             return proxy == null ? IFilteredHandler.LOW : proxy.getPriority();
         }

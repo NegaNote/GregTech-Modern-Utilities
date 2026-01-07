@@ -76,8 +76,8 @@ public class ExpandedPatternBufferProxyPartMachine extends TieredIOPartMachine
         if (level == null || pos == null) {
             this.buffer = null;
         } else if (MetaMachine.getMachine(level, pos) instanceof ExpandedPatternBufferPartMachine machine) {
-            this.bufferPos = pos;
-            this.buffer = machine;
+            bufferPos = pos;
+            buffer = machine;
             machine.addProxy(this);
             if (!isRemote()) proxySlotRecipeHandler.updateProxy(machine);
         } else {
