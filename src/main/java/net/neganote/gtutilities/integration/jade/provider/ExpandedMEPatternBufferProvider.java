@@ -1,6 +1,5 @@
 package net.neganote.gtutilities.integration.jade.provider;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.integration.jade.GTElementHelper;
