@@ -32,6 +32,7 @@ public class MultilineTextField extends WidgetGroup {
     private final Supplier<String> textSupplier;
     private final Consumer<String> textConsumer;
     private final Component placeholder;
+    private final Supplier<Integer> borderColorSupplier;
 
     private int maxLength = DEFAULT_MAX_LENGTH;
 
@@ -50,7 +51,7 @@ public class MultilineTextField extends WidgetGroup {
                               int x, int y, int width, int height,
                               Supplier<String> textSupplier,
                               Consumer<String> textConsumer) {
-        this(x, y, width, height, textSupplier, textConsumer, Component.empty());
+        this(x, y, width, height, textSupplier, textConsumer, Component.empty(), null);
     }
 
     public MultilineTextField(
@@ -58,10 +59,20 @@ public class MultilineTextField extends WidgetGroup {
                               Supplier<String> textSupplier,
                               Consumer<String> textConsumer,
                               Component placeholder) {
+        this(x, y, width, height, textSupplier, textConsumer, placeholder, null);
+    }
+
+    public MultilineTextField(
+                              int x, int y, int width, int height,
+                              Supplier<String> textSupplier,
+                              Consumer<String> textConsumer,
+                              Component placeholder,
+                              Supplier<Integer> borderColorSupplier) {
         super(new Position(x, y), new Size(width, height));
         this.textSupplier = textSupplier;
         this.textConsumer = textConsumer;
         this.placeholder = placeholder == null ? Component.empty() : placeholder;
+        this.borderColorSupplier = borderColorSupplier;
 
         String init = safe(textSupplier.get());
         this.lastSent = init;
@@ -467,7 +478,8 @@ public class MultilineTextField extends WidgetGroup {
         int h = getSize().height;
 
         int bg = 0xFF202020;
-        int border = hasFocus ? 0xFFFFFFFF : 0xFF808080;
+        Integer suppliedBorder = borderColorSupplier != null ? borderColorSupplier.get() : null;
+        int border = suppliedBorder != null ? suppliedBorder : hasFocus ? 0xFFFFFFFF : 0xFF808080;
 
         graphics.fill(x0 - 1, y0 - 1, x0 + w + 1, y0 + h + 1, 0xAA000000);
         graphics.fill(x0, y0, x0 + w, y0 + h, bg);

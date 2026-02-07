@@ -1,5 +1,18 @@
 package net.neganote.gtutilities.integration.ae2.machine;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfiguratorButton;
@@ -12,9 +25,10 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingHatchPartMachine;
-import com.gregtechceu.gtceu.integration.ae2.slot.*;
+import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
+import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
+import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
-
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -26,6 +40,14 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 import com.lowdragmc.lowdraglib.utils.Size;
 
+import appeng.api.config.Actionable;
+import appeng.api.networking.IGrid;
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
+import appeng.api.storage.MEStorage;
+import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -39,23 +61,6 @@ import net.neganote.gtutilities.common.gui.widgets.MultilineTextField;
 import net.neganote.gtutilities.common.gui.widgets.SimpleScrollbarWidget;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.utils.TagMatcher;
-
-import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
-import appeng.api.stacks.AEFluidKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
-import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -74,6 +79,12 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
     protected String Wltmp = "";
     @DescSynced
     protected String Bltmp = "";
+
+    @DescSynced
+    protected boolean whitelistBadSyntax = false;
+
+    @DescSynced
+    protected boolean blacklistBadSyntax = false;
 
     private Predicate<GenericStack> tagAutoPullTest = ($) -> true;
 
@@ -161,11 +172,13 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
         if (!Objects.equals(wl, wlLast)) {
             wlLast = wl;
             wlCompiled = TagMatcher.compile(wl);
+            whitelistBadSyntax = !wlCompiled.isValid();
             decisionCache.clear();
         }
         if (!Objects.equals(bl, blLast)) {
             blLast = bl;
             blCompiled = TagMatcher.compile(bl);
+            blacklistBadSyntax = !blCompiled.isValid();
             decisionCache.clear();
         }
 
@@ -176,6 +189,7 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
 
     protected boolean isAllowed(AEFluidKey key) {
         ensureCompiledUpToDate();
+        if (whitelistBadSyntax || blacklistBadSyntax) return false;
 
         if ((wlLast == null || wlLast.isEmpty()) && (blLast == null || blLast.isEmpty())) return false;
 
@@ -367,7 +381,8 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
                 7, y, 160, 25,
                 () -> Wltmp,
                 v -> { Wltmp = v; },
-                Component.literal("Whitelist tags..."));
+                Component.literal("Whitelist tags..."),
+                () -> whitelistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(WLField);
 
         y += 29;
@@ -375,7 +390,8 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
                 7, y, 160, 25,
                 () -> Bltmp,
                 v -> { Bltmp = v; },
-                Component.literal("Blacklist tags..."));
+                Component.literal("Blacklist tags..."),
+                () -> blacklistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(BLField);
 
         WLField.setDirectly(whitelistExpr);

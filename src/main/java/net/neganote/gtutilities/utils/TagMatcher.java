@@ -346,7 +346,34 @@ public final class TagMatcher {
             out.add(top);
         }
 
-        return out.toArray(Token[]::new);
+        Token[] rpn = out.toArray(Token[]::new);
+        validateRpnStackDepth(rpn);
+        return rpn;
+    }
+
+    private static void validateRpnStackDepth(Token[] rpn) throws InvalidTagMatcherSyntaxException {
+        int sp = 0;
+        for (Token t : rpn) {
+            switch (t.type) {
+                case TAG:
+                    sp++;
+                    break;
+                case OPERATOR:
+                    int requiredDepth = t.op == Operator.NOT ? 1 : 2;
+                    sp -= requiredDepth;
+                    if (sp < 0) {
+                        throw new InvalidTagMatcherSyntaxException("Unexpected operator " + t.op);
+                    }
+                    sp++;
+                    break;
+                case LPAREN:
+                case RPAREN:
+                    throw new InvalidTagMatcherSyntaxException("Unexpected token: " + t.type);
+            }
+        }
+        if (sp != 1) {
+            throw new InvalidTagMatcherSyntaxException("Depth at the end should equal 1");
+        }
     }
 
     private static boolean evalRpn(Token[] rpn, Set<String> actualTags) throws InvalidTagMatcherSyntaxException {
