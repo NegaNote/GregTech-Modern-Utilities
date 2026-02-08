@@ -1,5 +1,14 @@
 package net.neganote.gtutilities.utils;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.Fluid;
+
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEItemKey;
+import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -9,18 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
-
-import appeng.api.stacks.AEFluidKey;
-import appeng.api.stacks.AEItemKey;
-import lombok.Getter;
-import net.minecraft.core.Holder;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.material.Fluid;
-
 public final class TagMatcher {
 
     private static final class InvalidTagMatcherSyntaxException extends Exception {
+
         private InvalidTagMatcherSyntaxException(String s) {
             super(s);
         }
@@ -236,7 +237,8 @@ public final class TagMatcher {
             char c = expression.charAt(i);
 
             if (c == '#') {
-                throw new InvalidTagMatcherSyntaxException("Character '#' is not allowed in tag expressions (pos " + i + ").");
+                throw new InvalidTagMatcherSyntaxException(
+                        "Character '#' is not allowed in tag expressions (pos " + i + ").");
             }
             if (Character.isWhitespace(c)) continue;
 
@@ -250,7 +252,8 @@ public final class TagMatcher {
                 lastIsTag = false;
 
             } else if (c == ')') {
-                if (expectingOperand && lp <= 0) throw new InvalidTagMatcherSyntaxException("Unexpected ')' at position " + i);
+                if (expectingOperand && lp <= 0)
+                    throw new InvalidTagMatcherSyntaxException("Unexpected ')' at position " + i);
                 flushTag(currentTag, tokens);
                 tokens.add(Token.rparen());
                 expectingOperand = false;

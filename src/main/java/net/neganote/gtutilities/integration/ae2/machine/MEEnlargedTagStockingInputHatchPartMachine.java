@@ -1,18 +1,5 @@
 package net.neganote.gtutilities.integration.ae2.machine;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfiguratorButton;
@@ -29,6 +16,7 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
+
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -40,14 +28,6 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 import com.lowdragmc.lowdraglib.utils.Size;
 
-import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
-import appeng.api.stacks.AEFluidKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
-import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -61,6 +41,27 @@ import net.neganote.gtutilities.common.gui.widgets.MultilineTextField;
 import net.neganote.gtutilities.common.gui.widgets.SimpleScrollbarWidget;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.utils.TagMatcher;
+
+import appeng.api.config.Actionable;
+import appeng.api.networking.IGrid;
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
+import appeng.api.storage.MEStorage;
+import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
