@@ -13,7 +13,9 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEHatchPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingHatchPartMachine;
-import com.gregtechceu.gtceu.integration.ae2.slot.*;
+import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
+import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
+import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
 
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -74,6 +76,12 @@ public class METagStockingInputHatchPartMachine extends MEStockingHatchPartMachi
     protected String Wltmp = "";
     @DescSynced
     protected String Bltmp = "";
+
+    @DescSynced
+    protected boolean whitelistBadSyntax = false;
+
+    @DescSynced
+    protected boolean blacklistBadSyntax = false;
 
     private Predicate<GenericStack> tagAutoPullTest = ($) -> true;
 
@@ -157,11 +165,13 @@ public class METagStockingInputHatchPartMachine extends MEStockingHatchPartMachi
         if (!Objects.equals(wl, wlLast)) {
             wlLast = wl;
             wlCompiled = TagMatcher.compile(wl);
+            whitelistBadSyntax = !wlCompiled.isValid();
             decisionCache.clear();
         }
         if (!Objects.equals(bl, blLast)) {
             blLast = bl;
             blCompiled = TagMatcher.compile(bl);
+            blacklistBadSyntax = !wlCompiled.isValid();
             decisionCache.clear();
         }
 
@@ -172,6 +182,7 @@ public class METagStockingInputHatchPartMachine extends MEStockingHatchPartMachi
 
     protected boolean isAllowed(AEFluidKey key) {
         ensureCompiledUpToDate();
+        if (whitelistBadSyntax || blacklistBadSyntax) return false;
 
         if ((wlLast == null || wlLast.isEmpty()) && (blLast == null || blLast.isEmpty())) return false;
 
@@ -282,7 +293,8 @@ public class METagStockingInputHatchPartMachine extends MEStockingHatchPartMachi
                 v -> {
                     Wltmp = v;
                 },
-                Component.literal("Whitelist tags..."));
+                Component.literal("Whitelist tags..."),
+                () -> whitelistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(WLField);
 
         y += 29;
@@ -292,7 +304,8 @@ public class METagStockingInputHatchPartMachine extends MEStockingHatchPartMachi
                 v -> {
                     Bltmp = v;
                 },
-                Component.literal("Blacklist tags..."));
+                Component.literal("Blacklist tags..."),
+                () -> blacklistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(BLField);
 
         WLField.setDirectly(whitelistExpr);

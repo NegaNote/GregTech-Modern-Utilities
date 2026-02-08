@@ -77,6 +77,12 @@ public class METagStockingInputBusPartMachine extends MEStockingBusPartMachine {
     @DescSynced
     protected String Bltmp = "";
 
+    @DescSynced
+    protected boolean whitelistBadSyntax = false;
+
+    @DescSynced
+    protected boolean blacklistBadSyntax = false;
+
     private Predicate<GenericStack> tagAutoPullTest = ($) -> true;
 
     private transient String wlLast = null;
@@ -159,11 +165,13 @@ public class METagStockingInputBusPartMachine extends MEStockingBusPartMachine {
         if (!Objects.equals(wl, wlLast)) {
             wlLast = wl;
             wlCompiled = TagMatcher.compile(wl);
+            whitelistBadSyntax = !wlCompiled.isValid();
             decisionCache.clear();
         }
         if (!Objects.equals(bl, blLast)) {
             blLast = bl;
             blCompiled = TagMatcher.compile(bl);
+            blacklistBadSyntax = !blCompiled.isValid();
             decisionCache.clear();
         }
 
@@ -174,6 +182,7 @@ public class METagStockingInputBusPartMachine extends MEStockingBusPartMachine {
 
     protected boolean isAllowed(AEItemKey key) {
         ensureCompiledUpToDate();
+        if (whitelistBadSyntax || blacklistBadSyntax) return false;
 
         if ((wlLast == null || wlLast.isEmpty()) && (blLast == null || blLast.isEmpty())) return false;
 
@@ -283,7 +292,8 @@ public class METagStockingInputBusPartMachine extends MEStockingBusPartMachine {
                 v -> {
                     Wltmp = v;
                 },
-                Component.literal("Whitelist tags..."));
+                Component.literal("Whitelist tags..."),
+                () -> whitelistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(WLField);
 
         y += 29;
@@ -293,7 +303,8 @@ public class METagStockingInputBusPartMachine extends MEStockingBusPartMachine {
                 v -> {
                     Bltmp = v;
                 },
-                Component.literal("Blacklist tags..."));
+                Component.literal("Blacklist tags..."),
+                () -> blacklistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(BLField);
 
         WLField.setDirectly(whitelistExpr);

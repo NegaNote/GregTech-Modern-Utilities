@@ -53,7 +53,11 @@ import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -74,6 +78,12 @@ public class MEEnlargedTagStockingInputBusPartMachine extends MEStockingBusPartM
     @Persisted
     @DescSynced
     protected String blacklistExpr = "";
+
+    @DescSynced
+    protected boolean whitelistBadSyntax = false;
+
+    @DescSynced
+    protected boolean blacklistBadSyntax = false;
 
     @DescSynced
     protected String Wltmp = "";
@@ -168,11 +178,13 @@ public class MEEnlargedTagStockingInputBusPartMachine extends MEStockingBusPartM
         if (!Objects.equals(wl, wlLast)) {
             wlLast = wl;
             wlCompiled = TagMatcher.compile(wl);
+            whitelistBadSyntax = !wlCompiled.isValid();
             decisionCache.clear();
         }
         if (!Objects.equals(bl, blLast)) {
             blLast = bl;
             blCompiled = TagMatcher.compile(bl);
+            blacklistBadSyntax = !blCompiled.isValid();
             decisionCache.clear();
         }
 
@@ -183,6 +195,7 @@ public class MEEnlargedTagStockingInputBusPartMachine extends MEStockingBusPartM
 
     protected boolean isAllowed(AEItemKey key) {
         ensureCompiledUpToDate();
+        if (whitelistBadSyntax || blacklistBadSyntax) return false;
 
         if ((wlLast == null || wlLast.isEmpty()) && (blLast == null || blLast.isEmpty())) return false;
 
@@ -380,7 +393,8 @@ public class MEEnlargedTagStockingInputBusPartMachine extends MEStockingBusPartM
                 7, y, 160, 25,
                 () -> Wltmp,
                 v -> { Wltmp = v; },
-                Component.literal("Whitelist tags..."));
+                Component.literal("Whitelist tags..."),
+                () -> whitelistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(WLField);
 
         y += 29;
@@ -388,7 +402,8 @@ public class MEEnlargedTagStockingInputBusPartMachine extends MEStockingBusPartM
                 7, y, 160, 25,
                 () -> Bltmp,
                 v -> { Bltmp = v; },
-                Component.literal("Blacklist tags..."));
+                Component.literal("Blacklist tags..."),
+                () -> blacklistBadSyntax ? 0xFFFF0000 : null);
         group.addWidget(BLField);
 
         WLField.setDirectly(whitelistExpr);
