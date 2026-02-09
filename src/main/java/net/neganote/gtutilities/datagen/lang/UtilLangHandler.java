@@ -27,16 +27,12 @@ public class UtilLangHandler {
         provider.add("tooltip.omnibreaker.modern_vajra", "A Modern Vajra");
 
         provider.add("item.gtceu.tool.mv_screwdriver", "%s Electric Screwdriver (MV)");
-        provider.add("item.gtceu.tool.hv_screwdriver", "%s Electric Screwdriver (HV)");
         provider.add("item.gtceu.tool.ev_screwdriver", "%s Electric Screwdriver (EV)");
-        provider.add("item.gtceu.tool.iv_screwdriver", "%s Electric Screwdriver (IV)");
         provider.add("item.gtceu.tool.luv_screwdriver", "%s Electric Screwdriver (LuV)");
         provider.add("item.gtceu.tool.zpm_screwdriver", "%s Electric Screwdriver (ZPM)");
 
         provider.add("item.gtceu.tool.mv_chainsaw", "%s Chainsaw (MV)");
-        provider.add("item.gtceu.tool.hv_chainsaw", "%s Chainsaw (HV)");
         provider.add("item.gtceu.tool.ev_chainsaw", "%s Chainsaw (EV)");
-        provider.add("item.gtceu.tool.iv_chainsaw", "%s Chainsaw (IV)");
         provider.add("item.gtceu.tool.luv_chainsaw", "%s Chainsaw (LuV)");
         provider.add("item.gtceu.tool.zpm_chainsaw", "%s Chainsaw (ZPM)");
 
@@ -82,7 +78,9 @@ public class UtilLangHandler {
                 "Returns the current frequency used by a Wireless Active Transformer.",
                 "Usage:",
                 "  {watfrequency} -> Current frequency: (insert frequency here)");
-
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer", "[GtmUtils] Pattern Buffer Info");
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_proxy",
+                "[GtmUtils] Pattern Buffer Proxy Info");
         provider.add("block.gtmutils.pattern_buffer.desc.0",
                 "§fAllows expanded direct §6AE2 pattern storage §ffor GregTech Multiblocks.");
         provider.add("block.gtmutils.pattern_buffer.desc.2",

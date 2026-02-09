@@ -84,8 +84,8 @@ public class UtilToolRecipeHelper {
                         'R', steelRing);
 
                 addElectricToolRecipe(provider, toolPrefix,
-                        new GTToolType[] { UtilToolType.CHAINSAW_MV, UtilToolType.CHAINSAW_HV,
-                                UtilToolType.CHAINSAW_EV, UtilToolType.CHAINSAW_IV, UtilToolType.CHAINSAW_LuV,
+                        new GTToolType[] { UtilToolType.CHAINSAW_MV,
+                                UtilToolType.CHAINSAW_EV, UtilToolType.CHAINSAW_LuV,
                                 UtilToolType.CHAINSAW_ZPM, },
                         material);
             }
@@ -157,8 +157,8 @@ public class UtilToolRecipeHelper {
             if (material.hasFlag(GENERATE_LONG_ROD)) {
                 toolPrefix = TagPrefix.toolHeadScrewdriver;
                 addElectricToolRecipe(provider, toolPrefix,
-                        new GTToolType[] { UtilToolType.SCREWDRIVER_MV, UtilToolType.SCREWDRIVER_HV,
-                                UtilToolType.SCREWDRIVER_EV, UtilToolType.SCREWDRIVER_IV,
+                        new GTToolType[] { UtilToolType.SCREWDRIVER_MV,
+                                UtilToolType.SCREWDRIVER_EV,
                                 UtilToolType.SCREWDRIVER_LuV, UtilToolType.SCREWDRIVER_ZPM, },
                         material);
 
