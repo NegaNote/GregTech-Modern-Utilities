@@ -53,8 +53,6 @@
   "config.gtmutils.option.pterbCoolantIOMultiplier": "pterbCoolantIOMultiplier",
   "config.gtmutils.option.pterbEnabled": "pterbEnabled",
   "config.gtmutils.option.sterileHatchEnabled": "sterileHatchEnabled",
-  "config.jade.plugin_gtmutils.me_expanded_pattern_buffer": "[GtmUtils] Pattern Buffer Info",
-  "config.jade.plugin_gtmutils.me_expanded_pattern_buffer_proxy": "[GtmUtils] Pattern Buffer Proxy Info",
   "config.jade.plugin_gtmutils.pterb_info": "WAT Info",
   "gtceu.placeholder_info.watfrequency.0": "Returns the current frequency used by a Wireless Active Transformer.",
   "gtceu.placeholder_info.watfrequency.1": "Usage:",
