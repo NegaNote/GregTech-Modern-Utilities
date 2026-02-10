@@ -42,14 +42,8 @@ public class UtilToolConnection {
 
             // Custom HV Tools
             if (UtilConfig.INSTANCE.features.customHVToolsEnabled) {
-                if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
-                    toolProperty.addTypes(UtilToolType.SCREWDRIVER_HV);
-                }
                 if (toolProperty.hasType(GTToolType.BUZZSAW)) {
                     toolProperty.addTypes(UtilToolType.BUZZSAW_HV);
-                }
-                if (toolProperty.hasType(GTToolType.CHAINSAW_LV)) {
-                    toolProperty.addTypes(UtilToolType.CHAINSAW_HV);
                 }
             }
 
@@ -74,14 +68,8 @@ public class UtilToolConnection {
 
             // Custom IV Tools
             if (UtilConfig.INSTANCE.features.customIVToolsEnabled) {
-                if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
-                    toolProperty.addTypes(UtilToolType.SCREWDRIVER_IV);
-                }
                 if (toolProperty.hasType(GTToolType.BUZZSAW)) {
                     toolProperty.addTypes(UtilToolType.BUZZSAW_IV);
-                }
-                if (toolProperty.hasType(GTToolType.CHAINSAW_LV)) {
-                    toolProperty.addTypes(UtilToolType.CHAINSAW_IV);
                 }
             }
 
