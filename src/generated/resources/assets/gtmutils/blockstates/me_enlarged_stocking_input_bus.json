@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "gtmutils:block/machine/me_enlarged_stocking_input_bus",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "gtmutils:block/machine/me_enlarged_stocking_input_bus",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gtmutils:block/machine/me_enlarged_stocking_input_bus"
+    },
+    "facing=south": {
+      "model": "gtmutils:block/machine/me_enlarged_stocking_input_bus",
+      "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "gtmutils:block/machine/me_enlarged_stocking_input_bus",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "gtmutils:block/machine/me_enlarged_stocking_input_bus",
+      "y": 270
+    }
+  }
+}

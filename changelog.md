@@ -1,4 +1,3 @@
-# GregTech Modern Utilities version 2.6.0
+# GregTech Modern Utilities version 2.7.2
 
-* Add expanded 72-slot pattern buffers/proxies, courtesy of Phoenixvine
-* Allow silk touch on the Omni-breaker
+* Fix crash with tag parsing in tag buses/hatches (thanks Wizz)

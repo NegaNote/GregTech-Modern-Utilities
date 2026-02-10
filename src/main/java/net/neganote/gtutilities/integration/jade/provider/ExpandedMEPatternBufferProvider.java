@@ -57,7 +57,7 @@ public class ExpandedMEPatternBufferProvider implements IBlockComponentProvider,
 
     @Override
     public ResourceLocation getUid() {
-        return GregTechModernUtilities.id("me_expanded_pattern_buffer");
+        return GregTechModernUtilities.id("me_expanded_pattern_buffer_info");
     }
 
     public static void writeBufferTag(CompoundTag compoundTag, ExpandedPatternBufferPartMachine buffer) {
