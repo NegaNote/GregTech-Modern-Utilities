@@ -122,6 +122,60 @@ public class UtilRecipes {
                         'C', GTMachines.CHARGER_4[tier].asStack());
             }
         }
+
+        if (UtilConfig.INSTANCE.features.tagStockingEnabled) {
+            ASSEMBLER_RECIPES.recipeBuilder("me_tag_stocking_input_bus")
+                    .inputItems(GTAEMachines.STOCKING_IMPORT_BUS_ME.asStack(), 1)
+                    .inputItems(CustomTags.LuV_CIRCUITS, 2)
+                    .inputItems(AEItems.ENGINEERING_PROCESSOR.asItem(), 4)
+                    .inputItems(TAG_FILTER, 1)
+                    .outputItems(UtilAEMachines.ME_TAG_STOCKING_INPUT_BUS)
+                    .duration(400).EUt(VA[LuV]).save(provider);
+
+            ASSEMBLER_RECIPES.recipeBuilder("me_tag_stocking_input_hatch")
+                    .inputItems(GTAEMachines.STOCKING_IMPORT_HATCH_ME.asStack(), 1)
+                    .inputItems(CustomTags.LuV_CIRCUITS, 2)
+                    .inputItems(AEItems.ENGINEERING_PROCESSOR.asItem(), 4)
+                    .inputItems(TAG_FLUID_FILTER, 1)
+                    .outputItems(UtilAEMachines.ME_TAG_STOCKING_INPUT_HATCH)
+                    .duration(400).EUt(VA[LuV]).save(provider);
+        }
+
+        if (UtilConfig.INSTANCE.features.enlargedStockingEnabled) {
+            ASSEMBLER_RECIPES.recipeBuilder("me_enlarged_stocking_input_bus")
+                    .inputItems(GTAEMachines.STOCKING_IMPORT_BUS_ME.asStack(), 1)
+                    .inputItems(CustomTags.LuV_CIRCUITS, 2)
+                    .inputItems(AEItems.ENGINEERING_PROCESSOR.asItem(), 4)
+                    .inputItems(AEItems.CAPACITY_CARD.asItem(),
+                            Math.min(64, UtilConfig.INSTANCE.features.enlargedStockingSizeRows))
+                    .outputItems(UtilAEMachines.ME_ENLARGED_STOCKING_INPUT_BUS)
+                    .duration(400).EUt(VA[LuV]).save(provider);
+
+            ASSEMBLER_RECIPES.recipeBuilder("me_enlarged_stocking_input_hatch")
+                    .inputItems(GTAEMachines.STOCKING_IMPORT_HATCH_ME.asStack(), 1)
+                    .inputItems(CustomTags.LuV_CIRCUITS, 2)
+                    .inputItems(AEItems.ENGINEERING_PROCESSOR.asItem(), 4)
+                    .inputItems(AEItems.CAPACITY_CARD.asItem(),
+                            Math.min(64, UtilConfig.INSTANCE.features.enlargedStockingSizeRows))
+                    .outputItems(UtilAEMachines.ME_ENLARGED_STOCKING_INPUT_HATCH)
+                    .duration(400).EUt(VA[LuV]).save(provider);
+        }
+
+        if (UtilConfig.INSTANCE.features.enlargedStockingEnabled && UtilConfig.INSTANCE.features.tagStockingEnabled) {
+            ASSEMBLER_RECIPES.recipeBuilder("me_enlarged_tag_stocking_input_bus")
+                    .inputItems(UtilAEMachines.ME_ENLARGED_STOCKING_INPUT_BUS, 1)
+                    .inputItems(UtilAEMachines.ME_TAG_STOCKING_INPUT_BUS, 1)
+                    .inputItems(CustomTags.ZPM_CIRCUITS, 2)
+                    .outputItems(UtilAEMachines.ME_ENLARGED_TAG_STOCKING_INPUT_BUS)
+                    .duration(600).EUt(VA[ZPM]).save(provider);
+
+            ASSEMBLER_RECIPES.recipeBuilder("me_enlarged_tag_stocking_input_hatch")
+                    .inputItems(UtilAEMachines.ME_ENLARGED_STOCKING_INPUT_HATCH, 1)
+                    .inputItems(UtilAEMachines.ME_TAG_STOCKING_INPUT_HATCH, 1)
+                    .inputItems(CustomTags.ZPM_CIRCUITS, 2)
+                    .outputItems(UtilAEMachines.ME_ENLARGED_TAG_STOCKING_INPUT_HATCH)
+                    .duration(600).EUt(VA[ZPM]).save(provider);
+        }
     }
 
     public static void register64AConverterRecipes(Consumer<FinishedRecipe> provider) {

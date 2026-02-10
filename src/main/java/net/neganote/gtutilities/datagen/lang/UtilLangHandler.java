@@ -88,6 +88,46 @@ public class UtilLangHandler {
         provider.add("block.gtmutils.pattern_buffer_proxy.desc.0",
                 "§fAllows linking many machines to a singular §6Expanded ME Pattern Buffer§f.");
 
+        multiLang(provider, "block.gtmutils.tag_stocking_bus.desc",
+                "Retrieves items directly from the ME network",
+                "Stock list is built from tag filters (whitelist/blacklist)",
+                "Keeps the matching items in stock automatically");
+        multiLang(provider, "block.gtmutils.tag_stocking_hatch.desc",
+                "Retrieves fluids directly from the ME network",
+                "Stock list is built from tag filters (whitelist/blacklist)",
+                "Keeps the matching fluids in stock automatically");
+
+        multiLang(provider, "block.gtmutils.enlarged_stocking_bus.desc",
+                "Retrieves items directly from the ME network",
+                "Extra-large stocking list",
+                "Auto-Pull can fill the list with the most abundant ME items");
+        multiLang(provider, "block.gtmutils.enlarged_stocking_hatch.desc",
+                "Retrieves fluids directly from the ME network",
+                "Extra-large stocking list",
+                "Auto-Pull can fill the list with the most abundant ME fluids");
+
+        multiLang(provider, "block.gtmutils.tag_enlarged_stocking_bus.desc",
+                "Retrieves items directly from the ME network",
+                "Extra-large tag-based stocking",
+                "Uses whitelist/blacklist tags to build the stocked item list");
+        multiLang(provider, "block.gtmutils.tag_enlarged_stocking_hatch.desc",
+                "Retrieves fluids directly from the ME network",
+                "Extra-large tag-based stocking",
+                "Uses whitelist/blacklist tags to build the stocked fluid list");
+
+        provider.add("config.jade.plugin_gtmutils.enlarged_me_stocking_bus_info", "Enlarged ME Stocking Bus Info");
+        provider.add("config.jade.plugin_gtmutils.enlarged_me_stocking_bus_info.desc",
+                "Shows a snapshot of enlarged ME stocking bus contents in Jade");
+
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_info", "Expanded ME Pattern Buffer Info");
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_info.desc",
+                "Shows a snapshot of expanded ME pattern buffer contents in Jade");
+
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_proxy_info",
+                "Expanded ME Pattern Buffer Proxy Info");
+        provider.add("config.jade.plugin_gtmutils.me_expanded_pattern_buffer_proxy_info.desc",
+                "Shows a snapshot of expanded ME pattern buffer proxy contents in Jade");
+
         dfs(provider, new HashSet<>(), UtilConfig.CONFIG_HOLDER.getValueMap());
     }
 
