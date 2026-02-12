@@ -1,5 +1,6 @@
 package net.neganote.gtutilities.common.tools;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
@@ -22,7 +23,7 @@ public class UtilToolConnection {
             }
 
             // Custom MV Tools
-            if (UtilConfig.INSTANCE.features.customMVToolsEnabled) {
+            if (UtilConfig.INSTANCE.features.customMVToolsEnabled || GTCEu.isDataGen()) {
                 if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
                     toolProperty.addTypes(UtilToolType.SCREWDRIVER_MV);
                 }
@@ -41,20 +42,14 @@ public class UtilToolConnection {
             }
 
             // Custom HV Tools
-            if (UtilConfig.INSTANCE.features.customHVToolsEnabled) {
-                if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
-                    toolProperty.addTypes(UtilToolType.SCREWDRIVER_HV);
-                }
+            if (UtilConfig.INSTANCE.features.customHVToolsEnabled || GTCEu.isDataGen()) {
                 if (toolProperty.hasType(GTToolType.BUZZSAW)) {
                     toolProperty.addTypes(UtilToolType.BUZZSAW_HV);
-                }
-                if (toolProperty.hasType(GTToolType.CHAINSAW_LV)) {
-                    toolProperty.addTypes(UtilToolType.CHAINSAW_HV);
                 }
             }
 
             // Custom EV Tools
-            if (UtilConfig.INSTANCE.features.customEVToolsEnabled) {
+            if (UtilConfig.INSTANCE.features.customEVToolsEnabled || GTCEu.isDataGen()) {
                 if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
                     toolProperty.addTypes(UtilToolType.SCREWDRIVER_EV);
                 }
@@ -73,20 +68,14 @@ public class UtilToolConnection {
             }
 
             // Custom IV Tools
-            if (UtilConfig.INSTANCE.features.customIVToolsEnabled) {
-                if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
-                    toolProperty.addTypes(UtilToolType.SCREWDRIVER_IV);
-                }
+            if (UtilConfig.INSTANCE.features.customIVToolsEnabled || GTCEu.isDataGen()) {
                 if (toolProperty.hasType(GTToolType.BUZZSAW)) {
                     toolProperty.addTypes(UtilToolType.BUZZSAW_IV);
-                }
-                if (toolProperty.hasType(GTToolType.CHAINSAW_LV)) {
-                    toolProperty.addTypes(UtilToolType.CHAINSAW_IV);
                 }
             }
 
             // Custom LuV Tools
-            if (UtilConfig.INSTANCE.features.customLuVToolsEnabled) {
+            if (UtilConfig.INSTANCE.features.customLuVToolsEnabled || GTCEu.isDataGen()) {
                 if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
                     toolProperty.addTypes(UtilToolType.SCREWDRIVER_LuV);
                 }
@@ -108,7 +97,7 @@ public class UtilToolConnection {
             }
 
             // Custom ZPM Tools
-            if (UtilConfig.INSTANCE.features.customZPMToolsEnabled) {
+            if (UtilConfig.INSTANCE.features.customZPMToolsEnabled || GTCEu.isDataGen()) {
                 if (toolProperty.hasType(GTToolType.SCREWDRIVER_LV)) {
                     toolProperty.addTypes(UtilToolType.SCREWDRIVER_ZPM);
                 }

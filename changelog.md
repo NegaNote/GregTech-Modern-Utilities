@@ -1,3 +1,4 @@
-# GregTech Modern Utilities version 2.7.2
+# GregTech Modern Utilities version 2.8.0
 
-* Fix crash with tag parsing in tag buses/hatches (thanks Wizz)
+* Migrate to GTm 7.5.1 (this version is REQUIRED to run in 7.5.1+)
+  * Includes removal of custom hv/iv chainsaw and screwdriver, as they are now in the base mod
