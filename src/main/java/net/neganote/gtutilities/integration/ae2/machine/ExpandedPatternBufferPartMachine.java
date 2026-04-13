@@ -6,21 +6,15 @@ import com.gregtechceu.gtceu.integration.ae2.gui.widget.AETextInputButtonWidget;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.slot.AEPatternViewSlotWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEPatternBufferPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.machine.trait.InternalSlotRecipeHandler;
-
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.neganote.gtutilities.GregTechModernUtilities;
-
 import appeng.crafting.pattern.EncodedPatternItem;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -48,8 +42,7 @@ public class ExpandedPatternBufferPartMachine extends MEPatternBufferPartMachine
             recipeHandlerField.set(this, new InternalSlotRecipeHandler(this, newInternalInv));
 
         } catch (Exception e) {
-            GregTechModernUtilities.LOGGER
-                    .error("Failed to initialize Expanded Pattern Buffer inventories via reflection", e);
+            throw new RuntimeException("FATAL: Failed to initialize Expanded Pattern Buffer via reflection.", e);
         }
     }
 
@@ -59,7 +52,7 @@ public class ExpandedPatternBufferPartMachine extends MEPatternBufferPartMachine
             method.setAccessible(true);
             method.invoke(this, index);
         } catch (Exception e) {
-            GregTechModernUtilities.LOGGER.error("Failed to invoke onPatternChange for index {}", index, e);
+            throw new RuntimeException("Failed to invoke onPatternChange for index " + index, e);
         }
     }
 
@@ -69,9 +62,7 @@ public class ExpandedPatternBufferPartMachine extends MEPatternBufferPartMachine
             field.setAccessible(true);
             return (String) field.get(this);
         } catch (Exception e) {
-            GregTechModernUtilities.LOGGER
-                    .warn("Failed to retrieve customName via reflection, falling back to empty string");
-            return "";
+            throw new RuntimeException("Failed to retrieve customName via reflection", e);
         }
     }
 

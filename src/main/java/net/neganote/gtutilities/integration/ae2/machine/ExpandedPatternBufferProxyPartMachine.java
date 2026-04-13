@@ -3,12 +3,8 @@ package net.neganote.gtutilities.integration.ae2.machine;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEPatternBufferProxyPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.machine.trait.ProxySlotRecipeHandler;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.neganote.gtutilities.GregTechModernUtilities;
-
 import java.lang.reflect.Field;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -23,8 +19,7 @@ public class ExpandedPatternBufferProxyPartMachine extends MEPatternBufferProxyP
             handlerField.set(this,
                     new ProxySlotRecipeHandler(this, ExpandedPatternBufferPartMachine.EXPANDED_MAX_PATTERN_COUNT));
         } catch (Exception e) {
-            GregTechModernUtilities.LOGGER.error("Failed to initialize Expanded Proxy Recipe Handler via reflection",
-                    e);
+            throw new RuntimeException("FATAL: Failed to initialize Expanded Proxy Recipe Handler via reflection.", e);
         }
     }
 }
