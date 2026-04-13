@@ -3,8 +3,11 @@ package net.neganote.gtutilities.integration.ae2.machine;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEPatternBufferProxyPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.machine.trait.ProxySlotRecipeHandler;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
+
 import java.lang.reflect.Field;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
