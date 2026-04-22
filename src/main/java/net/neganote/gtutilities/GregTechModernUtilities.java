@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neganote.gtutilities.client.keybind.UtilKeybinds;
 import net.neganote.gtutilities.client.renderer.SprayCanHudOverlay;
 import net.neganote.gtutilities.client.renderer.UtilShaders;
 import net.neganote.gtutilities.common.data.UtilPlaceholders;
@@ -58,6 +59,7 @@ public class GregTechModernUtilities {
         modEventBus.addListener(this::commonSetup);
         if (GTCEu.isClientSide()) {
             modEventBus.addListener(this::clientSetup);
+            modEventBus.addListener(UtilKeybinds::register);
             modEventBus.register(UtilShaders.class);
         }
         modEventBus.addListener(this::addMaterialRegistries);
