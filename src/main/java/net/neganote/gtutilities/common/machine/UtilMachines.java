@@ -226,7 +226,7 @@ public class UtilMachines {
                                     .translatable("tooltip.pterb_machine.uses_coolant",
                                             UtilMaterials.QuantumCoolant !=
                                                     null ? UtilMaterials.QuantumCoolant.getLocalizedName()
-                                                    .withStyle(ChatFormatting.AQUA) : "")
+                                                            .withStyle(ChatFormatting.AQUA) : "")
                                     .withStyle(ChatFormatting.DARK_RED),
                             UtilConfig.coolantEnabled())
                     .conditionalTooltip(Component.translatable("tooltip.pterb_machine.input_coolant_before_use")
@@ -238,7 +238,9 @@ public class UtilMachines {
                             .aisle("bbbbb", "abdba", "aacaa", "aaaaa", "aaaaa", "aacaa", "aaaaa", "aaaaa")
                             .aisle("abeba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")
                             .where("e", controller(blocks(multiblockMachineDefinition.getBlock())))
-                            .where('b', blocks(HIGH_POWER_CASING.get()).setMinGlobalLimited(12).or(WEBMachine.getHatchPredicates()))
+                            .where('b',
+                                    blocks(HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
+                                            .or(WEBMachine.getHatchPredicates()))
                             .where("d", blocks(SUPERCONDUCTING_COIL.get()))
                             .where("c", frames(GTMaterials.NaquadahAlloy))
                             .where("a", air())
@@ -251,7 +253,6 @@ public class UtilMachines {
         }
 
     }
-
 
     public static void init() {}
 }

@@ -42,7 +42,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.saveddata.PTERBSavedData;
@@ -170,7 +169,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             inputAmperage = localInputs.getInputAmperage();
             inputVoltage = localInputs.getInputVoltage();
         }
-
 
         long scalingFactor = inputAmperage * inputVoltage;
 

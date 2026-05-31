@@ -17,17 +17,15 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternError;
-import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ItemStackTexture;
@@ -35,19 +33,17 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import lombok.Getter;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.neganote.gtutilities.GregTechModernUtilities;
-import net.neganote.gtutilities.common.materials.UtilMaterials;
-import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.saveddata.PTERBSavedData;
 import net.neganote.gtutilities.utils.EnergyUtils;
-import org.apache.logging.log4j.Level;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -56,8 +52,8 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
 public class WEBMachine extends WorkableElectricMultiblockMachine
-                          implements IControllable, IExplosionMachine, IFancyUIMachine,
-                          IDisplayUIMachine {
+                        implements IControllable, IExplosionMachine, IFancyUIMachine,
+                        IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             WEBMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -67,9 +63,6 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
     private List<IMultiPart> localPowerInput;
 
     protected ConditionalSubscriptionHandler converterSubscription;
-
-    @Getter
-    private int coolantDrain;
 
     @Persisted
     @DescSynced
@@ -115,33 +108,7 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
             getRecipeLogic()
                     .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
         }
-        if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING &&
-                UtilConfig.coolantEnabled() && coolantTimer == 0 && frequency != 0) {
 
-            var coolantTanks = getCapabilitiesFlat(IO.IN, GTRecipeCapabilities.FLUID).stream()
-                    .map(NotifiableFluidTank.class::cast).toList();
-
-            List<FluidIngredient> left = List
-                    .of(FluidIngredient.of(UtilMaterials.QuantumCoolant.getFluid(), coolantDrain));
-
-            for (var tank : coolantTanks) {
-                left = tank.handleRecipe(IO.IN, null, left, false);
-                if (left == null) {
-                    break;
-                }
-            }
-
-            if (left != null && !left.isEmpty()) {
-                if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
-                    explode();
-                } else {
-                    coolantTimer = 0;
-                    getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
-                    converterSubscription.updateSubscription();
-                    return;
-                }
-            }
-        }
         if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING) {
             coolantTimer = (coolantTimer + 1) % 20;
         }
@@ -157,34 +124,6 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
         }
 
         converterSubscription.updateSubscription();
-    }
-
-    private int calculateCoolantDrain() {
-        long inputAmperage = 0;
-        long inputVoltage = 0;
-        long outputAmperage = 0;
-        long outputVoltage = 0;
-
-        if (!localPowerInput.isEmpty()) {
-            EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
-            inputAmperage = localInputs.getInputAmperage();
-            inputVoltage = localInputs.getInputVoltage();
-        }
-
-        if (!localPowerOutput.isEmpty()) {
-            EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
-            outputAmperage = localOutputs.getOutputAmperage();
-            outputVoltage = localOutputs.getOutputVoltage();
-        }
-
-        long scalingFactor = Math.max(inputAmperage * inputVoltage, outputAmperage * outputVoltage);
-
-        int coolantDrain = UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
-                (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
-        if (coolantDrain <= 0) {
-            coolantDrain = 1;
-        }
-        return coolantDrain / 4;
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -243,10 +182,7 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
             return;
         }
 
-        this.localPowerInput = localPowerInput;
         this.localPowerOutput = localPowerOutput;
-
-        this.coolantDrain = calculateCoolantDrain();
 
         if (frequency != 0 && isActive()) {
             addWirelessEnergy();
@@ -312,13 +248,9 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
     }
 
     public static TraceabilityPredicate getHatchPredicates() {
-        var predicate = abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2)
+        return abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2)
                 .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
                 .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1));
-        if (UtilConfig.coolantEnabled()) {
-            predicate = predicate.or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1));
-        }
-        return predicate;
     }
 
     @Override
@@ -331,16 +263,8 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
         if (!isWorkingEnabled()) {
             textList.add(Component.translatable("gtceu.multiblock.work_paused"));
         } else if (isActive()) {
-            long inputAmperage = 0;
-            long inputVoltage = 0;
             long outputAmperage = 0;
             long outputVoltage = 0;
-
-            if (!localPowerInput.isEmpty()) {
-                EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
-                inputAmperage = localInputs.getInputAmperage();
-                inputVoltage = localInputs.getInputVoltage();
-            }
 
             if (!localPowerOutput.isEmpty()) {
                 EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
@@ -348,27 +272,14 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
                 outputVoltage = localOutputs.getOutputVoltage();
             }
 
-            long inputTotal = inputVoltage * inputAmperage;
             long outputTotal = outputVoltage * outputAmperage;
 
             textList.add(Component.translatable("gtceu.multiblock.running"));
-            if (inputTotal > 0) {
-                textList.add(Component
-                        .translatable("gtceu.multiblock.active_transformer.max_input",
-                                FormattingUtil.formatNumbers(
-                                        Math.abs(inputTotal))));
-            }
             if (outputTotal > 0) {
                 textList.add(Component
                         .translatable("gtceu.multiblock.active_transformer.max_output",
                                 FormattingUtil.formatNumbers(
                                         Math.abs(outputTotal))));
-            }
-            if (UtilConfig.coolantEnabled()) {
-                textList.add(Component
-                        .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
-                                FormattingUtil.formatNumbers(coolantDrain),
-                                UtilMaterials.QuantumCoolant.getLocalizedName()));
             }
             if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
                 textList.add(Component

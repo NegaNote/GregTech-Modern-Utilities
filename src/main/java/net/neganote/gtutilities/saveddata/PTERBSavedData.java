@@ -37,7 +37,6 @@ public class PTERBSavedData extends SavedData {
 
     private final ServerLevel serverLevel;
 
-
     private PTERBSavedData(ServerLevel serverLevel) {
         energyInputs = new HashMap<>();
         energyOutputs = new HashMap<>();

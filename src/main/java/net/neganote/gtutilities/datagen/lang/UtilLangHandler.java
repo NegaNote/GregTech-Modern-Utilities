@@ -77,7 +77,6 @@ public class UtilLangHandler {
                 "The {name tbd} is the energy output of a wireless energy network, it shares a frequency with a {name tbd} and outputs energy from it");
         provider.add("tooltip.web_machine.only_output", "Receives energy from a {name tbd}");
 
-
         provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
 
         multiLang(provider, "gtceu.placeholder_info.watfrequency",
