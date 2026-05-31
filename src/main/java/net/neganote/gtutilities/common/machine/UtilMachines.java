@@ -28,6 +28,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBMachine;
 import net.neganote.gtutilities.common.machine.singleblock.AutoChargerMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
@@ -159,6 +160,7 @@ public class UtilMachines {
     }
 
     public static MultiblockMachineDefinition PTERB_MACHINE = null;
+    public static MultiblockMachineDefinition WEB_MACHINE = null;
 
     static {
         if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
@@ -208,8 +210,48 @@ public class UtilMachines {
                     .allowExtendedFacing(true)
                     .hasBER(true)
                     .register();
+
+            WEB_MACHINE = REGISTRATE
+                    .multiblock("web_machine", WEBMachine::new)
+                    .langValue("Wireless Energy Bridge")
+                    .rotationState(RotationState.ALL)
+                    .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+                    .appearanceBlock(HIGH_POWER_CASING)
+                    .tooltips(Component.translatable("tooltip.web_machine.purpose"),
+                            Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
+                            Component.translatable("tooltip.web_machine.frequencies")
+                                    .withStyle(ChatFormatting.GRAY))
+                    .conditionalTooltip(
+                            Component
+                                    .translatable("tooltip.pterb_machine.uses_coolant",
+                                            UtilMaterials.QuantumCoolant !=
+                                                    null ? UtilMaterials.QuantumCoolant.getLocalizedName()
+                                                    .withStyle(ChatFormatting.AQUA) : "")
+                                    .withStyle(ChatFormatting.DARK_RED),
+                            UtilConfig.coolantEnabled())
+                    .conditionalTooltip(Component.translatable("tooltip.pterb_machine.input_coolant_before_use")
+                            .withStyle(ChatFormatting.DARK_RED), UtilConfig.coolantEnabled())
+                    .pattern((multiblockMachineDefinition -> FactoryBlockPattern.start()
+                            .aisle("abbba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")
+                            .aisle("bbbbb", "abdba", "aacaa", "aaaaa", "aaaaa", "aacaa", "aaaaa", "aaaaa")
+                            .aisle("bbbbb", "bdddb", "acdca", "aadaa", "aadaa", "ccdcc", "cadac", "daaad")
+                            .aisle("bbbbb", "abdba", "aacaa", "aaaaa", "aaaaa", "aacaa", "aaaaa", "aaaaa")
+                            .aisle("abeba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")
+                            .where("e", controller(blocks(multiblockMachineDefinition.getBlock())))
+                            .where('b', blocks(HIGH_POWER_CASING.get()).setMinGlobalLimited(12).or(WEBMachine.getHatchPredicates()))
+                            .where("d", blocks(SUPERCONDUCTING_COIL.get()))
+                            .where("c", frames(GTMaterials.NaquadahAlloy))
+                            .where("a", air())
+                            .build()))
+                    .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
+                            GTCEu.id("block/multiblock/data_bank"))
+                    .allowExtendedFacing(true)
+                    .hasBER(true)
+                    .register();
         }
+
     }
+
 
     public static void init() {}
 }

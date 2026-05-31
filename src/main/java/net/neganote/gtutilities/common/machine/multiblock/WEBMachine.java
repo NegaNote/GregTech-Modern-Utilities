@@ -28,7 +28,6 @@ import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
-
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ItemStackTexture;
@@ -36,20 +35,19 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.dimension.DimensionType;
+import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.saveddata.PTERBSavedData;
 import net.neganote.gtutilities.utils.EnergyUtils;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import lombok.Getter;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -57,12 +55,12 @@ import java.util.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
-public class PTERBMachine extends WorkableElectricMultiblockMachine
+public class WEBMachine extends WorkableElectricMultiblockMachine
                           implements IControllable, IExplosionMachine, IFancyUIMachine,
                           IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            PTERBMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            WEBMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private List<IMultiPart> localPowerOutput;
 
@@ -82,7 +80,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     @DescSynced
     private int coolantTimer = 0;
 
-    public PTERBMachine(IMachineBlockEntity holder) {
+    public WEBMachine(IMachineBlockEntity holder) {
         super(holder);
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
@@ -96,14 +94,14 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     public void explode() {
         removeWirelessEnergy();
 
-        long inputVoltage = 0;
+        long outputVoltage = 0;
 
-        if (!localPowerInput.isEmpty()) {
-            EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
-            inputVoltage = localInputs.getInputVoltage();
+        if (!localPowerOutput.isEmpty()) {
+            EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
+            outputVoltage = localOutputs.getOutputVoltage();
         }
 
-        long tier = GTUtil.getFloorTierByVoltage(inputVoltage);
+        long tier = GTUtil.getFloorTierByVoltage(outputVoltage);
 
         doExplosion(15f + tier);
     }
@@ -149,8 +147,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         }
         if (isWorkingEnabled() && frequency != 0) {
             if (getLevel() instanceof ServerLevel serverLevel) {
-                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-
+                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
                 EnergyContainerList powerInput = savedData.getWirelessEnergyInputs(frequency);
                 EnergyContainerList powerOutput = savedData.getWirelessEnergyOutputs(frequency);
                 long canDrain = powerInput.getEnergyStored();
@@ -158,12 +155,15 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
                 powerInput.removeEnergy(totalDrained);
             }
         }
+
         converterSubscription.updateSubscription();
     }
 
     private int calculateCoolantDrain() {
         long inputAmperage = 0;
         long inputVoltage = 0;
+        long outputAmperage = 0;
+        long outputVoltage = 0;
 
         if (!localPowerInput.isEmpty()) {
             EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
@@ -171,15 +171,20 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             inputVoltage = localInputs.getInputVoltage();
         }
 
+        if (!localPowerOutput.isEmpty()) {
+            EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
+            outputAmperage = localOutputs.getOutputAmperage();
+            outputVoltage = localOutputs.getOutputVoltage();
+        }
 
-        long scalingFactor = inputAmperage * inputVoltage;
+        long scalingFactor = Math.max(inputAmperage * inputVoltage, outputAmperage * outputVoltage);
 
         int coolantDrain = UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
                 (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
         if (coolantDrain <= 0) {
             coolantDrain = 1;
         }
-        return coolantDrain;
+        return coolantDrain / 4;
     }
 
     @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
@@ -293,7 +298,7 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     private void removeWirelessEnergy() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.removeEnergyInputs(frequency, localPowerInput);
+            savedData.removeEnergyOutputs(frequency, localPowerOutput);
             savedData.saveDataToCache();
         }
     }
@@ -301,15 +306,15 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     private void addWirelessEnergy() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.addEnergyInputs(frequency, localPowerInput);
+            savedData.addEnergyOutputs(frequency, localPowerOutput);
             savedData.saveDataToCache();
         }
     }
 
     public static TraceabilityPredicate getHatchPredicates() {
-        var predicate = abilities(PartAbility.INPUT_ENERGY).setPreviewCount(1)
-                .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setPreviewCount(1))
-                .or(abilities(PartAbility.INPUT_LASER).setPreviewCount(1));
+        var predicate = abilities(PartAbility.OUTPUT_ENERGY).setPreviewCount(2)
+                .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setPreviewCount(1))
+                .or(abilities(PartAbility.OUTPUT_LASER).setPreviewCount(1));
         if (UtilConfig.coolantEnabled()) {
             predicate = predicate.or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1));
         }
@@ -318,46 +323,59 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public void addDisplayText(@NotNull List<Component> textList) {
-        if (isFormed() && getLevel() instanceof ServerLevel serverLevel) {
-            if (frequency == 0) {
-                textList.add(Component.translatable("gtmutils.pterb_machine.invalid_frequency")
-                        .withStyle(ChatFormatting.RED));
-                return;
+        if (frequency == 0) {
+            textList.add(Component.translatable("gtmutils.pterb_machine.invalid_frequency")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+        if (!isWorkingEnabled()) {
+            textList.add(Component.translatable("gtceu.multiblock.work_paused"));
+        } else if (isActive()) {
+            long inputAmperage = 0;
+            long inputVoltage = 0;
+            long outputAmperage = 0;
+            long outputVoltage = 0;
+
+            if (!localPowerInput.isEmpty()) {
+                EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
+                inputAmperage = localInputs.getInputAmperage();
+                inputVoltage = localInputs.getInputVoltage();
             }
-            if (!isWorkingEnabled()) {
-                textList.add(Component.translatable("gtceu.multiblock.work_paused"));
-            } else if (isActive()) {
-                long inputAmperage = 0;
-                long inputVoltage = 0;
 
-                if (!localPowerInput.isEmpty()) {
-                    EnergyContainerList localInputs = EnergyUtils.getEnergyListFromMultiParts(localPowerInput);
-                    inputAmperage = localInputs.getInputAmperage();
-                    inputVoltage = localInputs.getInputVoltage();
-                }
-
-                long inputTotal = inputVoltage * inputAmperage;
-
-                textList.add(Component.translatable("gtceu.multiblock.running"));
-                if (inputTotal > 0) {
-                    textList.add(Component
-                            .translatable("gtceu.multiblock.active_transformer.max_input",
-                                    FormattingUtil.formatNumbers(
-                                            Math.abs(inputTotal))));
-                }
-                if (UtilConfig.coolantEnabled()) {
-                    textList.add(Component
-                            .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
-                                    FormattingUtil.formatNumbers(coolantDrain),
-                                    UtilMaterials.QuantumCoolant.getLocalizedName()));
-                }
-                if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
-                    textList.add(Component
-                            .translatable("gtceu.multiblock.active_transformer.danger_enabled"));
-                }
-            } else {
-                textList.add(Component.translatable("gtceu.multiblock.idling"));
+            if (!localPowerOutput.isEmpty()) {
+                EnergyContainerList localOutputs = EnergyUtils.getEnergyListFromMultiParts(localPowerOutput);
+                outputAmperage = localOutputs.getOutputAmperage();
+                outputVoltage = localOutputs.getOutputVoltage();
             }
+
+            long inputTotal = inputVoltage * inputAmperage;
+            long outputTotal = outputVoltage * outputAmperage;
+
+            textList.add(Component.translatable("gtceu.multiblock.running"));
+            if (inputTotal > 0) {
+                textList.add(Component
+                        .translatable("gtceu.multiblock.active_transformer.max_input",
+                                FormattingUtil.formatNumbers(
+                                        Math.abs(inputTotal))));
+            }
+            if (outputTotal > 0) {
+                textList.add(Component
+                        .translatable("gtceu.multiblock.active_transformer.max_output",
+                                FormattingUtil.formatNumbers(
+                                        Math.abs(outputTotal))));
+            }
+            if (UtilConfig.coolantEnabled()) {
+                textList.add(Component
+                        .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
+                                FormattingUtil.formatNumbers(coolantDrain),
+                                UtilMaterials.QuantumCoolant.getLocalizedName()));
+            }
+            if (!ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
+                textList.add(Component
+                        .translatable("gtceu.multiblock.active_transformer.danger_enabled"));
+            }
+        } else {
+            textList.add(Component.translatable("gtceu.multiblock.idling"));
         }
     }
 
@@ -414,8 +432,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             public Widget createConfigurator() {
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
-                                .setTextResponder(PTERBMachine.this::setFrequencyFromString)
-                                .setTextSupplier(PTERBMachine.this::getFrequencyString));
+                                .setTextResponder(WEBMachine.this::setFrequencyFromString)
+                                .setTextSupplier(WEBMachine.this::getFrequencyString));
             }
         });
     }
