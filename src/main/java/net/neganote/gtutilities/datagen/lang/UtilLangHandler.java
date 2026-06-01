@@ -69,13 +69,13 @@ public class UtilLangHandler {
 
         provider.add("tooltip.pterb_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
         provider.add("tooltip.pterb_machine.frequencies",
-                "The {name tbd} is the energy input of a wireless energy network, it shares a frequency with a {name tbd} and inputs energy into it");
+                "The PTERB is the energy input of a wireless energy network, it shares a frequency with a ERAP and inputs energy into the wireless network");
         provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
 
-        provider.add("tooltip.web_machine.purpose", "{name tbd}");
+        provider.add("tooltip.web_machine.purpose", "Einstein-Rosen Anchor Point (ERAP)");
         provider.add("tooltip.web_machine.frequencies",
-                "The {name tbd} is the energy output of a wireless energy network, it shares a frequency with a {name tbd} and outputs energy from it");
-        provider.add("tooltip.web_machine.only_output", "Receives energy from a {name tbd}");
+                "The ERAP is the energy output of a wireless energy network, it shares a frequency with a PTERB, it takes and outputs energy from the wireless network");
+        provider.add("tooltip.web_machine.only_output", "Receives energy from a PTERB");
 
         provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
 

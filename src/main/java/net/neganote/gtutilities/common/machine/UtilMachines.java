@@ -166,7 +166,7 @@ public class UtilMachines {
         if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
             PTERB_MACHINE = REGISTRATE
                     .multiblock("pterb_machine", PTERBMachine::new)
-                    .langValue("Wireless Active Transformer")
+                    .langValue("Wireless Energy Bridge Hub")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
@@ -213,7 +213,7 @@ public class UtilMachines {
 
             WEB_MACHINE = REGISTRATE
                     .multiblock("web_machine", WEBMachine::new)
-                    .langValue("Wireless Energy Bridge")
+                    .langValue("Wireless Energy Bridge Reciever")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(HIGH_POWER_CASING)
