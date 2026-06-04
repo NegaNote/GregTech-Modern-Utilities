@@ -15,6 +15,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
+import appeng.api.inventories.InternalInventory;
 import appeng.crafting.pattern.EncodedPatternItem;
 
 import java.lang.reflect.Field;
@@ -46,6 +47,28 @@ public class ExpandedPatternBufferPartMachine extends MEPatternBufferPartMachine
             recipeHandlerField.setAccessible(true);
             recipeHandlerField.set(this, new InternalSlotRecipeHandler(this, newInternalInv));
 
+            Field internalPatternInventoryField = MEPatternBufferPartMachine.class
+                    .getDeclaredField("internalPatternInventory");
+            internalPatternInventoryField.setAccessible(true);
+            internalPatternInventoryField.set(this, new InternalInventory() {
+
+                @Override
+                public int size() {
+                    return EXPANDED_MAX_PATTERN_COUNT;
+                }
+
+                @Override
+                public ItemStack getStackInSlot(int slotIndex) {
+                    return getPatternInventory().getStackInSlot(slotIndex);
+                }
+
+                @Override
+                public void setItemDirect(int slotIndex, ItemStack stack) {
+                    getPatternInventory().setStackInSlot(slotIndex, stack);
+                    getPatternInventory().onContentsChanged(slotIndex);
+                    callPrivatePatternChange(slotIndex);
+                }
+            });
         } catch (Exception e) {
             throw new RuntimeException("FATAL: Failed to initialize Expanded Pattern Buffer via reflection.", e);
         }
