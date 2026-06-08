@@ -58,6 +58,7 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
     private static final ImmutableMap<DyeColor, Block> CONCRETE_MAP;
     private static final ImmutableMap<DyeColor, Block> CONCRETE_POWDER_MAP;
     private static final ImmutableMap<DyeColor, Block> SHULKER_BOX_MAP;
+    private static final ImmutableMap<Block, Integer> BLOCK_TO_COLOR_INDEX;
 
     private static Block getBlock(DyeColor color, String postfix) {
         ResourceLocation id = new ResourceLocation("minecraft", color.getSerializedName() + "_" + postfix);
@@ -92,6 +93,22 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         CONCRETE_MAP = concreteBuilder.build();
         CONCRETE_POWDER_MAP = concretePowderBuilder.build();
         SHULKER_BOX_MAP = shulkerBoxBuilder.build();
+
+        ImmutableMap.Builder<Block, Integer> blockColorBuilder = ImmutableMap.builder();
+        blockColorBuilder.put(Blocks.GLASS, -1);
+        blockColorBuilder.put(Blocks.GLASS_PANE, -1);
+        blockColorBuilder.put(Blocks.TERRACOTTA, -1);
+        for (DyeColor color : DyeColor.values()) {
+            int ordinal = color.ordinal();
+            blockColorBuilder.put(GLASS_MAP.get(color), ordinal);
+            blockColorBuilder.put(GLASS_PANE_MAP.get(color), ordinal);
+            blockColorBuilder.put(TERRACOTTA_MAP.get(color), ordinal);
+            blockColorBuilder.put(WOOL_MAP.get(color), ordinal);
+            blockColorBuilder.put(CARPET_MAP.get(color), ordinal);
+            blockColorBuilder.put(CONCRETE_MAP.get(color), ordinal);
+            blockColorBuilder.put(CONCRETE_POWDER_MAP.get(color), ordinal);
+        }
+        BLOCK_TO_COLOR_INDEX = blockColorBuilder.build();
     }
 
     private static final TriPredicate<IPaintable, IPaintable, Direction> paintablePredicate = (parent, child, dir) -> {
@@ -215,6 +232,21 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
             return colors[ordinal];
         }
         return null;
+    }
+
+    /**
+     * Returns the spray can color index for the given block state: -1 for uncolored/solvent,
+     * 0-15 for a DyeColor ordinal, or null if the block is not supported by the spray can.
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public static Integer getBlockPickedColorIndex(BlockState state) {
+        for (Property<?> property : state.getProperties()) {
+            if (property.getValueClass() == DyeColor.class) {
+                return state.getValue((Property<DyeColor>) property).ordinal();
+            }
+        }
+        return BLOCK_TO_COLOR_INDEX.get(state.getBlock());
     }
 
     private static void handleBlocks(BlockPos start, @Nullable DyeColor color, int limit, Level level) {
