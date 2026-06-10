@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.TriPredicate;
+import net.minecraftforge.event.level.BlockEvent;
 
 import appeng.api.implementations.blockentities.IColorableBlockEntity;
 import appeng.api.util.AEColor;
@@ -120,15 +121,64 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         int maxBlocksToRecolor = player.isShiftKeyDown() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1;
 
         var pos = context.getClickedPos();
-        var first = level.getBlockEntity(pos);
+        tryPaintAt(level, pos, selectedColor, maxBlocksToRecolor, player);
 
-        if (first == null || !handleSpecialBlockEntities(first, selectedColor, maxBlocksToRecolor, context)) {
-            handleBlocks(pos, selectedColor, maxBlocksToRecolor, context);
-        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private static void tryPaintAt(Level level, BlockPos pos, @Nullable DyeColor color, int limit, Player player) {
+        var first = level.getBlockEntity(pos);
+        if (first == null || !handleSpecialBlockEntities(first, color, limit, level, player))
+            handleBlocks(pos, color, limit, level);
+
+        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+    }
+
+    private static boolean tryStripAt(Level level, BlockPos pos, Player player) {
+        var before = level.getBlockState(pos);
+        var be = level.getBlockEntity(pos);
+        if (be != null && handleSpecialBlockEntities(be, null, 1, level, player)) return true;
+
+        tryStripBlockColor(level, pos, before.getBlock());
+        return level.getBlockState(pos) != before;
+    }
+
+    public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
+        if (event.isCanceled()) return;
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(event.getLevel() instanceof Level level)) return;
+
+        ItemStack offhand = player.getOffhandItem();
+        if (!(offhand.getItem() instanceof InfiniteSprayCanItem)) return;
+
+        tryPaintAt(level, event.getPos(), getColor(offhand), 1, player);
+    }
+
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (event.isCanceled()) return;
+        if (event.getPlayer() == null) return;
+        if (!(event.getLevel() instanceof Level level)) return;
+        var player = event.getPlayer();
+
+        var offhand = player.getOffhandItem();
+        if (!(offhand.getItem() instanceof InfiniteSprayCanItem)) return;
+
+        var pos = event.getPos();
+        var stateBefore = level.getBlockState(pos);
+
+        if (!tryStripAt(level, pos, player)) return;
 
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
 
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        var stateAfter = level.getBlockState(pos);
+        if (stateAfter == stateBefore) return;
+        event.setCanceled(true);
+
+        var be = level.getBlockEntity(pos);
+        var tool = player.getMainHandItem();
+
+        level.removeBlock(pos, false);
+        if (!player.isCreative()) stateAfter.getBlock().playerDestroy(level, player, pos, stateAfter, be, tool);
     }
 
     @Override
@@ -167,8 +217,7 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         return null;
     }
 
-    private void handleBlocks(BlockPos start, DyeColor color, int limit, UseOnContext context) {
-        final var level = context.getLevel();
+    private static void handleBlocks(BlockPos start, @Nullable DyeColor color, int limit, Level level) {
         var collected = BreadthFirstBlockSearch
                 .conditionalBlockPosSearch(start,
                         (parent, child) -> parent == null ||
@@ -179,10 +228,8 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         }
     }
 
-    private boolean handleSpecialBlockEntities(BlockEntity first, DyeColor color, int limit, UseOnContext context) {
-        var player = context.getPlayer();
-        if (player == null) return false;
-
+    private static boolean handleSpecialBlockEntities(BlockEntity first, @Nullable DyeColor color, int limit,
+                                                      Level level, Player player) {
         if (GTCEu.Mods.isAE2Loaded() && first instanceof IColorableBlockEntity) {
             var collected = BreadthFirstBlockSearch.conditionalSearch(
                     IColorableBlockEntity.class,
@@ -224,10 +271,8 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
 
         else if (first instanceof ShulkerBoxBlockEntity shulkerBox) {
             var tag = shulkerBox.saveWithoutMetadata();
-            var level = first.getLevel();
             var pos = first.getBlockPos();
             recolorBlockNoState(SHULKER_BOX_MAP, color, level, pos, Blocks.SHULKER_BOX);
-            assert level != null;
             if (level.getBlockEntity(pos) instanceof ShulkerBoxBlockEntity newShulker) {
                 newShulker.load(tag);
             }
@@ -237,13 +282,13 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         return false;
     }
 
-    private <T extends IPaintable> void paintPaintables(Set<T> paintables, DyeColor color) {
+    private static <T extends IPaintable> void paintPaintables(Set<T> paintables, @Nullable DyeColor color) {
         for (var c : paintables) {
             paintPaintable(c, color);
         }
     }
 
-    private void tryPaintBlock(Level level, BlockPos pos, DyeColor color) {
+    private static void tryPaintBlock(Level level, BlockPos pos, @Nullable DyeColor color) {
         var blockState = level.getBlockState(pos);
         var block = blockState.getBlock();
         if (color == null) {
@@ -255,7 +300,7 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         }
     }
 
-    private void tryPaintSpecialBlock(Level world, BlockPos pos, Block block, DyeColor color) {
+    private static void tryPaintSpecialBlock(Level world, BlockPos pos, Block block, @Nullable DyeColor color) {
         if (block.defaultBlockState().is(Tags.Blocks.GLASS)) {
             if (recolorBlockNoState(GLASS_MAP, color, world, pos, Blocks.GLASS)) {
                 return;

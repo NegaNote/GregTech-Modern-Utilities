@@ -29,6 +29,7 @@ import net.neganote.gtutilities.client.keybind.UtilKeybinds;
 import net.neganote.gtutilities.client.renderer.SprayCanHudOverlay;
 import net.neganote.gtutilities.client.renderer.UtilShaders;
 import net.neganote.gtutilities.common.data.UtilPlaceholders;
+import net.neganote.gtutilities.common.item.InfiniteSprayCanBehaviour;
 import net.neganote.gtutilities.common.item.UtilItems;
 import net.neganote.gtutilities.common.item.UtilToolItems;
 import net.neganote.gtutilities.common.machine.UtilAEMachines;
@@ -72,6 +73,8 @@ public class GregTechModernUtilities {
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.addListener(InfiniteSprayCanBehaviour::onBlockPlaced);
+        MinecraftForge.EVENT_BUS.addListener(InfiniteSprayCanBehaviour::onBlockBreak);
     }
 
     public static void init() {
