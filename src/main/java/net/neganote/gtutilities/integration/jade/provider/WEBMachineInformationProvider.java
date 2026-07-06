@@ -37,14 +37,15 @@ public class WEBMachineInformationProvider implements IBlockComponentProvider, I
                             UtilMaterials.QuantumCoolant.getLocalizedName()));
                 }
             }
-        } else if (be instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof WEBRecieverMachine erap) {
-            CompoundTag data = blockAccessor.getServerData().getCompound(getUid().toString());
-            if (data.contains("pterbData")) {
-                var tag = data.getCompound("pterbData");
-                iTooltip.add(Component.translatable("gtmutils.pterb.current_frequency",
-                        FormattingUtil.formatNumbers(tag.getInt("currentFrequency"))));
+        } else
+            if (be instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof WEBRecieverMachine erap) {
+                CompoundTag data = blockAccessor.getServerData().getCompound(getUid().toString());
+                if (data.contains("pterbData")) {
+                    var tag = data.getCompound("pterbData");
+                    iTooltip.add(Component.translatable("gtmutils.pterb.current_frequency",
+                            FormattingUtil.formatNumbers(tag.getInt("currentFrequency"))));
+                }
             }
-        }
     }
 
     @Override
@@ -61,10 +62,10 @@ public class WEBMachineInformationProvider implements IBlockComponentProvider, I
             data.put("pterbData", pterbData);
         } else if (blockAccessor.getBlockEntity() instanceof MetaMachineBlockEntity mmbe &&
                 mmbe.getMetaMachine() instanceof WEBRecieverMachine erap) {
-            CompoundTag pterbData = new CompoundTag();
-            pterbData.putInt("currentFrequency", erap.getFrequency());
-            data.put("pterbData", pterbData);
-        }
+                    CompoundTag pterbData = new CompoundTag();
+                    pterbData.putInt("currentFrequency", erap.getFrequency());
+                    data.put("pterbData", pterbData);
+                }
         compoundTag.put(getUid().toString(), data);
     }
 

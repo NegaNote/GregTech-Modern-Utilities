@@ -52,8 +52,8 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
 public class WEBRecieverMachine extends WorkableElectricMultiblockMachine
-                        implements IControllable, IExplosionMachine, IFancyUIMachine,
-                        IDisplayUIMachine {
+                                implements IControllable, IExplosionMachine, IFancyUIMachine,
+                                IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             WEBRecieverMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);

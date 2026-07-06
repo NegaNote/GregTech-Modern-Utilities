@@ -57,12 +57,11 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
 public class WEBHubMachine extends WorkableElectricMultiblockMachine
-                          implements IControllable, IExplosionMachine, IFancyUIMachine,
-                          IDisplayUIMachine {
+                           implements IControllable, IExplosionMachine, IFancyUIMachine,
+                           IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             WEBHubMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
-
 
     private List<IMultiPart> localPowerInput;
 
