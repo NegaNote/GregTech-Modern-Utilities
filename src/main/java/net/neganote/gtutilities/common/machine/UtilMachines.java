@@ -221,16 +221,6 @@ public class UtilMachines {
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
                             Component.translatable("tooltip.web_machine.frequencies")
                                     .withStyle(ChatFormatting.GRAY))
-                    .conditionalTooltip(
-                            Component
-                                    .translatable("tooltip.pterb_machine.uses_coolant",
-                                            UtilMaterials.QuantumCoolant !=
-                                                    null ? UtilMaterials.QuantumCoolant.getLocalizedName()
-                                                            .withStyle(ChatFormatting.AQUA) : "")
-                                    .withStyle(ChatFormatting.DARK_RED),
-                            UtilConfig.coolantEnabled())
-                    .conditionalTooltip(Component.translatable("tooltip.pterb_machine.input_coolant_before_use")
-                            .withStyle(ChatFormatting.DARK_RED), UtilConfig.coolantEnabled())
                     .pattern((multiblockMachineDefinition -> FactoryBlockPattern.start()
                             .aisle("abbba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")
                             .aisle("bbbbb", "abdba", "aacaa", "aaaaa", "aaaaa", "aacaa", "aaaaa", "aaaaa")
