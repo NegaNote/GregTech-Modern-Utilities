@@ -94,7 +94,7 @@ public class UtilRecipes {
         if (UtilConfig.INSTANCE.features.expandedBuffersEnabled && GTCEu.Mods.isAE2Loaded()) {
             ASSEMBLY_LINE_RECIPES.recipeBuilder("expanded_me_pattern_buffer")
                     .inputItems(DUAL_IMPORT_HATCH[ZPM], 1)
-                    .inputItems(EMITTER_ZPM, 4)
+                    .inputItems(EMITTER_ZPM, 2)
                     .inputItems(CustomTags.ZPM_CIRCUITS, 4)
                     .inputItems(AEBlocks.PATTERN_PROVIDER.asItem(), 4)
                     .inputItems(AEBlocks.INTERFACE.asItem(), 4)
