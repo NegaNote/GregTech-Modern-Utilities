@@ -56,14 +56,13 @@ import java.util.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
-public class PTERBMachine extends WorkableElectricMultiblockMachine
+public class WEBHubMachine extends WorkableElectricMultiblockMachine
                           implements IControllable, IExplosionMachine, IFancyUIMachine,
                           IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            PTERBMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            WEBHubMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    private List<IMultiPart> localPowerOutput;
 
     private List<IMultiPart> localPowerInput;
 
@@ -81,9 +80,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
     @DescSynced
     private int coolantTimer = 0;
 
-    public PTERBMachine(IMachineBlockEntity holder) {
+    public WEBHubMachine(IMachineBlockEntity holder) {
         super(holder);
-        this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
 
         this.converterSubscription = new ConditionalSubscriptionHandler(this, this::convertEnergyTick,
@@ -185,7 +183,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         if (!isFormed()) return false;
 
         if (localPowerInput == null) return false;
-        if (localPowerOutput == null) return false;
 
         return true;
     }
@@ -237,7 +234,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
         }
 
         this.localPowerInput = localPowerInput;
-        this.localPowerOutput = localPowerOutput;
 
         this.coolantDrain = calculateCoolantDrain();
 
@@ -282,7 +278,6 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             explode();
         }
         super.onStructureInvalid();
-        this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
         setWorkingEnabled(false);
         converterSubscription.unsubscribe();
@@ -412,8 +407,8 @@ public class PTERBMachine extends WorkableElectricMultiblockMachine
             public Widget createConfigurator() {
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
-                                .setTextResponder(PTERBMachine.this::setFrequencyFromString)
-                                .setTextSupplier(PTERBMachine.this::getFrequencyString));
+                                .setTextResponder(WEBHubMachine.this::setFrequencyFromString)
+                                .setTextSupplier(WEBHubMachine.this::getFrequencyString));
             }
         });
     }

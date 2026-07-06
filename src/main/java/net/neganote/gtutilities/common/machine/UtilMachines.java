@@ -27,8 +27,8 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
-import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
-import net.neganote.gtutilities.common.machine.multiblock.WEBMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBHubMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBRecieverMachine;
 import net.neganote.gtutilities.common.machine.singleblock.AutoChargerMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
@@ -159,13 +159,13 @@ public class UtilMachines {
         }
     }
 
-    public static MultiblockMachineDefinition PTERB_MACHINE = null;
-    public static MultiblockMachineDefinition WEB_MACHINE = null;
+    public static MultiblockMachineDefinition WEB_HUB_MACHINE = null;
+    public static MultiblockMachineDefinition WEB_RECIEVER_MACHINE = null;
 
     static {
         if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
-            PTERB_MACHINE = REGISTRATE
-                    .multiblock("pterb_machine", PTERBMachine::new)
+            WEB_HUB_MACHINE = REGISTRATE
+                    .multiblock("pterb_machine", WEBHubMachine::new)
                     .langValue("Wireless Energy Bridge Hub")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
@@ -199,7 +199,7 @@ public class UtilMachines {
                             .where('#', any())
                             .where('X',
                                     blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(30)
-                                            .or(PTERBMachine.getHatchPredicates()))
+                                            .or(WEBHubMachine.getHatchPredicates()))
                             .where('S', blocks(SUPERCONDUCTING_COIL.get()))
                             .where('H', blocks(HIGH_POWER_CASING.get()))
                             .where('C', controller(blocks(definition.getBlock())))
@@ -211,8 +211,8 @@ public class UtilMachines {
                     .hasBER(true)
                     .register();
 
-            WEB_MACHINE = REGISTRATE
-                    .multiblock("web_machine", WEBMachine::new)
+            WEB_RECIEVER_MACHINE = REGISTRATE
+                    .multiblock("web_machine", WEBRecieverMachine::new)
                     .langValue("Wireless Energy Bridge Reciever")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
@@ -230,7 +230,7 @@ public class UtilMachines {
                             .where("e", controller(blocks(multiblockMachineDefinition.getBlock())))
                             .where('b',
                                     blocks(HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
-                                            .or(WEBMachine.getHatchPredicates()))
+                                            .or(WEBRecieverMachine.getHatchPredicates()))
                             .where("d", blocks(SUPERCONDUCTING_COIL.get()))
                             .where("c", frames(GTMaterials.NaquadahAlloy))
                             .where("a", air())

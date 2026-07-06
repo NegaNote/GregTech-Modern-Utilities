@@ -51,12 +51,12 @@ import java.util.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 
 // A lot of this is copied from the Active Transformer
-public class WEBMachine extends WorkableElectricMultiblockMachine
+public class WEBRecieverMachine extends WorkableElectricMultiblockMachine
                         implements IControllable, IExplosionMachine, IFancyUIMachine,
                         IDisplayUIMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            WEBMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            WEBRecieverMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private List<IMultiPart> localPowerOutput;
 
@@ -73,7 +73,7 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
     @DescSynced
     private int coolantTimer = 0;
 
-    public WEBMachine(IMachineBlockEntity holder) {
+    public WEBRecieverMachine(IMachineBlockEntity holder) {
         super(holder);
         this.localPowerOutput = new ArrayList<>();
         this.localPowerInput = new ArrayList<>();
@@ -343,8 +343,8 @@ public class WEBMachine extends WorkableElectricMultiblockMachine
             public Widget createConfigurator() {
                 return new WidgetGroup(0, 0, 130, 25)
                         .addWidget(new TextFieldWidget().setNumbersOnly(0, Integer.MAX_VALUE)
-                                .setTextResponder(WEBMachine.this::setFrequencyFromString)
-                                .setTextSupplier(WEBMachine.this::getFrequencyString));
+                                .setTextResponder(WEBRecieverMachine.this::setFrequencyFromString)
+                                .setTextSupplier(WEBRecieverMachine.this::getFrequencyString));
             }
         });
     }

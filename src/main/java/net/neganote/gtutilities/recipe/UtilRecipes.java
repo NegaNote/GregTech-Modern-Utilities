@@ -53,7 +53,7 @@ public class UtilRecipes {
 
         if (UtilConfig.INSTANCE.features.pterbEnabled) {
             ASSEMBLY_LINE_RECIPES.recipeBuilder("pterb")
-                    .inputItems(UtilMachines.WEB_MACHINE)
+                    .inputItems(UtilMachines.WEB_RECIEVER_MACHINE)
                     .inputItems(TagPrefix.plate, GTMaterials.Neutronium, 32)
                     .inputItems(SENSOR.get(GTValues.UV), 2)
                     .inputItems(EMITTER.get(GTValues.UV), 8)
@@ -65,10 +65,10 @@ public class UtilRecipes {
                     .inputFluids(GTMaterials.SolderingAlloy.getFluid(GTValues.L * 32))
                     .EUt(1_600_000L)
                     .duration(1200)
-                    .outputItems(UtilMachines.PTERB_MACHINE)
+                    .outputItems(UtilMachines.WEB_HUB_MACHINE)
                     .addMaterialInfo(true)
                     .stationResearch(b -> b
-                            .researchStack(UtilMachines.WEB_MACHINE.asStack()).CWUt(16))
+                            .researchStack(UtilMachines.WEB_RECIEVER_MACHINE.asStack()).CWUt(16))
                     .save(provider);
 
             ASSEMBLY_LINE_RECIPES.recipeBuilder("web")
@@ -83,7 +83,7 @@ public class UtilRecipes {
                     .inputFluids(GTMaterials.SolderingAlloy.getFluid(GTValues.L * 8))
                     .EUt(1_600_000L)
                     .duration(250)
-                    .outputItems(UtilMachines.WEB_MACHINE)
+                    .outputItems(UtilMachines.WEB_RECIEVER_MACHINE)
                     .addMaterialInfo(true)
                     .stationResearch(b -> b
                             .researchStack(GTMultiMachines.ACTIVE_TRANSFORMER.asStack()).CWUt(16))
