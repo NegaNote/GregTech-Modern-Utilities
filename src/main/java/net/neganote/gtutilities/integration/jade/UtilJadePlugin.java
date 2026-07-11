@@ -5,8 +5,8 @@ import com.gregtechceu.gtceu.GTCEu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neganote.gtutilities.integration.jade.provider.EnlargedMEStockingBusInformationProvider;
-
 import net.neganote.gtutilities.integration.jade.provider.WEBInformationProvider;
+
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
