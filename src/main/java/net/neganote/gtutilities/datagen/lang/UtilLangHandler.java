@@ -79,10 +79,10 @@ public class UtilLangHandler {
 
         provider.add("config.jade.plugin_gtmutils.web_info", "WEB Machine Info");
 
-        multiLang(provider, "gtceu.placeholder_info.watfrequency",
+        multiLang(provider, "gtceu.placeholder_info.webfrequency",
                 "Returns the current frequency used by a WEB Hub or Reciever.",
                 "Usage:",
-                "  {watfrequency} -> Current frequency: (insert frequency here)");
+                "  {webfrequency} -> Current frequency: (insert frequency here)");
 
         provider.add("block.gtmutils.pattern_buffer.desc.0",
                 "§fAllows expanded direct §6AE2 pattern storage §ffor GregTech Multiblocks.");

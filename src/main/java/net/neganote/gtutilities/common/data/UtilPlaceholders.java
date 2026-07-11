@@ -13,7 +13,7 @@ import java.util.List;
 public class UtilPlaceholders {
 
     public static void init() {
-        PlaceholderHandler.addPlaceholder(new Placeholder("watfrequency") {
+        PlaceholderHandler.addPlaceholder(new Placeholder("webfrequency") {
 
             @Override
             public MultiLineComponent apply(PlaceholderContext ctx,
@@ -24,7 +24,7 @@ public class UtilPlaceholders {
                     throw new NotSupportedException();
                 }
                 var freq = wat.getFrequencyString();
-                return MultiLineComponent.of(Component.translatable("gtmutils.pterb.current_frequency",
+                return MultiLineComponent.of(Component.translatable("gtmutils.web_machine.current_frequency",
                         freq));
             }
         });
