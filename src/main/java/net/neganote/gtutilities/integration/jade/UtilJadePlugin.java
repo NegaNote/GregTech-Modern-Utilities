@@ -5,8 +5,8 @@ import com.gregtechceu.gtceu.GTCEu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neganote.gtutilities.integration.jade.provider.EnlargedMEStockingBusInformationProvider;
-import net.neganote.gtutilities.integration.jade.provider.PTERBInformationProvider;
 
+import net.neganote.gtutilities.integration.jade.provider.WEBInformationProvider;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -18,7 +18,7 @@ public class UtilJadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerBlockDataProvider(new PTERBInformationProvider(), BlockEntity.class);
+        registration.registerBlockDataProvider(new WEBInformationProvider(), BlockEntity.class);
         if (GTCEu.Mods.isAE2Loaded()) {
             registration.registerBlockDataProvider(new EnlargedMEStockingBusInformationProvider(), BlockEntity.class);
         }
@@ -26,7 +26,7 @@ public class UtilJadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(new PTERBInformationProvider(), Block.class);
+        registration.registerBlockComponent(new WEBInformationProvider(), Block.class);
         if (GTCEu.Mods.isAE2Loaded()) {
             registration.registerBlockComponent(new EnlargedMEStockingBusInformationProvider(), Block.class);
         }
