@@ -170,19 +170,19 @@ public class UtilMachines {
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
-                    .tooltips(Component.translatable("tooltip.pterb_machine.purpose"),
+                    .tooltips(Component.translatable("tooltip.web_hub_machine.purpose"),
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
-                            Component.translatable("tooltip.pterb_machine.frequencies")
+                            Component.translatable("tooltip.web_hub_machine.frequencies")
                                     .withStyle(ChatFormatting.GRAY))
                     .conditionalTooltip(
                             Component
-                                    .translatable("tooltip.pterb_machine.uses_coolant",
+                                    .translatable("tooltip.web_hub_machine.uses_coolant",
                                             UtilMaterials.QuantumCoolant !=
                                                     null ? UtilMaterials.QuantumCoolant.getLocalizedName()
                                                             .withStyle(ChatFormatting.AQUA) : "")
                                     .withStyle(ChatFormatting.DARK_RED),
                             UtilConfig.coolantEnabled())
-                    .conditionalTooltip(Component.translatable("tooltip.pterb_machine.input_coolant_before_use")
+                    .conditionalTooltip(Component.translatable("tooltip.web_hub_machine.input_coolant_before_use")
                             .withStyle(ChatFormatting.DARK_RED), UtilConfig.coolantEnabled())
                     .pattern((definition) -> FactoryBlockPattern.start()
                             // spotless:off
@@ -217,9 +217,9 @@ public class UtilMachines {
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(HIGH_POWER_CASING)
-                    .tooltips(Component.translatable("tooltip.web_machine.purpose"),
+                    .tooltips(Component.translatable("tooltip.web_receiver_machine.purpose"),
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
-                            Component.translatable("tooltip.web_machine.frequencies")
+                            Component.translatable("tooltip.web_receiver_machine.frequencies")
                                     .withStyle(ChatFormatting.GRAY))
                     .pattern((multiblockMachineDefinition -> FactoryBlockPattern.start()
                             .aisle("abbba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")

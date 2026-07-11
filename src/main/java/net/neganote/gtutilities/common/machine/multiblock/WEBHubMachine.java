@@ -312,7 +312,7 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
     public void addDisplayText(@NotNull List<Component> textList) {
         if (isFormed() && getLevel() instanceof ServerLevel serverLevel) {
             if (frequency == 0) {
-                textList.add(Component.translatable("gtmutils.pterb_machine.invalid_frequency")
+                textList.add(Component.translatable("gtmutils.web_machines.invalid_frequency")
                         .withStyle(ChatFormatting.RED));
                 return;
             }
@@ -339,7 +339,7 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
                 }
                 if (UtilConfig.coolantEnabled()) {
                     textList.add(Component
-                            .translatable("gtmutils.multiblock.pterb_machine.coolant_usage",
+                            .translatable("gtmutils.multiblock.web_hub_machine.coolant_usage",
                                     FormattingUtil.formatNumbers(coolantDrain),
                                     UtilMaterials.QuantumCoolant.getLocalizedName()));
                 }
@@ -394,7 +394,7 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
 
             @Override
             public Component getTitle() {
-                return Component.translatable("gtmutils.gui.pterb.wireless_configurator.title");
+                return Component.translatable("gtmutils.gui.web_hub.wireless_configurator.title");
             }
 
             @Override

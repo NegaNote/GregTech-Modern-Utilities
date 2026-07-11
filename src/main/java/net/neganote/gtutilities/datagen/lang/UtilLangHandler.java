@@ -63,22 +63,21 @@ public class UtilLangHandler {
                 "Starts as §fEU Converter§7, use Soft Mallet to change");
 
         provider.add("gtmutils.multiblock.web_hub_machine.coolant_usage", "§cDrains %smb of %s per second");
-        provider.add("gtmutils.web_receiver_machine.invalid_frequency", "WATs will not work on frequency 0!");
+        provider.add("gtmutils.web_machines.invalid_frequency", "WEB machines will not work on frequency 0!");
 
         provider.add("gtmutils.gui.web_hub.wireless_configurator.title", "Wireless frequency");
 
         provider.add("tooltip.web_hub_machine.purpose", "Power Transfer Einstein-Rosen Bridge (web_hub)");
         provider.add("tooltip.web_hub_machine.frequencies",
                 "The web_hub is the energy input of a wireless energy network, it shares a frequency with a ERAP and inputs energy into the wireless network");
-        provider.add("gtmutils.web_hub.current_frequency", "Current frequency: %s");
+        provider.add("gtmutils.web_machine.current_frequency", "Current frequency: %s");
 
         provider.add("tooltip.web_receiver_machine.purpose", "Einstein-Rosen Anchor Point (ERAP)");
         provider.add("tooltip.web_receiver_machine.frequencies",
                 "The WEB Receiver is the energy output of a wireless energy network, it shares a frequency with a WEB Hub, it takes and outputs energy from the wireless network");
         provider.add("tooltip.web_receiver_machine.only_output", "Receives energy from a WEB Hub");
 
-        provider.add("config.jade.plugin_gtmutils.web_hub_info", "WEB Hub Info");
-        provider.add("config.jade.plugin_gtmutils.web_reciever_info", "WEB Reciever Info");
+        provider.add("config.jade.plugin_gtmutils.web_info", "WEB Machine Info");
 
         multiLang(provider, "gtceu.placeholder_info.watfrequency",
                 "Returns the current frequency used by a WEB Hub or Reciever.",
