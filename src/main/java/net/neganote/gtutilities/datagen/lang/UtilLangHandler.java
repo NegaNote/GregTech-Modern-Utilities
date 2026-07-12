@@ -56,28 +56,33 @@ public class UtilLangHandler {
         provider.add("item.gtceu.tool.luv_drill", "%s Drill (LuV)");
         provider.add("item.gtceu.tool.zpm_drill", "%s Drill (ZPM)");
 
-        provider.add("tooltip.pterb_machine.uses_coolant", "Drains %s to function!");
-        provider.add("tooltip.pterb_machine.input_coolant_before_use", "Always input coolant before turning it on!");
+        provider.add("tooltip.web_hub_machine.uses_coolant", "Drains %s to function!");
+        provider.add("tooltip.web_hub_machine.input_coolant_before_use", "Always input coolant before turning it on!");
 
         provider.add("gtmutils.machine.64a_energy_converter.tooltip_tool_usage",
                 "Starts as §fEU Converter§7, use Soft Mallet to change");
 
-        provider.add("gtmutils.multiblock.pterb_machine.coolant_usage", "§cDrains %smb of %s per second");
-        provider.add("gtmutils.pterb_machine.invalid_frequency", "WATs will not work on frequency 0!");
+        provider.add("gtmutils.multiblock.web_hub_machine.coolant_usage", "§cDrains %smb of %s per second");
+        provider.add("gtmutils.web_machines.invalid_frequency", "WEB machines will not work on frequency 0!");
 
-        provider.add("gtmutils.gui.pterb.wireless_configurator.title", "Wireless frequency");
+        provider.add("gtmutils.gui.web_hub.wireless_configurator.title", "Wireless frequency");
 
-        provider.add("tooltip.pterb_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
-        provider.add("tooltip.pterb_machine.frequencies",
-                "All WATs with the same frequency will wirelessly transfer energy between each other like a single Active Transformer.");
-        provider.add("gtmutils.pterb.current_frequency", "Current frequency: %s");
+        provider.add("tooltip.web_hub_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
+        provider.add("tooltip.web_hub_machine.frequencies",
+                "The WEB Hub is the energy input of a wireless energy network, it shares a frequency with a WEB Receiver and inputs energy into the wireless network");
+        provider.add("gtmutils.web_machine.current_frequency", "Current frequency: %s");
 
-        provider.add("config.jade.plugin_gtmutils.pterb_info", "WAT Info");
+        provider.add("tooltip.web_receiver_machine.purpose", "Einstein-Rosen Anchor Point (ERAP)");
+        provider.add("tooltip.web_receiver_machine.frequencies",
+                "The WEB Receiver is the energy output of a wireless energy network, it shares a frequency with a WEB Hub, it takes and outputs energy from the wireless network");
+        provider.add("tooltip.web_receiver_machine.only_output", "Receives energy from a WEB Hub");
 
-        multiLang(provider, "gtceu.placeholder_info.watfrequency",
-                "Returns the current frequency used by a Wireless Active Transformer.",
+        provider.add("config.jade.plugin_gtmutils.web_info", "WEB Machine Info");
+
+        multiLang(provider, "gtceu.placeholder_info.webfrequency",
+                "Returns the current frequency used by a WEB Hub or Reciever.",
                 "Usage:",
-                "  {watfrequency} -> Current frequency: (insert frequency here)");
+                "  {webfrequency} -> Current frequency: (insert frequency here)");
 
         provider.add("block.gtmutils.pattern_buffer.desc.0",
                 "§fAllows expanded direct §6AE2 pattern storage §ffor GregTech Multiblocks.");

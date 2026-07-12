@@ -27,7 +27,8 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
-import net.neganote.gtutilities.common.machine.multiblock.PTERBMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBHubMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBReceiverMachine;
 import net.neganote.gtutilities.common.machine.singleblock.AutoChargerMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
@@ -158,29 +159,30 @@ public class UtilMachines {
         }
     }
 
-    public static MultiblockMachineDefinition PTERB_MACHINE = null;
+    public static MultiblockMachineDefinition WEB_HUB = null;
+    public static MultiblockMachineDefinition WEB_RECEIVER = null;
 
     static {
         if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
-            PTERB_MACHINE = REGISTRATE
-                    .multiblock("pterb_machine", PTERBMachine::new)
-                    .langValue("Wireless Active Transformer")
+            WEB_HUB = REGISTRATE
+                    .multiblock("web_hub", WEBHubMachine::new)
+                    .langValue("Wireless Energy Bridge Hub")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
-                    .tooltips(Component.translatable("tooltip.pterb_machine.purpose"),
+                    .tooltips(Component.translatable("tooltip.web_hub_machine.purpose"),
                             Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
-                            Component.translatable("tooltip.pterb_machine.frequencies")
+                            Component.translatable("tooltip.web_hub_machine.frequencies")
                                     .withStyle(ChatFormatting.GRAY))
                     .conditionalTooltip(
                             Component
-                                    .translatable("tooltip.pterb_machine.uses_coolant",
+                                    .translatable("tooltip.web_hub_machine.uses_coolant",
                                             UtilMaterials.QuantumCoolant !=
                                                     null ? UtilMaterials.QuantumCoolant.getLocalizedName()
                                                             .withStyle(ChatFormatting.AQUA) : "")
                                     .withStyle(ChatFormatting.DARK_RED),
                             UtilConfig.coolantEnabled())
-                    .conditionalTooltip(Component.translatable("tooltip.pterb_machine.input_coolant_before_use")
+                    .conditionalTooltip(Component.translatable("tooltip.web_hub_machine.input_coolant_before_use")
                             .withStyle(ChatFormatting.DARK_RED), UtilConfig.coolantEnabled())
                     .pattern((definition) -> FactoryBlockPattern.start()
                             // spotless:off
@@ -197,7 +199,7 @@ public class UtilMachines {
                             .where('#', any())
                             .where('X',
                                     blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(30)
-                                            .or(PTERBMachine.getHatchPredicates()))
+                                            .or(WEBHubMachine.getHatchPredicates()))
                             .where('S', blocks(SUPERCONDUCTING_COIL.get()))
                             .where('H', blocks(HIGH_POWER_CASING.get()))
                             .where('C', controller(blocks(definition.getBlock())))
@@ -208,7 +210,38 @@ public class UtilMachines {
                     .allowExtendedFacing(true)
                     .hasBER(true)
                     .register();
+
+            WEB_RECEIVER = REGISTRATE
+                    .multiblock("web_receiver", WEBReceiverMachine::new)
+                    .langValue("Wireless Energy Bridge Receiver")
+                    .rotationState(RotationState.ALL)
+                    .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+                    .appearanceBlock(HIGH_POWER_CASING)
+                    .tooltips(Component.translatable("tooltip.web_receiver_machine.purpose"),
+                            Component.translatable("gtceu.machine.active_transformer.tooltip.1"),
+                            Component.translatable("tooltip.web_receiver_machine.frequencies")
+                                    .withStyle(ChatFormatting.GRAY))
+                    .pattern((multiblockMachineDefinition -> FactoryBlockPattern.start()
+                            .aisle("abbba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")
+                            .aisle("bbbbb", "abdba", "aacaa", "aaaaa", "aaaaa", "aacaa", "aaaaa", "aaaaa")
+                            .aisle("bbbbb", "bdddb", "acdca", "aadaa", "aadaa", "ccdcc", "cadac", "daaad")
+                            .aisle("bbbbb", "abdba", "aacaa", "aaaaa", "aaaaa", "aacaa", "aaaaa", "aaaaa")
+                            .aisle("abeba", "aabaa", "aaaaa", "aaaaa", "aaaaa", "aacaa", "aacaa", "aadaa")
+                            .where("e", controller(blocks(multiblockMachineDefinition.getBlock())))
+                            .where('b',
+                                    blocks(HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
+                                            .or(WEBReceiverMachine.getHatchPredicates()))
+                            .where("d", blocks(SUPERCONDUCTING_COIL.get()))
+                            .where("c", frames(GTMaterials.NaquadahAlloy))
+                            .where("a", air())
+                            .build()))
+                    .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
+                            GTCEu.id("block/multiblock/data_bank"))
+                    .allowExtendedFacing(true)
+                    .hasBER(true)
+                    .register();
         }
+
     }
 
     public static void init() {}
