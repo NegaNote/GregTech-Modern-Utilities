@@ -67,9 +67,9 @@ public class UtilLangHandler {
 
         provider.add("gtmutils.gui.web_hub.wireless_configurator.title", "Wireless frequency");
 
-        provider.add("tooltip.web_hub_machine.purpose", "Power Transfer Einstein-Rosen Bridge (web_hub)");
+        provider.add("tooltip.web_hub_machine.purpose", "Power Transfer Einstein-Rosen Bridge (PTERB)");
         provider.add("tooltip.web_hub_machine.frequencies",
-                "The web_hub is the energy input of a wireless energy network, it shares a frequency with a ERAP and inputs energy into the wireless network");
+                "The WEB Hub is the energy input of a wireless energy network, it shares a frequency with a WEB Receiver and inputs energy into the wireless network");
         provider.add("gtmutils.web_machine.current_frequency", "Current frequency: %s");
 
         provider.add("tooltip.web_receiver_machine.purpose", "Einstein-Rosen Anchor Point (ERAP)");

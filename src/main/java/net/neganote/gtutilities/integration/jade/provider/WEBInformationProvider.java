@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.machine.multiblock.WEBHubMachine;
-import net.neganote.gtutilities.common.machine.multiblock.WEBRecieverMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBReceiverMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
 
@@ -38,7 +38,7 @@ public class WEBInformationProvider implements IBlockComponentProvider, IServerD
                 }
             }
         } else
-            if (be instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof WEBRecieverMachine erap) {
+            if (be instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof WEBReceiverMachine erap) {
                 CompoundTag data = blockAccessor.getServerData().getCompound(getUid().toString());
                 if (data.contains("pterbData")) {
                     var tag = data.getCompound("pterbData");
@@ -61,7 +61,7 @@ public class WEBInformationProvider implements IBlockComponentProvider, IServerD
             }
             data.put("pterbData", pterbData);
         } else if (blockAccessor.getBlockEntity() instanceof MetaMachineBlockEntity mmbe &&
-                mmbe.getMetaMachine() instanceof WEBRecieverMachine erap) {
+                mmbe.getMetaMachine() instanceof WEBReceiverMachine erap) {
                     CompoundTag pterbData = new CompoundTag();
                     pterbData.putInt("currentFrequency", erap.getFrequency());
                     data.put("pterbData", pterbData);

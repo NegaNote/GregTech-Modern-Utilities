@@ -28,7 +28,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neganote.gtutilities.GregTechModernUtilities;
 import net.neganote.gtutilities.common.machine.multiblock.WEBHubMachine;
-import net.neganote.gtutilities.common.machine.multiblock.WEBRecieverMachine;
+import net.neganote.gtutilities.common.machine.multiblock.WEBReceiverMachine;
 import net.neganote.gtutilities.common.machine.singleblock.AutoChargerMachine;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
@@ -159,13 +159,13 @@ public class UtilMachines {
         }
     }
 
-    public static MultiblockMachineDefinition WEB_HUB_MACHINE = null;
-    public static MultiblockMachineDefinition WEB_RECIEVER_MACHINE = null;
+    public static MultiblockMachineDefinition WEB_HUB = null;
+    public static MultiblockMachineDefinition WEB_RECEIVER = null;
 
     static {
         if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
-            WEB_HUB_MACHINE = REGISTRATE
-                    .multiblock("pterb_machine", WEBHubMachine::new)
+            WEB_HUB = REGISTRATE
+                    .multiblock("web_hub", WEBHubMachine::new)
                     .langValue("Wireless Energy Bridge Hub")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
@@ -211,9 +211,9 @@ public class UtilMachines {
                     .hasBER(true)
                     .register();
 
-            WEB_RECIEVER_MACHINE = REGISTRATE
-                    .multiblock("web_machine", WEBRecieverMachine::new)
-                    .langValue("Wireless Energy Bridge Reciever")
+            WEB_RECEIVER = REGISTRATE
+                    .multiblock("web_receiver", WEBReceiverMachine::new)
+                    .langValue("Wireless Energy Bridge Receiver")
                     .rotationState(RotationState.ALL)
                     .recipeType(GTRecipeTypes.DUMMY_RECIPES)
                     .appearanceBlock(HIGH_POWER_CASING)
@@ -230,7 +230,7 @@ public class UtilMachines {
                             .where("e", controller(blocks(multiblockMachineDefinition.getBlock())))
                             .where('b',
                                     blocks(HIGH_POWER_CASING.get()).setMinGlobalLimited(12)
-                                            .or(WEBRecieverMachine.getHatchPredicates()))
+                                            .or(WEBReceiverMachine.getHatchPredicates()))
                             .where("d", blocks(SUPERCONDUCTING_COIL.get()))
                             .where("c", frames(GTMaterials.NaquadahAlloy))
                             .where("a", air())
