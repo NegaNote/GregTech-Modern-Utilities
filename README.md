@@ -10,8 +10,8 @@ Current features:
 * Expanded 72-slot ME pattern buffers/proxies
 * Enlarged (many-row) stocking buses/hatches
 * Tag-based stocking buses/hatches
-* The Wireless Active Transformer (WAT)
-  * Has an opt-in coolant system, where the WAT requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
+* The WEB system, transfers energy wirelessly from WEB Hubs to WEB Receivers
+  * Has an opt-in coolant system, where the WEB Hub requires coolant to be used, or it'll explode (or just stop if GTm is set to have harmless active transformers)
 
 All features can be enabled or disabled in the config.
 
