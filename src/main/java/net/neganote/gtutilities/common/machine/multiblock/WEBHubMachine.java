@@ -360,7 +360,7 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
 
         this.coolantDrain = calculateCoolantDrain();
 
-        if (frequency != 0 && isActive()) {
+        if (frequency != 0 && isWorkingEnabled()) {
             addWirelessEnergy();
         }
 

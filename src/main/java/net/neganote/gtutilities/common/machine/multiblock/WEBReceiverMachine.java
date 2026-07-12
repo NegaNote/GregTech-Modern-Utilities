@@ -130,7 +130,7 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
 
         this.localPowerOutput = localPowerOutput;
 
-        if (frequency != 0 && isActive()) {
+        if (frequency != 0 && isWorkingEnabled()) {
             addWirelessEnergy();
         }
     }
