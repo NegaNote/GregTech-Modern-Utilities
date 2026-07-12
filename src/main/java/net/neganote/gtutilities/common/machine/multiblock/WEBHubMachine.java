@@ -25,6 +25,8 @@ import com.gregtechceu.gtceu.api.pattern.error.PatternError;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.LaserHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -37,14 +39,18 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.config.UtilConfig;
-import net.neganote.gtutilities.saveddata.PTERBSavedData;
 import net.neganote.gtutilities.utils.EnergyUtils;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
@@ -62,6 +68,129 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             WEBHubMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+
+    public static Map<Integer, Set<Pair<ResourceLocation, BlockPos>>> ENERGY_INPUTS = new HashMap<>();
+    public static Map<Integer, Set<Pair<ResourceLocation, BlockPos>>> ENERGY_OUTPUTS = new HashMap<>();
+
+    public static void addEnergyInputs(int freq, List<IMultiPart> parts) {
+        Set<Pair<ResourceLocation, BlockPos>> inputPairs = ENERGY_INPUTS.computeIfAbsent(freq,
+                (f) -> new HashSet<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                inputPairs.add(pair);
+            }
+        }
+        ENERGY_INPUTS.put(freq, inputPairs);
+    }
+
+    public static void removeEnergyInputs(int freq, List<IMultiPart> parts) {
+        Set<Pair<ResourceLocation, BlockPos>> inputPairs = ENERGY_INPUTS.computeIfAbsent(freq,
+                (f) -> new HashSet<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                inputPairs.remove(pair);
+            }
+        }
+        ENERGY_INPUTS.put(freq, inputPairs);
+    }
+
+    public static void addEnergyOutputs(int freq, List<IMultiPart> parts) {
+        Set<Pair<ResourceLocation, BlockPos>> outputPairs = ENERGY_OUTPUTS.computeIfAbsent(freq,
+                (f) -> new HashSet<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                outputPairs.add(pair);
+            }
+        }
+        ENERGY_OUTPUTS.put(freq, outputPairs);
+    }
+
+    public static void removeEnergyOutputs(int freq, List<IMultiPart> parts) {
+        Set<Pair<ResourceLocation, BlockPos>> outputPairs = ENERGY_OUTPUTS.computeIfAbsent(freq,
+                (f) -> new HashSet<>());
+        for (IMultiPart part : parts) {
+            if (part instanceof MetaMachine machine) {
+                ServerLevel level = (ServerLevel) machine.getLevel();
+                assert level != null;
+                ResourceLocation dimension = level.dimension().location();
+                BlockPos pos = machine.getPos();
+                Pair<ResourceLocation, BlockPos> pair = new Pair<>(dimension, pos);
+                outputPairs.remove(pair);
+            }
+        }
+        
+        ENERGY_OUTPUTS.put(freq, outputPairs);
+    }
+
+    public static EnergyContainerList getWirelessEnergyInputs(int freq, ServerLevel serverLevel) {
+        Set<Pair<ResourceLocation, BlockPos>> inputPairs = ENERGY_INPUTS.computeIfAbsent(freq,
+                (f) -> new HashSet<>());
+        List<IEnergyContainer> energyContainerList = new ArrayList<>();
+        for (Pair<ResourceLocation, BlockPos> pair : inputPairs) {
+            ServerLevel dimension = serverLevel.getServer()
+                    .getLevel(ResourceKey.create(Registries.DIMENSION, pair.getFirst()));
+            if (dimension != null) {
+                MetaMachine machine = MetaMachine.getMachine(dimension, pair.getSecond());
+                if (machine instanceof EnergyHatchPartMachine hatch) {
+                    energyContainerList.add(hatch.energyContainer);
+                }
+                if (machine instanceof LaserHatchPartMachine hatch) {
+                    // unfortunately the laser hatch's buffer is private, so I have to do this instead
+                    for (var handlerList : hatch.getRecipeHandlers()) {
+                        var containers = handlerList.getCapability(EURecipeCapability.CAP).stream()
+                                .filter(IEnergyContainer.class::isInstance)
+                                .map(IEnergyContainer.class::cast)
+                                .toList();
+                        energyContainerList.addAll(containers);
+                    }
+                }
+            }
+        }
+        return new EnergyContainerList(energyContainerList);
+    }
+
+    public static EnergyContainerList getWirelessEnergyOutputs(int freq, ServerLevel serverLevel) {
+        Set<Pair<ResourceLocation, BlockPos>> outputPairs = ENERGY_OUTPUTS.computeIfAbsent(freq,
+                (f) -> new HashSet<>());
+        List<IEnergyContainer> energyContainerList = new ArrayList<>();
+        for (Pair<ResourceLocation, BlockPos> pair : outputPairs) {
+            ServerLevel dimension = serverLevel.getServer()
+                    .getLevel(ResourceKey.create(Registries.DIMENSION, pair.getFirst()));
+            if (dimension != null) {
+                MetaMachine machine = MetaMachine.getMachine(dimension, pair.getSecond());
+
+                if (machine instanceof EnergyHatchPartMachine hatch) {
+                    energyContainerList.add(hatch.energyContainer);
+                }
+                if (machine instanceof LaserHatchPartMachine hatch) {
+                    // unfortunately the laser hatch's buffer is private, so I have to do this instead
+                    for (var handlerList : hatch.getRecipeHandlers()) {
+                        var containers = handlerList.getCapability(EURecipeCapability.CAP).stream()
+                                .filter(IEnergyContainer.class::isInstance)
+                                .map(IEnergyContainer.class::cast)
+                                .toList();
+                        energyContainerList.addAll(containers);
+                    }
+                }
+            }
+        }
+        return new EnergyContainerList(energyContainerList);
+    }
 
     private List<IMultiPart> localPowerInput;
 
@@ -145,10 +274,8 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
         }
         if (isWorkingEnabled() && frequency != 0) {
             if (getLevel() instanceof ServerLevel serverLevel) {
-                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-
-                EnergyContainerList powerInput = savedData.getWirelessEnergyInputs(frequency);
-                EnergyContainerList powerOutput = savedData.getWirelessEnergyOutputs(frequency);
+                EnergyContainerList powerInput = getWirelessEnergyInputs(frequency, serverLevel);
+                EnergyContainerList powerOutput = getWirelessEnergyOutputs(frequency, serverLevel);
                 long canDrain = powerInput.getEnergyStored();
                 long totalDrained = powerOutput.changeEnergy(canDrain);
                 powerInput.removeEnergy(totalDrained);
@@ -201,7 +328,6 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
 
         // capture all energy containers
         List<IMultiPart> localPowerInput = new ArrayList<>();
-        List<IMultiPart> localPowerOutput = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
         for (IMultiPart part : getPrioritySortedParts()) {
@@ -218,15 +344,13 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
                 if (!energyContainers.isEmpty()) {
                     if (handlerIO == IO.IN) {
                         localPowerInput.add(part);
-                    } else if (handlerIO == IO.OUT) {
-                        localPowerOutput.add(part);
                     }
                 }
             }
         }
 
         // Invalidate the structure if there is not at least one output or one input
-        if (localPowerInput.isEmpty() && localPowerOutput.isEmpty()) {
+        if (localPowerInput.isEmpty()) {
             this.onStructureInvalid();
             getMultiblockState().setError(new PatternError());
             return;
@@ -283,19 +407,11 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
     }
 
     private void removeWirelessEnergy() {
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.removeEnergyInputs(frequency, localPowerInput);
-            savedData.saveDataToCache();
-        }
+        removeEnergyInputs(frequency, localPowerInput);
     }
 
     private void addWirelessEnergy() {
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.addEnergyInputs(frequency, localPowerInput);
-            savedData.saveDataToCache();
-        }
+        addEnergyInputs(frequency, localPowerInput);
     }
 
     public static TraceabilityPredicate getHatchPredicates() {
@@ -310,7 +426,7 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public void addDisplayText(@NotNull List<Component> textList) {
-        if (isFormed() && getLevel() instanceof ServerLevel serverLevel) {
+        if (isFormed()) {
             if (frequency == 0) {
                 textList.add(Component.translatable("gtmutils.web_machines.invalid_frequency")
                         .withStyle(ChatFormatting.RED));
