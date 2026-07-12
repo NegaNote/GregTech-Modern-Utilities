@@ -7,6 +7,7 @@ import net.neganote.gtutilities.common.machine.multiblock.WEBHubMachine;
 
 @Mod.EventBusSubscriber(modid = GregTechModernUtilities.MOD_ID)
 public class UtilEvents {
+
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         WEBHubMachine.ENERGY_INPUTS.clear();
