@@ -38,11 +38,11 @@ public class WEBInformationProvider implements IBlockComponentProvider, IServerD
                 }
             }
         } else
-            if (be instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof WEBReceiverMachine erap) {
+            if (be instanceof MetaMachineBlockEntity mmbe && mmbe.getMetaMachine() instanceof WEBReceiverMachine) {
                 CompoundTag data = blockAccessor.getServerData().getCompound(getUid().toString());
                 if (data.contains("pterbData")) {
                     var tag = data.getCompound("pterbData");
-                    iTooltip.add(Component.translatable("gtmutils.web_hub.current_frequency",
+                    iTooltip.add(Component.translatable("gtmutils.web_machine.current_frequency",
                             FormattingUtil.formatNumbers(tag.getInt("currentFrequency"))));
                 }
             }

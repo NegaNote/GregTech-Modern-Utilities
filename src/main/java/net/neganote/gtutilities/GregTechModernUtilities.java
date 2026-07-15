@@ -73,6 +73,7 @@ public class GregTechModernUtilities {
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(UtilEvents.class);
         MinecraftForge.EVENT_BUS.addListener(InfiniteSprayCanBehaviour::onBlockPlaced);
         MinecraftForge.EVENT_BUS.addListener(InfiniteSprayCanBehaviour::onBlockBreak);
     }

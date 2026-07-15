@@ -8,7 +8,6 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
-import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
@@ -36,10 +35,8 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.neganote.gtutilities.saveddata.PTERBSavedData;
 import net.neganote.gtutilities.utils.EnergyUtils;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
@@ -49,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
+import static net.neganote.gtutilities.common.machine.multiblock.WEBHubMachine.*;
 
 // A lot of this is copied from the Active Transformer
 public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
@@ -60,26 +58,14 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
 
     private List<IMultiPart> localPowerOutput;
 
-    private List<IMultiPart> localPowerInput;
-
-    protected ConditionalSubscriptionHandler converterSubscription;
-
     @Persisted
     @DescSynced
     @Getter
     private int frequency;
 
-    @Persisted
-    @DescSynced
-    private int coolantTimer = 0;
-
     public WEBReceiverMachine(IMachineBlockEntity holder) {
         super(holder);
         this.localPowerOutput = new ArrayList<>();
-        this.localPowerInput = new ArrayList<>();
-
-        this.converterSubscription = new ConditionalSubscriptionHandler(this, this::convertEnergyTick,
-                this::isSubscriptionActive);
 
         this.frequency = 0;
     }
@@ -99,43 +85,6 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
         doExplosion(15f + tier);
     }
 
-    public void convertEnergyTick() {
-        if (frequency == 0) {
-            getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
-            return;
-        }
-        if (isWorkingEnabled()) {
-            getRecipeLogic()
-                    .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
-        }
-
-        if (isWorkingEnabled() && getRecipeLogic().getStatus() == RecipeLogic.Status.WORKING) {
-            coolantTimer = (coolantTimer + 1) % 20;
-        }
-        if (isWorkingEnabled() && frequency != 0) {
-            if (getLevel() instanceof ServerLevel serverLevel) {
-                PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel);
-                EnergyContainerList powerInput = savedData.getWirelessEnergyInputs(frequency);
-                EnergyContainerList powerOutput = savedData.getWirelessEnergyOutputs(frequency);
-                long canDrain = powerInput.getEnergyStored();
-                long totalDrained = powerOutput.changeEnergy(canDrain);
-                powerInput.removeEnergy(totalDrained);
-            }
-        }
-
-        converterSubscription.updateSubscription();
-    }
-
-    @SuppressWarnings("RedundantIfStatement") // It is cleaner to have the final return true separate.
-    protected boolean isSubscriptionActive() {
-        if (!isFormed()) return false;
-
-        if (localPowerInput == null) return false;
-        if (localPowerOutput == null) return false;
-
-        return true;
-    }
-
     @Override
     public boolean onWorking() {
         return super.onWorking();
@@ -150,7 +99,6 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
         }
 
         // capture all energy containers
-        List<IMultiPart> localPowerInput = new ArrayList<>();
         List<IMultiPart> localPowerOutput = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
@@ -166,9 +114,7 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
                         .map(IEnergyContainer.class::cast)
                         .toList();
                 if (!energyContainers.isEmpty()) {
-                    if (handlerIO == IO.IN) {
-                        localPowerInput.add(part);
-                    } else if (handlerIO == IO.OUT) {
+                    if (handlerIO == IO.OUT) {
                         localPowerOutput.add(part);
                     }
                 }
@@ -176,7 +122,7 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
         }
 
         // Invalidate the structure if there is not at least one output or one input
-        if (localPowerInput.isEmpty() && localPowerOutput.isEmpty()) {
+        if (localPowerOutput.isEmpty()) {
             this.onStructureInvalid();
             getMultiblockState().setError(new PatternError());
             return;
@@ -184,11 +130,9 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
 
         this.localPowerOutput = localPowerOutput;
 
-        if (frequency != 0 && isActive()) {
+        if (frequency != 0 && isWorkingEnabled()) {
             addWirelessEnergy();
         }
-
-        converterSubscription.updateSubscription();
     }
 
     @NotNull
@@ -218,7 +162,6 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public void onStructureInvalid() {
-        coolantTimer = 0;
         removeWirelessEnergy();
         if ((isWorkingEnabled() && recipeLogic.getStatus() == RecipeLogic.Status.WORKING) &&
                 !ConfigHolder.INSTANCE.machines.harmlessActiveTransformers) {
@@ -226,25 +169,15 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
         }
         super.onStructureInvalid();
         this.localPowerOutput = new ArrayList<>();
-        this.localPowerInput = new ArrayList<>();
         setWorkingEnabled(false);
-        converterSubscription.unsubscribe();
     }
 
     private void removeWirelessEnergy() {
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.removeEnergyOutputs(frequency, localPowerOutput);
-            savedData.saveDataToCache();
-        }
+        removeEnergyOutputs(frequency, localPowerOutput);
     }
 
     private void addWirelessEnergy() {
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            PTERBSavedData savedData = PTERBSavedData.getOrCreate(serverLevel.getServer().overworld());
-            savedData.addEnergyOutputs(frequency, localPowerOutput);
-            savedData.saveDataToCache();
-        }
+        addEnergyOutputs(frequency, localPowerOutput);
     }
 
     public static TraceabilityPredicate getHatchPredicates() {
@@ -318,9 +251,6 @@ public class WEBReceiverMachine extends WorkableElectricMultiblockMachine
             } else {
                 removeWirelessEnergy();
             }
-        }
-        if (!isWorkingAllowed) {
-            coolantTimer = 0;
         }
     }
 
