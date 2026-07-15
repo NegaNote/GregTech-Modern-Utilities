@@ -17,7 +17,7 @@ All features can be enabled or disabled in the config.
 
 While this mod was originally created for Monifactory, feel free to use it in any GregTech modpack you like!
 
-All features (except for the sterile cleaning hatch and optional coolant for the WAT) have default recipes.
+All features (except for the sterile cleaning hatch, optional coolant for the WEB Hub, and Infinite Spray Can) have default recipes.
 Feel free to change recipes in your own pack!
 
 ## License

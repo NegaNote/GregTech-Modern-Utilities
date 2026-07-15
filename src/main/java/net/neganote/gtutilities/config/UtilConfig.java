@@ -47,17 +47,18 @@ public class UtilConfig {
 
         @Configurable
         @Configurable.Comment({ "Whether the Wireless Active Transformer is enabled." })
-        public boolean pterbEnabled = true;
+        public boolean webEnabled = true;
 
         @Configurable
         @Configurable.Comment({ "Base amount of WAT coolant to drain every second.",
                 "(Setting both this amount and the IO multiplier to 0 disables the coolant mechanic.)" })
-        public int pterbCoolantBaseDrain = 0;
+        public int webCoolantBaseDrain = 0;
 
         @Configurable
         @Configurable.Comment({ "Multiplier over IO amount for additional coolant drain.",
+                "Multiplies over the logarithm of Voltage * Amperage.",
                 "(Setting both this and the base drain amount to 0 disables the coolant mechanic.)" })
-        public float pterbCoolantIOMultiplier = 0;
+        public float webCoolantIOMultiplier = 0;
 
         @Configurable
         @Configurable.Comment({ "Whether the coins/credits are enabled." })
@@ -119,7 +120,7 @@ public class UtilConfig {
     }
 
     public static boolean coolantEnabled() {
-        return UtilConfig.INSTANCE.features.pterbCoolantBaseDrain != 0 ||
-                UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier != 0.0f || GTCEu.isDataGen();
+        return UtilConfig.INSTANCE.features.webCoolantBaseDrain != 0 ||
+                UtilConfig.INSTANCE.features.webCoolantIOMultiplier != 0.0f || GTCEu.isDataGen();
     }
 }

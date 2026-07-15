@@ -51,7 +51,7 @@ public class UtilRecipes {
             registerOmnitoolRecipe(provider);
         }
 
-        if (UtilConfig.INSTANCE.features.pterbEnabled) {
+        if (UtilConfig.INSTANCE.features.webEnabled) {
             ASSEMBLY_LINE_RECIPES.recipeBuilder("pterb")
                     .inputItems(UtilMachines.WEB_RECEIVER)
                     .inputItems(TagPrefix.plate, GTMaterials.Neutronium, 32)

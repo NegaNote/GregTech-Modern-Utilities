@@ -296,8 +296,8 @@ public class WEBHubMachine extends WorkableElectricMultiblockMachine
 
         long scalingFactor = inputAmperage * inputVoltage;
 
-        int coolantDrain = UtilConfig.INSTANCE.features.pterbCoolantBaseDrain +
-                (int) (scalingFactor * UtilConfig.INSTANCE.features.pterbCoolantIOMultiplier);
+        int coolantDrain = (int) (UtilConfig.INSTANCE.features.webCoolantBaseDrain +
+                UtilConfig.INSTANCE.features.webCoolantIOMultiplier * (Math.log(scalingFactor) / Math.log(2.0)));
         if (coolantDrain <= 0) {
             coolantDrain = 1;
         }

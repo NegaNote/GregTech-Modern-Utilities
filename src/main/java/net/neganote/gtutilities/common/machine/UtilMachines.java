@@ -163,7 +163,7 @@ public class UtilMachines {
     public static MultiblockMachineDefinition WEB_RECEIVER = null;
 
     static {
-        if (UtilConfig.INSTANCE.features.pterbEnabled || GTCEu.isDataGen()) {
+        if (UtilConfig.INSTANCE.features.webEnabled || GTCEu.isDataGen()) {
             WEB_HUB = REGISTRATE
                     .multiblock("web_hub", WEBHubMachine::new)
                     .langValue("Wireless Energy Bridge Hub")
