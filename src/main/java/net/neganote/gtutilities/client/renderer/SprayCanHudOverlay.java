@@ -2,11 +2,11 @@ package net.neganote.gtutilities.client.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.neganote.gtutilities.common.item.InfiniteSprayCanBehaviour;
 import net.neganote.gtutilities.common.item.InfiniteSprayCanItem;
+import net.neganote.gtutilities.utils.UtilColor;
 
 public class SprayCanHudOverlay {
 
@@ -20,11 +20,11 @@ public class SprayCanHudOverlay {
         }
 
         if (stack.getItem() instanceof InfiniteSprayCanItem) {
-            DyeColor color = InfiniteSprayCanBehaviour.getColor(stack);
+            UtilColor color = InfiniteSprayCanBehaviour.getColor(stack);
             Component text;
 
             if (color != null) {
-                Component colorName = Component.translatable("color.minecraft." + color.getSerializedName());
+                Component colorName = Component.translatable("color.minecraft." + color.dye.getSerializedName());
                 text = Component.translatable("behaviour.paintspray.infinite.status.color", colorName);
             } else {
                 text = Component.translatable("behaviour.paintspray.infinite.status.solvent");
