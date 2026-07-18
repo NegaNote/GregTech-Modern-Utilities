@@ -2,6 +2,9 @@ package net.neganote.gtutilities.utils;
 
 import net.minecraft.world.item.DyeColor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum UtilColor {
 
     WHITE(DyeColor.WHITE),
@@ -23,14 +26,21 @@ public enum UtilColor {
 
     public final DyeColor dye;
 
+    private static final Map<DyeColor, UtilColor> DYE_MAP = new HashMap<>();
+
+    static {
+        for (UtilColor color : values()) {
+            DYE_MAP.put(color.dye, color);
+        }
+    }
+
     UtilColor(DyeColor dye) {
         this.dye = dye;
     }
 
     public static UtilColor fromDye(DyeColor vanillaDye) {
-        for (var value : values()) {
-            if (value.dye == vanillaDye) return value;
-        }
-        throw new IllegalArgumentException("Unknown Vanilla dye: " + vanillaDye);
+        UtilColor result = DYE_MAP.get(vanillaDye);
+        if (result == null) throw new IllegalArgumentException("Unknown Vanilla dye: " + vanillaDye);
+        return result;
     }
 }

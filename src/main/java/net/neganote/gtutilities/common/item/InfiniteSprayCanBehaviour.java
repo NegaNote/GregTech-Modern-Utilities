@@ -221,6 +221,8 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
         }
     }
 
+    private static final UtilColor[] COLORS = UtilColor.values();
+
     @Nullable
     public static UtilColor getColor(ItemStack stack) {
         CompoundTag tag = stack.getTag();
@@ -228,10 +230,7 @@ public class InfiniteSprayCanBehaviour implements IInteractionItem, IAddInformat
             return null;
         }
         int ordinal = tag.getInt("color");
-        for (UtilColor color : UtilColor.values()) {
-            if (color.ordinal() == ordinal) return color;
-        }
-        return null;
+        return ordinal >= 0 && ordinal < COLORS.length ? COLORS[ordinal] : null;
     }
 
     /**
