@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.pipenet.IPipeNode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
@@ -24,6 +23,7 @@ import net.neganote.gtutilities.common.item.InfiniteSprayCanBehaviour;
 import net.neganote.gtutilities.common.item.InfiniteSprayCanItem;
 import net.neganote.gtutilities.network.UtilsNetwork;
 import net.neganote.gtutilities.network.packet.SelectColorPacket;
+import net.neganote.gtutilities.utils.UtilColor;
 
 import appeng.api.implementations.blockentities.IColorableBlockEntity;
 import appeng.api.util.AEColor;
@@ -125,7 +125,7 @@ public class ClientTickHandler {
             for (AEColor color : AEColor.values()) {
                 if (color.equals(colorable.getColor())) {
                     UtilsNetwork.CHANNEL
-                            .sendToServer(new SelectColorPacket(hand, color.ordinal()));
+                            .sendToServer(new SelectColorPacket(hand, UtilColor.fromDye(color.dye).ordinal()));
                     return;
                 }
             }
@@ -133,10 +133,9 @@ public class ClientTickHandler {
             if (!pipe.isPainted()) {
                 UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, -1));
             } else {
-                for (int i = 0; i < DyeColor.values().length; i++) {
-                    DyeColor color = DyeColor.byId(i);
-                    if (color.getMapColor().col == pipe.getPaintingColor()) {
-                        UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, i));
+                for (UtilColor color : UtilColor.values()) {
+                    if (color.dye.getMapColor().col == pipe.getPaintingColor()) {
+                        UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, color.ordinal()));
                         return;
                     }
                 }
@@ -145,10 +144,9 @@ public class ClientTickHandler {
             if (!paintable.isPainted()) {
                 UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, -1));
             } else {
-                for (int i = 0; i < DyeColor.values().length; i++) {
-                    DyeColor color = DyeColor.byId(i);
-                    if (color.getMapColor().col == paintable.getRealColor()) {
-                        UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, i));
+                for (UtilColor color : UtilColor.values()) {
+                    if (color.dye.getMapColor().col == paintable.getRealColor()) {
+                        UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, color.ordinal()));
                         return;
                     }
                 }
@@ -158,7 +156,7 @@ public class ClientTickHandler {
                 UtilsNetwork.CHANNEL.sendToServer(new SelectColorPacket(hand, -1));
             } else {
                 UtilsNetwork.CHANNEL.sendToServer(
-                        new SelectColorPacket(hand, shulkerBox.getColor().ordinal()));
+                        new SelectColorPacket(hand, UtilColor.fromDye(shulkerBox.getColor()).ordinal()));
             }
         } else {
             Integer colorIndex = InfiniteSprayCanBehaviour.getBlockPickedColorIndex(level.getBlockState(pos));

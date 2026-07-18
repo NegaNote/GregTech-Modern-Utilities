@@ -9,11 +9,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neganote.gtutilities.network.UtilsNetwork;
 import net.neganote.gtutilities.network.packet.SelectColorPacket;
+import net.neganote.gtutilities.utils.UtilColor;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class ColorRadialMenuScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
 
-        DyeColor[] colors = DyeColor.values();
+        UtilColor[] colors = UtilColor.values();
         int numSegments = colors.length;
         float segmentAngle = 360.0f / numSegments;
 
@@ -79,7 +79,7 @@ public class ColorRadialMenuScreen extends Screen {
 
             if (hoveringThis) {
                 guiGraphics.renderTooltip(this.font,
-                        Component.translatable("color.minecraft." + colors[i].getSerializedName()), mouseX, mouseY);
+                        Component.translatable("color.minecraft." + colors[i].dye.getSerializedName()), mouseX, mouseY);
             }
         }
     }
@@ -100,7 +100,7 @@ public class ColorRadialMenuScreen extends Screen {
             double angle = Math.toDegrees(Math.atan2(mouseY - centerY, mouseX - centerX));
             angle = (angle + 360 + 90) % 360;
 
-            DyeColor[] colors = DyeColor.values();
+            UtilColor[] colors = UtilColor.values();
             int selectedSegment = (int) (angle / (360.0f / colors.length));
 
             if (selectedSegment >= 0 && selectedSegment < colors.length) {
@@ -120,8 +120,8 @@ public class ColorRadialMenuScreen extends Screen {
         this.onClose();
     }
 
-    private Item getDyeItem(DyeColor color) {
-        ResourceLocation id = new ResourceLocation("minecraft", color.getSerializedName() + "_dye");
+    private Item getDyeItem(UtilColor color) {
+        ResourceLocation id = new ResourceLocation("minecraft", color.dye.getSerializedName() + "_dye");
         return BuiltInRegistries.ITEM.get(id);
     }
 

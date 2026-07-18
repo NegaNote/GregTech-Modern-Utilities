@@ -3,11 +3,11 @@ package net.neganote.gtutilities.network.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import net.neganote.gtutilities.common.item.InfiniteSprayCanBehaviour;
 import net.neganote.gtutilities.common.item.InfiniteSprayCanItem;
+import net.neganote.gtutilities.utils.UtilColor;
 
 import java.util.function.Supplier;
 
@@ -37,8 +37,8 @@ public class SelectColorPacket {
 
             ItemStack stack = player.getItemInHand(msg.hand);
             if (stack.getItem() instanceof InfiniteSprayCanItem) {
-                DyeColor[] colors = DyeColor.values();
-                DyeColor selectedColor = null;
+                UtilColor[] colors = UtilColor.values();
+                UtilColor selectedColor = null;
 
                 if (msg.selectedIndex >= 0 && msg.selectedIndex < colors.length) {
                     selectedColor = colors[msg.selectedIndex];
