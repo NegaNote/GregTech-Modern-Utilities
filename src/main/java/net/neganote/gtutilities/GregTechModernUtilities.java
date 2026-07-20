@@ -38,6 +38,7 @@ import net.neganote.gtutilities.common.materials.UtilMaterials;
 import net.neganote.gtutilities.common.tools.UtilToolConnection;
 import net.neganote.gtutilities.config.UtilConfig;
 import net.neganote.gtutilities.datagen.UtilDatagen;
+import net.neganote.gtutilities.integration.ae2.gridservice.TagStockingGridService;
 import net.neganote.gtutilities.network.UtilsNetwork;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -118,6 +119,9 @@ public class GregTechModernUtilities {
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             UtilsNetwork.init();
+            if (GTCEu.Mods.isAE2Loaded()) {
+                TagStockingGridService.register();
+            }
             LOGGER.info("Hello from common setup! This is *after* registries are done, so we can do this:");
             LOGGER.info("Look, I found a {}!", Items.DIAMOND);
         });
