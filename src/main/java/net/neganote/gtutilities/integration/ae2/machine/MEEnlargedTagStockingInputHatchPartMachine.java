@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CircuitFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingHatchPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
@@ -40,23 +39,22 @@ import net.minecraftforge.fluids.FluidStack;
 import net.neganote.gtutilities.common.gui.widgets.MultilineTextField;
 import net.neganote.gtutilities.common.gui.widgets.SimpleScrollbarWidget;
 import net.neganote.gtutilities.config.UtilConfig;
+import net.neganote.gtutilities.integration.ae2.gridservice.ITagStockingPart;
 import net.neganote.gtutilities.utils.TagMatcher;
 
 import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridNodeListener;
+import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEFluidKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.MEStorage;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -65,7 +63,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchPartMachine {
+public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchPartMachine implements ITagStockingPart {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             MEEnlargedTagStockingInputHatchPartMachine.class, MEStockingHatchPartMachine.MANAGED_FIELD_HOLDER);
@@ -118,6 +116,20 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
     }
 
     @Override
+    public IActionSource getActionSource() {
+        return this.actionSource;
+    }
+
+    @Override
+    public void onMainNodeStateChanged(IGridNodeListener.State reason) {
+        boolean wasOnline = isOnline();
+        super.onMainNodeStateChanged(reason);
+        if (isOnline() != wasOnline) {
+            markTagRefresh();
+        }
+    }
+
+    @Override
     public void onLoad() {
         super.onLoad();
         if (!isRemote()) {
@@ -128,8 +140,7 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
             invalidateFilterCaches();
 
             if (updateMEStatus()) {
-                refreshListFromTags();
-                super.syncME();
+                markTagRefresh();
                 updateTankSubscription();
             }
         }
@@ -140,17 +151,8 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
         if (!isRemote() && super.isAutoPull()) {
             super.setAutoPull(false);
         }
-
-        if (this.getTicksPerCycle() == 0) {
-            this.setTicksPerCycle(ConfigHolder.INSTANCE.compat.ae2.updateIntervals);
-        }
-
-        if (this.getOffsetTimer() % (long) this.getTicksPerCycle() == 0L) {
-            if (!isRemote() && updateMEStatus()) {
-                refreshListFromTags();
-                super.syncME();
-                updateTankSubscription();
-            }
+        if (!isRemote() && updateMEStatus()) {
+            updateTankSubscription();
         }
     }
 
@@ -217,57 +219,11 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
         return allowed;
     }
 
-    protected void refreshListFromTags() {
-        IGrid grid = this.getMainNode().getGrid();
-        if (grid == null) {
-            this.aeFluidHandler.clearInventory(0);
-            return;
-        }
-
-        MEStorage networkStorage = grid.getStorageService().getInventory();
-        var counter = networkStorage.getAvailableStacks();
-
-        PriorityQueue<Object2LongMap.Entry<AEKey>> top = new PriorityQueue<>(
-                Comparator.comparingLong(Object2LongMap.Entry::getLongValue));
-
-        for (Object2LongMap.Entry<AEKey> entry : counter) {
-            long amount = entry.getLongValue();
-            AEKey what = entry.getKey();
-
-            if (amount <= 0) continue;
-            if (!(what instanceof AEFluidKey fluidKey)) continue;
-
-            if (!isAllowed(fluidKey)) continue;
-
-            long request = networkStorage.extract(what, amount, Actionable.SIMULATE, this.actionSource);
-            if (request == 0L) continue;
-
-            if (tagAutoPullTest != null && !tagAutoPullTest.test(new GenericStack(fluidKey, amount))) continue;
-
-            if (top.size() < TOTAL_SLOTS) {
-                top.offer(entry);
-            } else if (amount > Objects.requireNonNull(top.peek()).getLongValue()) {
-                top.poll();
-                top.offer(entry);
-            }
-        }
-
-        int itemAmount = top.size();
-
-        int index;
-        for (index = 0; index < TOTAL_SLOTS && !top.isEmpty(); index++) {
-            Object2LongMap.Entry<AEKey> entry = top.poll();
-            AEKey what = entry.getKey();
-            long amount = entry.getLongValue();
-            long request = networkStorage.extract(what, amount, Actionable.SIMULATE, this.actionSource);
-
-            ExportOnlyAEFluidSlot slot = this.aeFluidHandler.getInventory()[itemAmount - index - 1];
-            slot.setConfig(new GenericStack(what, 1L));
-            slot.setStock(new GenericStack(what, request));
-        }
-        this.aeFluidHandler.clearInventory(index);
-        markDirty();
-        self().getHolder().self().setChanged();
+    @Override
+    public boolean isTagKeyAllowed(AEKey key, long amount) {
+        if (!(key instanceof AEFluidKey fluidKey)) return false;
+        if (!isAllowed(fluidKey)) return false;
+        return tagAutoPullTest == null || tagAutoPullTest.test(new GenericStack(fluidKey, amount));
     }
 
     @Override
@@ -307,8 +263,7 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
         invalidateFilterCaches();
 
         if (!isRemote() && updateMEStatus()) {
-            refreshListFromTags();
-            super.syncME();
+            markTagRefresh();
             updateTankSubscription();
         }
     }
@@ -370,8 +325,7 @@ public class MEEnlargedTagStockingInputHatchPartMachine extends MEStockingHatchP
             invalidateFilterCaches();
 
             if (updateMEStatus()) {
-                refreshListFromTags();
-                super.syncME();
+                markTagRefresh();
                 updateTankSubscription();
             }
         }).setTexture(new GuiTextureGroup(GuiTextures.VANILLA_BUTTON, new TextTexture("Confirm")),
